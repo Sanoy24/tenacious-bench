@@ -1,0 +1,66 @@
+# Synthesis Memo 01: Synthetic Data for Language Models
+
+## Reading
+
+Ruibo Liu et al., *Best Practices and Lessons Learned on Synthetic Data for Language Models* (COLM 2024). Primary source: `arXiv:2404.07503`.
+
+## Thesis
+
+This paper is the operational foundation for Week 11 dataset authoring. Its core value for this project is not "synthetic data is good"; it is the more disciplined claim that synthetic data is useful only when we control factuality, fidelity, bias, and evaluation leakage. For Tenacious-Bench, that means synthetic task generation is justified, but only if it is grounded in Week 10 traces, probe failures, and structured sales inputs rather than free-floating creativity.
+
+## What I am taking from the paper
+
+The paper is strongest where it treats synthetic data as an engineering instrument instead of a magic scaling trick. Section 3 shows that synthetic data is useful not only for training, but also for evaluation: factuality testing, safety red-teaming, and low-cost assistance to human evaluation are all directly relevant to this challenge. That maps cleanly onto our benchmark work. We need synthetic tasks because Tenacious does not have a mature labeled benchmark, but those tasks must still preserve the semantics of the real failure modes we saw in Week 10: weak-evidence over-claiming, timezone fabrication, and bench over-commitment.
+
+The paper is also valuable because Section 4 says out loud what weaker "synthetic data" discussions often hide: misuse can proliferate misinformation, synthetic alignment data can misrepresent human values, and synthetic training makes evaluation decontamination harder. That is exactly the danger in this project. If we let a model freely invent competitor-gap claims, pricing bands, or hiring narratives, we will accidentally build a benchmark that rewards polished fabrication. So the right lesson is not to maximize synthetic volume; it is to maximize grounded synthetic variation.
+
+Section 5 is especially useful for this repo because it frames future work around quality and diversity improvements, domain constraints, and more efficient scalable oversight. Those are the right priorities for Tenacious-Bench. We do not need a giant internet-scale synthetic corpus. We need a contamination-aware, high-fidelity sales dataset that supports reliable evaluation and later training-data conversion.
+
+## My disagreement with the paper
+
+My main disagreement is with the practical emphasis implied by Section 5 on synthetic-data scaling as a frontier question. I agree it is a real research question, but for this challenge I think scaling is the wrong optimization target too early.
+
+Why I disagree:
+
+- Section 4 explicitly warns that synthetic training makes decontamination harder.
+- Section 3 shows synthetic evaluation is useful when it is grounded and verifiable, not merely abundant.
+- Our local evidence is small but sharp: the Week 10 failures are specific, repetitive, and machine-checkable in ways that favor targeted generation over broad generation.
+
+For Tenacious-Bench, an extra 500 weak synthetic tasks are less valuable than 30 high-integrity tasks anchored to real probes and trace patterns. The benchmark is meant to isolate a production failure mode, not to imitate internet-scale generality. So I would invert the usual scale-first instinct:
+
+1. start with trace-derived and programmatic tasks
+2. verify the evaluator catches the intended failure
+3. add adversarial cases
+4. only then add routed multi-LLM synthesis for the hard edge cases
+
+In other words, I disagree with treating synthetic scale as the central lever for this week. The central lever is benchmark fidelity.
+
+## Design consequence for Tenacious-Bench
+
+This reading changes how I would author the dataset:
+
+- Every synthetic task should be traceable to one of four grounding sources:
+  - Week 10 traces
+  - Week 10 probes
+  - structured sales seed docs
+  - structured public-signal files like `layoffs.csv` and `crunchbase_odm_sample.json`
+- Programmatic generation should come before open-ended generation.
+- Synthetic tasks should be filtered by deterministic rubric checks wherever possible.
+- High-risk claims, especially pricing, hiring velocity, competitor gaps, and timing language, should be generated only inside constrained templates or with explicit verification hooks.
+
+For this project specifically, the paper reinforces a simple operating rule:
+
+> synthetic data is acceptable when it increases coverage without weakening truth conditions.
+
+That is the right standard for Tenacious-Bench.
+
+## What I will do because of this reading
+
+1. Prefer grounded programmatic sweeps over unconstrained prompt sampling.
+2. Keep multi-LLM synthesis for the hardest failure families only.
+3. Treat synthetic tasks as benchmark construction artifacts that must be verified, not as automatic truth.
+4. Expand the current pilot toward a 30-task slice by using Week 10 evidence as the source of variation rather than asking a model to invent a sales universe from scratch.
+
+## Source
+
+- Liu et al., *Best Practices and Lessons Learned on Synthetic Data for Language Models*, Sections 3, 4, and 5. `https://arxiv.org/abs/2404.07503`
