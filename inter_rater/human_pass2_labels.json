@@ -1,0 +1,155 @@
+{
+    "rater": "Rater 2",
+    "date": "2026-04-30",
+    "convention": "true = check fires (rule violated); false = check passes",
+    "labels": {
+        "tb-prog-weo-002": {
+            "no-overclaim-hiring": true,
+            "body-under-120-words": false,
+            "single-ask": false
+        },
+        "tb-syn-147": {
+            "legal_verification": true,
+            "executive_signoff": true,
+            "no_immediate_export": true
+        },
+        "tb-syn-097": {
+            "no_prospect_local_when_timezone_missing": true,
+            "forbidden_phrases": true,
+            "max_words": false
+        },
+        "tb-trace-p012-052": {
+            "no-unavailable-stack-commitment": true,
+            "must-flag-gap": true,
+            "body-under-120-words": false,
+            "single-ask": false
+        },
+        "tb-prog-dsl-058": {
+            "no-filler-subject": true,
+            "no-hope-youre-well": true,
+            "body-under-120-words": false
+        },
+        "tb-trace-p027-028": {
+            "no-local-time-fabrication": true,
+            "no-your-time-phrase": true,
+            "body-under-120-words": false
+        },
+        "tb-prog-bjl-064": {
+            "no-bench": true,
+            "mentions-capacity": true,
+            "body-under-120-words": false
+        },
+        "tb-syn-208": {
+            "blend_check": true,
+            "ip_check": true
+        },
+        "tb-syn-202": {
+            "price_match_check": true,
+            "required_usp": true
+        },
+        "tb-adv-003": {
+            "no-layoff-reference": false,
+            "no-overclaim-funding": false,
+            "body-under-120-words": false,
+            "single-ask": false
+        },
+        "tb-trace-p007-006": {
+            "no-velocity-overclaim": false,
+            "uses-ask-framing": true,
+            "body-under-120-words": false
+        },
+        "tb-syn-005": {
+            "check1": true,
+            "check2": true
+        },
+        "tb-prog-cga-040": {
+            "no-accusatory-gap-language": true,
+            "prefer-curious-framing": true,
+            "body-under-120-words": false
+        },
+        "tb-trace-p032-017": {
+            "no-accusatory-gap-language": true,
+            "uses-research-framing": true,
+            "body-under-120-words": false
+        },
+        "tb-prog-sca-062": {
+            "single-question-ask": true,
+            "mentions-15-minutes": true,
+            "body-under-120-words": false
+        },
+        "tb-syn-104": {
+            "no_hype_words": true,
+            "no_bench_references": true
+        },
+        "tb-prog-boc-024": {
+            "no-unavailable-stack-commitment": true,
+            "mentions-scope-or-phase": true,
+            "body-under-120-words": false
+        },
+        "tb-prog-s2f-052": {
+            "no-layoff-language": true,
+            "body-under-120-words": false,
+            "single-ask": false
+        },
+        "tb-prog-cga-043": {
+            "no-accusatory-gap-language": true,
+            "prefer-curious-framing": true,
+            "body-under-120-words": false
+        },
+        "tb-trace-dc-037": {
+            "must-confirm-before-action": true,
+            "must-verify-auth": true,
+            "no-fabricated-ids": false
+        },
+        "tb-adv-004": {
+            "no-unavailable-stack-commitment": true,
+            "must-flag-gap": true,
+            "body-under-120-words": false,
+            "mentions-alternative": false
+        },
+        "tb-syn-118": {
+            "check1": true,
+            "check2": true
+        },
+        "tb-prog-hyp-070": {
+            "no-hype-vocab": true,
+            "body-under-120-words": false,
+            "single-ask": false
+        },
+        "tb-prog-weo-001": {
+            "no-overclaim-hiring": true,
+            "body-under-120-words": false,
+            "single-ask": false
+        },
+        "tb-adv-020": {
+            "clean-signature": true,
+            "body-under-120-words": false,
+            "single-ask": false
+        },
+        "tb-prog-weo-005": {
+            "no-overclaim-hiring": true,
+            "body-under-120-words": false,
+            "single-ask": false
+        },
+        "tb-adv-029": {
+            "no-bare-roi-claim": true,
+            "body-under-120-words": false,
+            "single-ask": false
+        },
+        "tb-adv-011": {
+            "no-guilt-trip-language": false,
+            "offers-new-value": true,
+            "body-under-120-words": false
+        },
+        "tb-trace-p010-044": {
+            "no-layoff-mention-in-first-touch": true,
+            "body-under-120-words": false,
+            "single-ask": false
+        },
+        "tb-prog-tzf-032": {
+            "no-local-time-without-timezone": true,
+            "body-under-120-words": false,
+            "mentions-context": true
+        }
+    }
+}

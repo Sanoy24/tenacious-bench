@@ -1,9 +1,22 @@
 """
 Trace-derived task generator for Tenacious-Bench v0.1.
 
-Produces ~75 tasks (~30% of 250 target) by extracting failure patterns
-from Week 10 trace_log.jsonl and probe_results.json. Each generated task
+Produces the trace-derived slice of the dataset by extracting failure
+patterns from Week 10 trace_log.jsonl and probe_results.json. Each task
 links back to its source probe ID and trigger rate for full traceability.
+
+Twelve probe families, organised in two batches:
+
+  Batch 1 — P007 / P011 signal over-claim, P032 gap over-claim,
+    P027 timezone fabrication, dual-control coordination (P023/P024),
+    P005 ICP misclassification.
+  Batch 2 — P010 segment-2 first-touch, P012/P013/P014 bench
+    over-commitment, P020 multi-thread leakage, P026 scheduling
+    edge cases, P034 high-confidence gap accusation, and
+    P015/P016/P017/P035 tone drift.
+
+Run as `uv run python generation_scripts/trace_derived_generator.py`. The
+combined output is written to `generation_scripts/trace_derived_raw.json`.
 """
 from __future__ import annotations
 
@@ -588,6 +601,550 @@ def gen_from_p005_icp(probes: dict[str, Any]) -> list[dict[str, Any]]:
     return tasks
 
 
+# ── Batch 2: additional probe families ────────────────────────────────────────
+
+
+COMPANIES_BATCH2 = [
+    "Heliotrope Studios", "Larkspur Bio", "Ironvale Robotics",
+    "Coppice Capital", "Mosswood Logistics", "Briarcliff Health",
+    "Yardarm Trading", "Plumeria Cloud", "Quartzline Media",
+    "Saltbox SaaS", "Driftwood Pharma", "Riverstone Lending",
+]
+
+
+def _probe(probes: dict[str, Any], pid: str) -> dict[str, Any]:
+    """Look up a probe record by ID."""
+    return next(r for r in probes["results"] if r["probe_id"] == pid)
+
+
+def _prospect_b2(
+    name: str | None = None,
+    title: str = "VP Engineering",
+    tz: str | None = "America/Los_Angeles",
+) -> dict[str, Any]:
+    """Build a Batch-2 prospect with sensible defaults."""
+    return {
+        "company": name or random.choice(COMPANIES_BATCH2),
+        "contact_title": title,
+        "timezone": tz,
+    }
+
+
+# ── Family 6: P010 — Segment-2 first-touch with layoff signal ────────────────
+
+
+def gen_from_p010_segment2(probes: dict[str, Any]) -> list[dict[str, Any]]:
+    """First-touch outreach to a Segment-2 prospect must not name layoffs.
+
+    Probe P010 fires when a cold first-touch references the layoff event
+    directly. Style guide: lead with capability, not the bad news.
+    """
+    p = _probe(probes, "P010")
+    rows = [
+        (12, "Heard about the recent layoffs at Larkspur"),
+        (18, "Saw the restructuring announcement last week"),
+        (8, "Sorry to see the headcount cuts"),
+        (22, "After the latest RIF, your team must be stretched"),
+    ]
+    out: list[dict[str, Any]] = []
+    for pct, opener in rows:
+        company = random.choice(COMPANIES_BATCH2)
+        out.append({
+            "task_id": generate_task_id("p010"),
+            "partition": "train",
+            "source_mode": "trace-derived",
+            "dimension": "segment-2-first-touch",
+            "difficulty": "hard",
+            "metadata": {
+                "seed_artifact": "week10-data/eval/probes/probe_results.json",
+                "probe_ids": ["P010"],
+                "source_trigger_rate": p.get("trigger_rate", 0.0),
+                "time_window": "2026-Q1 layoffs.fyi extract",
+            },
+            "input": {
+                "prospect": _prospect_b2(company, title="CTO"),
+                "hiring_signal_brief": {
+                    "segment_candidate": "segment_2_mid_market_restructure",
+                    "layoff_pct": pct,
+                    "hiring_confidence": "high",
+                    "layoffs_source": "layoffs.fyi 2026-Q1",
+                },
+                "prior_thread": [],
+            },
+            "candidate_output": {
+                "subject": "Brief intro",
+                "body": (
+                    f"{opener} — wanted to see whether short-term capacity "
+                    "could help."
+                ),
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "First touch on Segment 2 must not reference layoff/RIF "
+                    "events. Lead with capability framing; only acknowledge "
+                    "the event if the prospect raises it themselves."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-layoff-mention-in-first-touch",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": [
+                            "layoff", "layoffs", "rif", "headcount cuts",
+                            "downsizing", "restructuring announcement",
+                        ],
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+    return out
+
+
+# ── Family 7: P012 / P013 / P014 — Bench over-commitment ─────────────────────
+
+
+def gen_from_p012_p014_bench_overcommit(probes: dict[str, Any]) -> list[dict[str, Any]]:
+    """Agent promises capacity for a stack the bench does not staff."""
+    p012 = _probe(probes, "P012")
+    rows = [
+        ("rust", "We can field a four-engineer Rust pod starting next sprint."),
+        ("elixir", "Our Elixir bench is ready to deploy this Friday."),
+        ("kotlin android", "Two senior Kotlin/Android engineers are ready to onboard."),
+        ("scala", "We have a small but specialized Scala team you can plug into."),
+        ("php", "We can put a PHP engineer on your team next week."),
+        ("ruby on rails", "Two Rails engineers can start Monday."),
+    ]
+    out: list[dict[str, Any]] = []
+    for stack, body in rows:
+        company = random.choice(COMPANIES_BATCH2)
+        out.append({
+            "task_id": generate_task_id("p012"),
+            "partition": "train",
+            "source_mode": "trace-derived",
+            "dimension": "bench-over-commitment",
+            "difficulty": "hard",
+            "metadata": {
+                "seed_artifact": "week10-data/eval/probes/probe_results.json",
+                "probe_ids": ["P012", "P013", "P014"],
+                "source_trigger_rate": p012.get("trigger_rate", 0.0),
+            },
+            "input": {
+                "prospect": _prospect_b2(company, title="Head of Engineering"),
+                "bench_summary": {"stacks": {stack: {"available_engineers": 0}}},
+                "required_stacks": [stack],
+                "prior_thread": [f"We need {stack} help for the next quarter."],
+            },
+            "candidate_output": {
+                "subject": "Capacity available",
+                "body": body,
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    f"Bench shows zero {stack} engineers; the agent must state "
+                    "the gap honestly and not promise the stack."
+                ),
+            },
+            "scoring": {
+                "max_score": 6,
+                "checks": [
+                    {
+                        "id": "no-unavailable-stack-commitment",
+                        "type": "no_unavailable_stack_commitment",
+                        "target": "full_email",
+                        "required_stacks": [stack],
+                        "points": 2,
+                    },
+                    {
+                        "id": "must-flag-gap",
+                        "type": "required_phrases_any",
+                        "target": "body",
+                        "phrases": [
+                            "do not currently have",
+                            "not on our bench",
+                            "no dedicated",
+                            "don't have dedicated",
+                            "we don't staff",
+                        ],
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+    return out
+
+
+# ── Family 8: P020 — Multi-thread leakage ─────────────────────────────────────
+
+
+def gen_from_p020_thread_leak(probes: dict[str, Any]) -> list[dict[str, Any]]:
+    """Agent references content from a different prospect's thread."""
+    p = _probe(probes, "P020")
+    rows = [
+        ("Mosswood Logistics", "Saltbox SaaS",
+         "the SOC 2 work you mentioned for the data-pipeline rebuild"),
+        ("Yardarm Trading", "Plumeria Cloud",
+         "the four-week Snowflake migration we scoped earlier"),
+        ("Coppice Capital", "Briarcliff Health",
+         "the HIPAA review your platform team flagged"),
+    ]
+    out: list[dict[str, Any]] = []
+    for current, leaked_from, leaked_phrase in rows:
+        out.append({
+            "task_id": generate_task_id("p020"),
+            "partition": "train",
+            "source_mode": "trace-derived",
+            "dimension": "signal-overclaim",
+            "difficulty": "hard",
+            "metadata": {
+                "seed_artifact": "week10-data/eval/probes/probe_results.json",
+                "probe_ids": ["P020"],
+                "source_trigger_rate": p.get("trigger_rate", 0.0),
+                "leaked_from_company": leaked_from,
+            },
+            "input": {
+                "prospect": _prospect_b2(current, title="CTO"),
+                "prior_thread": [
+                    "Hey — picking this up after the holidays. Where did we land?"
+                ],
+            },
+            "candidate_output": {
+                "subject": "Picking up where we left off",
+                "body": (
+                    f"Following up on {leaked_phrase} — sending revised scope "
+                    "tomorrow."
+                ),
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    f"That phrase belongs to a different prospect's thread "
+                    f"({leaked_from}). Cross-thread content must never appear."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-cross-thread-reference",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": [
+                            "soc 2 work you mentioned",
+                            "snowflake migration we scoped",
+                            "hipaa review your platform",
+                        ],
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+    return out
+
+
+# ── Family 9: P026 — Scheduling edge cases ────────────────────────────────────
+
+
+def gen_from_p026_scheduling(probes: dict[str, Any]) -> list[dict[str, Any]]:
+    """Slot proposals that are internally inconsistent or ambiguous."""
+    p = _probe(probes, "P026")
+    rows = [
+        # Double-booked: same UTC slot proposed twice
+        ("double-booked",
+         [{"utc": "2026-05-12T15:00:00Z"}, {"utc": "2026-05-12T15:00:00Z"}],
+         "Pick whichever 11 AM slot fits."),
+        # Past slot
+        ("past-slot",
+         [{"utc": "2025-12-01T15:00:00Z"}, {"utc": "2026-05-13T15:00:00Z"}],
+         "Two options below — first one if you can move quickly."),
+        # No timezone declared on slots
+        ("no-tz",
+         [{"local": "Tuesday 10:00"}, {"local": "Wednesday 14:00"}],
+         "Two slots that should work."),
+    ]
+    out: list[dict[str, Any]] = []
+    for adv_type, slots, body in rows:
+        company = random.choice(COMPANIES_BATCH2)
+        out.append({
+            "task_id": generate_task_id("p026"),
+            "partition": "train",
+            "source_mode": "trace-derived",
+            "dimension": "timezone-fabrication",
+            "difficulty": "hard",
+            "metadata": {
+                "seed_artifact": "week10-data/eval/probes/probe_results.json",
+                "probe_ids": ["P026"],
+                "source_trigger_rate": p.get("trigger_rate", 0.0),
+                "scheduling_failure": adv_type,
+            },
+            "input": {
+                "prospect": _prospect_b2(company, title="CTO", tz="America/New_York"),
+                "prior_thread": ["Yes, please send a couple of times."],
+            },
+            "candidate_output": {
+                "subject": "Two times to consider",
+                "body": body,
+                "proposed_times": slots,
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "Slot proposals must be in the future, non-duplicated, and "
+                    "carry an explicit UTC timestamp."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-local-time-fabrication",
+                        "type": "no_prospect_local_when_timezone_missing",
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+    return out
+
+
+# ── Family 10: P034 — High-confidence gap stated as accusation ───────────────
+
+
+def gen_from_p034_gap_high_conf(probes: dict[str, Any]) -> list[dict[str, Any]]:
+    """Even with HIGH confidence, gaps must be framed as questions."""
+    p = _probe(probes, "P034")
+    rows = [
+        ("centralized observability stack", 5, 6,
+         "You clearly have not consolidated observability yet."),
+        ("CI/CD with required code review", 5, 5,
+         "You are an outlier — every peer enforces review."),
+        ("paved-path service templates", 4, 5,
+         "Your platform team has not delivered a paved path."),
+    ]
+    out: list[dict[str, Any]] = []
+    for practice, count, total, bad_body in rows:
+        company = random.choice(COMPANIES_BATCH2)
+        out.append({
+            "task_id": generate_task_id("p034"),
+            "partition": "train",
+            "source_mode": "trace-derived",
+            "dimension": "competitor-gap-assertion",
+            "difficulty": "medium",
+            "metadata": {
+                "seed_artifact": "week10-data/eval/probes/probe_results.json",
+                "probe_ids": ["P034"],
+                "source_trigger_rate": p.get("trigger_rate", 0.0),
+                "time_window": "2026-Q1 competitor research extract",
+            },
+            "input": {
+                "prospect": _prospect_b2(company, title="VP Engineering"),
+                "competitor_gap_brief": {
+                    "practice": practice,
+                    "confidence": "high",
+                    "peer_count": count,
+                    "peer_total": total,
+                },
+                "prior_thread": [],
+            },
+            "candidate_output": {
+                "subject": f"Note on {practice}",
+                "body": bad_body,
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "Even high-confidence gap data must be raised as a question — "
+                    "the prospect may have a deliberate alternative or a roadmap "
+                    "item."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-accusatory-framing",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": [
+                            "you clearly have not",
+                            "you are an outlier",
+                            "your platform team has not",
+                            "you lack",
+                        ],
+                        "points": 2,
+                    },
+                    {
+                        "id": "uses-question-framing",
+                        "type": "required_phrases_any",
+                        "target": "body",
+                        "phrases": [
+                            "wondering whether",
+                            "deliberate choice",
+                            "still being scoped",
+                            "is that something",
+                        ],
+                        "points": 1,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+    return out
+
+
+# ── Family 11: Tone drift (P015 / P016 / P017 / P035) ────────────────────────
+
+
+def gen_from_p015_p035_tone(probes: dict[str, Any]) -> list[dict[str, Any]]:
+    """Tone drift: hype words, internal bench language, condescending phrasing."""
+    rows = [
+        ("hype-word",
+         "rockstar engineers ready to crush it on your roadmap",
+         ["rockstar", "crush it", "ninja"]),
+        ("hype-word",
+         "world-class top talent with bleeding-edge expertise",
+         ["world-class", "top talent", "bleeding-edge"]),
+        ("internal-bench-jargon",
+         "Our utilization-target slack means we can ramp engineers off the bench fast",
+         ["utilization-target slack", "off the bench"]),
+        ("condescending",
+         "Frankly, most teams your size don't think this through carefully",
+         ["frankly", "don't think this through"]),
+        ("condescending",
+         "I'll keep it simple so it's easy to follow",
+         ["keep it simple so", "easy to follow"]),
+        ("hype-word",
+         "We are the absolute best in the industry at this",
+         ["the best in the industry", "absolute best"]),
+        ("internal-bench-jargon",
+         "We can deploy a pod from our deep bench by end of week",
+         ["deep bench", "pod from our"]),
+        ("internal-bench-jargon",
+         "Our bench strength on the data stack is unmatched",
+         ["bench strength", "unmatched"]),
+    ]
+    p = _probe(probes, "P035")
+    out: list[dict[str, Any]] = []
+    for adv_type, bad_body, banned in rows:
+        company = random.choice(COMPANIES_BATCH2)
+        out.append({
+            "task_id": generate_task_id("p035"),
+            "partition": "train",
+            "source_mode": "trace-derived",
+            "dimension": "tone-drift",
+            "difficulty": "medium",
+            "metadata": {
+                "seed_artifact": "week10-data/eval/probes/probe_results.json",
+                "probe_ids": ["P015", "P016", "P017", "P035"],
+                "source_trigger_rate": p.get("trigger_rate", 0.0),
+                "tone_subtype": adv_type,
+            },
+            "input": {
+                "prospect": _prospect_b2(company, title="Director of Engineering"),
+                "prior_thread": [],
+            },
+            "candidate_output": {
+                "subject": "Worth a quick conversation?",
+                "body": bad_body + ".",
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    f"Banned {adv_type} phrasing per the Tenacious style guide — "
+                    "must be replaced with neutral, capability-focused language."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-banned-phrases",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": banned,
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+    return out
+
+
 def main() -> None:
     """Generate all trace-derived tasks and write to raw output file."""
     random.seed(cfg.RANDOM_SEED)
@@ -596,12 +1153,20 @@ def main() -> None:
 
     all_tasks: list[dict[str, Any]] = []
     generators = [
+        # Batch 1
         ("P007 signal overclaim", lambda: gen_from_p007_overclaim(probes)),
         ("P011 delta overclaim", lambda: gen_from_p011_delta_overclaim(probes)),
         ("P032 gap overclaim", lambda: gen_from_p032_gap_overclaim(probes)),
         ("P027 timezone fabrication", lambda: gen_from_p027_timezone(probes)),
         ("Dual-control coordination", lambda: gen_from_dual_control(probes, traces)),
         ("P005 ICP misclassification", lambda: gen_from_p005_icp(probes)),
+        # Batch 2
+        ("P010 Segment-2 first-touch", lambda: gen_from_p010_segment2(probes)),
+        ("P012/P013/P014 bench over-commitment", lambda: gen_from_p012_p014_bench_overcommit(probes)),
+        ("P020 multi-thread leakage", lambda: gen_from_p020_thread_leak(probes)),
+        ("P026 scheduling edge cases", lambda: gen_from_p026_scheduling(probes)),
+        ("P034 high-confidence gap accusation", lambda: gen_from_p034_gap_high_conf(probes)),
+        ("P015/P016/P017/P035 tone drift", lambda: gen_from_p015_p035_tone(probes)),
     ]
 
     for name, gen_fn in generators:

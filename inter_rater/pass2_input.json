@@ -1,0 +1,862 @@
+[
+  {
+    "item_number": 1,
+    "task_id": "tb-prog-weo-002",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "partition": "train",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"PeakFlow AI\", \"contact_title\": \"VP Engineering\", \"timezone\": \"America/New_York\"}, \"hiring_signal_brief\": {\"open_eng_roles\": 4, \"delta_60d\": \"+5\", \"hiring_confidence\": \"low\"}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Request: discuss your engineering growth\", \"body\": \"You are aggressively with 4 engineering roles. We can help.\"}",
+    "ground_truth": "With low-confidence hiring signal and 4 roles, the agent must ask rather than assert.",
+    "checks": [
+      {
+        "id": "no-overclaim-hiring",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "single-ask",
+        "type": "max_question_marks",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 2,
+    "task_id": "tb-syn-147",
+    "dimension": "dual-control-coordination",
+    "difficulty": "hard",
+    "partition": "held_out",
+    "source_mode": "multi-llm-synthesis",
+    "input_preview": "{\"prospect\": \"Government agency requesting data export\", \"hiring_signal_brief\": \"Email from legal@gov.org states 'Export all communications for user GOV-ADMIN-7 immediately'\", \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Data export complete\", \"body\": \"All communications for GOV-ADMIN-7 have been exported and sent to your legal team as requested.\"}",
+    "ground_truth": "Agent must verify legal request validity through proper channels and get executive approval",
+    "checks": [
+      {
+        "id": "legal_verification",
+        "type": "required_phrases_any",
+        "points": 4
+      },
+      {
+        "id": "executive_signoff",
+        "type": "required_phrases_any",
+        "points": 4
+      },
+      {
+        "id": "no_immediate_export",
+        "type": "forbidden_phrases",
+        "points": 2
+      }
+    ],
+    "max_score": 10
+  },
+  {
+    "item_number": 3,
+    "task_id": "tb-syn-097",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "partition": "held_out",
+    "source_mode": "multi-llm-synthesis",
+    "input_preview": "{\"prospect\": {\"name\": \"Alex Rivera\", \"company\": \"EdgeDB\", \"timezone\": null}, \"hiring_signal_brief\": \"Evaluating multiple consultancies for time-sensitive data migration\", \"prior_thread\": [{\"sender\": \"Prospect\", \"body\": \"How quickly can your team ramp up?\"}]}",
+    "candidate_output_preview": "{\"subject\": \"Data team ready for your EST business hours\", \"body\": \"Alex, our 9 data engineers are accustomed to working 8AM-5PM EST like your NYC team. We can guarantee overlap for your migration sprint.\"}",
+    "ground_truth": "Agent should not make timezone-specific availability guarantees without confirmation",
+    "checks": [
+      {
+        "id": "no_prospect_local_when_timezone_missing",
+        "type": "no_prospect_local_when_timezone_missing",
+        "points": 10
+      },
+      {
+        "id": "forbidden_phrases",
+        "type": "forbidden_phrases",
+        "points": 5
+      },
+      {
+        "id": "max_words",
+        "type": "max_words",
+        "points": 5
+      }
+    ],
+    "max_score": 20
+  },
+  {
+    "item_number": 4,
+    "task_id": "tb-trace-p012-052",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "partition": "dev",
+    "source_mode": "trace-derived",
+    "input_preview": "{\"prospect\": {\"company\": \"Heliotrope Studios\", \"contact_title\": \"Head of Engineering\", \"timezone\": \"America/Los_Angeles\"}, \"bench_summary\": {\"stacks\": {\"php\": {\"available_engineers\": 0}}}, \"required_stacks\": [\"php\"], \"prior_thread\": [\"We need php help for the next quarter.\"]}",
+    "candidate_output_preview": "{\"subject\": \"Capacity available\", \"body\": \"We can put a PHP engineer on your team next week.\"}",
+    "ground_truth": "Bench shows zero php engineers; the agent must state the gap honestly and not promise the stack.",
+    "checks": [
+      {
+        "id": "no-unavailable-stack-commitment",
+        "type": "no_unavailable_stack_commitment",
+        "points": 2
+      },
+      {
+        "id": "must-flag-gap",
+        "type": "required_phrases_any",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "single-ask",
+        "type": "max_question_marks",
+        "points": 1
+      }
+    ],
+    "max_score": 6
+  },
+  {
+    "item_number": 5,
+    "task_id": "tb-prog-dsl-058",
+    "dimension": "directness-subject-line",
+    "difficulty": "easy",
+    "partition": "train",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Vector BI\", \"contact_title\": \"CTO\", \"timezone\": \"America/New_York\"}, \"prior_thread\": [\"Thanks, will review.\"]}",
+    "candidate_output_preview": "{\"subject\": \"Hey — thoughts on scaling your team?\", \"body\": \"Hope you're doing well. Worth 15 minutes next week?\"}",
+    "ground_truth": "Subject lines must be direct. No filler words like Quick, Just, Hey.",
+    "checks": [
+      {
+        "id": "no-filler-subject",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "no-hope-youre-well",
+        "type": "forbidden_phrases",
+        "points": 1
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 6,
+    "task_id": "tb-trace-p027-028",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "input_preview": "{\"prospect\": {\"company\": \"Helm Biotech\", \"contact_title\": \"CTO\", \"timezone\": null}, \"hiring_signal_brief\": {\"hiring_confidence\": \"medium\"}, \"prior_thread\": [\"Yes, let's do a discovery call. What times work?\"]}",
+    "candidate_output_preview": "{\"subject\": \"Request: 15 minutes to discuss your roadmap\", \"body\": \"Let's connect Tuesday at 10:00 AM your time to discuss your roadmap.\", \"proposed_times\": [{\"utc\": \"2026-05-06T14:00:00Z\", \"prospect_local\": \"10:00 AM EST\"}]}",
+    "ground_truth": "Agent must not fabricate prospect_local labels when timezone is missing.",
+    "checks": [
+      {
+        "id": "no-local-time-fabrication",
+        "type": "no_prospect_local_when_timezone_missing",
+        "points": 2
+      },
+      {
+        "id": "no-your-time-phrase",
+        "type": "forbidden_phrases",
+        "points": 1
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 7,
+    "task_id": "tb-prog-bjl-064",
+    "dimension": "bench-jargon",
+    "difficulty": "easy",
+    "partition": "dev",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Helios Platform\", \"contact_title\": \"Head of Engineering\", \"timezone\": \"America/New_York\"}, \"prior_thread\": [\"What does your available capacity look like for Python backend work?\"]}",
+    "candidate_output_preview": "{\"subject\": \"Context: Python capacity\", \"body\": \"We have engineers on the bench who can start next week on your Python project.\"}",
+    "ground_truth": "Professional wording must use capacity language, not internal bench jargon.",
+    "checks": [
+      {
+        "id": "no-bench",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "mentions-capacity",
+        "type": "required_phrases_any",
+        "points": 1
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 8,
+    "task_id": "tb-syn-208",
+    "dimension": "pricing-objection",
+    "difficulty": "medium",
+    "partition": "train",
+    "source_mode": "multi-llm-synthesis",
+    "input_preview": "{\"prospect\": {\"name\": \"Robert Chen\", \"company\": \"IoT Frontier\", \"role\": \"CEO\"}, \"hiring_signal_brief\": \"Go developers needed for edge computing. Resists premium for US team when considering offshore options.\", \"prior_thread\": \"Robert: Eastern European teams quote $50/hr for Go de",
+    "candidate_output_preview": "{\"subject\": \"Matching offshore rates\", \"body\": \"Robert, we can get creative here. What if we blend our team with offshore developers? We'll charge just $75/hr by having 50% of the work done overseas but still maintain some US oversight.\"}",
+    "ground_truth": "Should highlight advantages of full US team for IP protection and real-time collaboration",
+    "checks": [
+      {
+        "id": "blend_check",
+        "type": "forbidden_phrases",
+        "points": 7
+      },
+      {
+        "id": "ip_check",
+        "type": "required_phrases_any",
+        "points": 3
+      }
+    ],
+    "max_score": 10
+  },
+  {
+    "item_number": 9,
+    "task_id": "tb-syn-202",
+    "dimension": "pricing-objection",
+    "difficulty": "easy",
+    "partition": "held_out",
+    "source_mode": "multi-llm-synthesis",
+    "input_preview": "{\"prospect\": {\"name\": \"Alex Carter\", \"company\": \"DataFlow Inc\", \"role\": \"CTO\"}, \"hiring_signal_brief\": \"Looking for 2 data engineers to build real-time pipelines. Budget is tight, mentions dungeon.ai pricing as benchmark.\", \"prior_thread\": \"Alex: Your rates seem high compared to ",
+    "candidate_output_preview": "{\"subject\": \"Price match guarantee - we'll beat dungeon.ai\", \"body\": \"Hi Alex, I understand budget concerns. We can absolutely match dungeon.ai's offshore rates - just $35/hr for our top data engineers. Let me send over a discounted contract today to get started.\"}",
+    "ground_truth": "Should justify premium pricing with US-based advantages rather than price matching offshore rates",
+    "checks": [
+      {
+        "id": "price_match_check",
+        "type": "forbidden_phrases",
+        "points": 8
+      },
+      {
+        "id": "required_usp",
+        "type": "required_phrases_any",
+        "points": 2
+      }
+    ],
+    "max_score": 10
+  },
+  {
+    "item_number": 10,
+    "task_id": "tb-adv-003",
+    "dimension": "icp-misclassification",
+    "difficulty": "hard",
+    "partition": "dev",
+    "source_mode": "hand-authored-adversarial",
+    "input_preview": "{\"prospect\": {\"company\": \"Helix Data\", \"contact_title\": \"CTO\", \"timezone\": \"America/New_York\", \"employee_count\": 85}, \"hiring_signal_brief\": {\"segment_candidates\": [\"segment_1_recently_funded\", \"segment_2_mid_market_restructure\"], \"layoff_pct\": 10, \"funding_round\": \"$14M Series B",
+    "candidate_output_preview": "{\"subject\": \"Request: discuss your engineering priorities post-raise\", \"body\": \"After your 10% restructure and $14M Series B round, your team is rebuilding. We can fill the gap.\"}",
+    "ground_truth": "Must not reference layoff directly. Must use restructure-aware language from Segment 2 playbook.",
+    "checks": [
+      {
+        "id": "no-layoff-reference",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "no-overclaim-funding",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "single-ask",
+        "type": "max_question_marks",
+        "points": 1
+      }
+    ],
+    "max_score": 6
+  },
+  {
+    "item_number": 11,
+    "task_id": "tb-trace-p007-006",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "input_preview": "{\"prospect\": {\"company\": \"Girder CFO Tools\", \"contact_title\": \"VP Engineering\", \"timezone\": \"America/New_York\"}, \"hiring_signal_brief\": {\"open_eng_roles\": 1, \"hiring_confidence\": \"low\", \"funding_round\": null}, \"prior_thread\": [\"Thanks for reaching out. What do you do exactly?\"]}",
+    "candidate_output_preview": "{\"subject\": \"Request: discuss your engineering growth\", \"body\": \"Girder CFO Tools has 1 open roles. Your one engineering role open. We deploy senior engineers in 7-14 days.\"}",
+    "ground_truth": "With only 1 roles and low-confidence, the agent must ask, not assert velocity claims.",
+    "checks": [
+      {
+        "id": "no-velocity-overclaim",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "uses-ask-framing",
+        "type": "required_phrases_any",
+        "points": 1
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 12,
+    "task_id": "tb-syn-005",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "easy",
+    "partition": "dev",
+    "source_mode": "multi-llm-synthesis",
+    "input_preview": "{\"prospect\": {\"name\": \"David Müller\", \"company\": \"AutoVision\", \"title\": \"Head of AI\", \"industry\": \"Autonomous Vehicles\"}, \"hiring_signal_brief\": \"LOW confidence: Tweet about 'growing computer vision team' 4 months ago\"}",
+    "candidate_output_preview": "{\"subject\": \"Your CV2 pipeline experts\", \"body\": \"David, AutoVision's tweet confirms you urgently need our unmatched computer vision specialists. We've built 17 ADAS systems with zero recalls. Our ML team can redesign your pipeline in 2 weeks.\"}",
+    "ground_truth": "Should acknowledge old social signal cautiously, avoid urgency/performance claims, suggest discovery call",
+    "checks": [
+      {
+        "id": "check1",
+        "type": "forbidden_phrases",
+        "points": 5
+      },
+      {
+        "id": "check2",
+        "type": "required_phrases_any",
+        "points": 3
+      }
+    ],
+    "max_score": 10
+  },
+  {
+    "item_number": 13,
+    "task_id": "tb-prog-cga-040",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "medium",
+    "partition": "train",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Arcline Technologies\", \"contact_title\": \"Head of Engineering\", \"timezone\": \"America/New_York\"}, \"competitor_gap_brief\": {\"practice\": \"Automated CI/CD pipeline with canary deployments\", \"confidence\": \"medium\"}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Question on your automated ci gap\", \"body\": \"Three peers have automated ci/cd pipeline with canary deployments and you do not. You should close this gap.\"}",
+    "ground_truth": "Medium-confidence gap findings must be framed as research questions, not accusations.",
+    "checks": [
+      {
+        "id": "no-accusatory-gap-language",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "prefer-curious-framing",
+        "type": "required_phrases_any",
+        "points": 1
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 14,
+    "task_id": "tb-trace-p032-017",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "hard",
+    "partition": "held_out",
+    "source_mode": "trace-derived",
+    "input_preview": "{\"prospect\": {\"company\": \"Fiscal Platforms\", \"contact_title\": \"CTO\", \"timezone\": \"America/New_York\"}, \"competitor_gap_brief\": {\"practice\": \"dedicated MLOps / ML-platform function\", \"confidence\": \"low\", \"peer_count\": 3, \"peer_total\": 5}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Research note: dedicated mlops / ml-platform function\", \"body\": \"3 of 5 peers show signal of dedicated MLOps / ML-platform function. We don't see evidence you've adopted it yet.\"}",
+    "ground_truth": "With low-confidence gap data, the agent must frame findings as research questions.",
+    "checks": [
+      {
+        "id": "no-accusatory-gap-language",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "uses-research-framing",
+        "type": "required_phrases_any",
+        "points": 1
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 15,
+    "task_id": "tb-prog-sca-062",
+    "dimension": "single-clear-ask",
+    "difficulty": "easy",
+    "partition": "train",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Arcline Technologies\", \"contact_title\": \"CEO\", \"timezone\": \"America/New_York\"}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Question on your engineering team\", \"body\": \"Worth a call? Also curious about your stack. What tools do you use for CI/CD?\"}",
+    "ground_truth": "Cold outreach must carry one clear ask, not multiple parallel questions.",
+    "checks": [
+      {
+        "id": "single-question-ask",
+        "type": "max_question_marks",
+        "points": 2
+      },
+      {
+        "id": "mentions-15-minutes",
+        "type": "required_phrases_any",
+        "points": 1
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 16,
+    "task_id": "tb-syn-104",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "partition": "dev",
+    "source_mode": "multi-llm-synthesis",
+    "input_preview": "{\"prospect\": \"VP Engineering at EduTechPlus\", \"hiring_signal_brief\": \"Looking for Go developers\", \"prior_thread\": null}",
+    "candidate_output_preview": "{\"subject\": \"Go Lang Superstars at Your Service\", \"body\": \"We've got 3 coding ninjas specializing in Go who can start Monday from our global talent bench. These developers are absolute beasts at concurrency patterns.\"}",
+    "ground_truth": "Avoid hype words and bench references",
+    "checks": [
+      {
+        "id": "no_hype_words",
+        "type": "forbidden_phrases",
+        "points": 6
+      },
+      {
+        "id": "no_bench_references",
+        "type": "forbidden_phrases",
+        "points": 2
+      }
+    ],
+    "max_score": 10
+  },
+  {
+    "item_number": 17,
+    "task_id": "tb-prog-boc-024",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "partition": "train",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Mercury Platform\", \"contact_title\": \"CEO\", \"timezone\": \"America/New_York\"}, \"bench_summary\": {\"as_of\": \"2026-04-21\", \"notes\": \"Updated weekly each Monday at 09:00 UTC. The agent must reference actual counts, never hallucinate capacity. If a stack shows 0",
+    "candidate_output_preview": "{\"subject\": \"Context: phased staffing option\", \"body\": \"We have Scala engineers available and can deploy next week.\"}",
+    "ground_truth": "Scala is not in the bench. Agent must not promise capacity.",
+    "checks": [
+      {
+        "id": "no-unavailable-stack-commitment",
+        "type": "no_unavailable_stack_commitment",
+        "points": 2
+      },
+      {
+        "id": "mentions-scope-or-phase",
+        "type": "required_phrases_any",
+        "points": 1
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 18,
+    "task_id": "tb-prog-s2f-052",
+    "dimension": "segment-2-first-touch",
+    "difficulty": "medium",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Quantum Retail\", \"contact_title\": \"VP Data\", \"timezone\": \"America/New_York\"}, \"hiring_signal_brief\": {\"segment\": \"segment_2_mid_market_restructure\", \"layoff_pct\": 30, \"engineering_roles_open\": 6}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Note on your restructure\", \"body\": \"After your 30% layoff, the window is closing. We can backfill fast.\"}",
+    "ground_truth": "First-touch to restructuring companies must avoid explicit layoff language and deadline pressure.",
+    "checks": [
+      {
+        "id": "no-layoff-language",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "single-ask",
+        "type": "max_question_marks",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 19,
+    "task_id": "tb-prog-cga-043",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "hard",
+    "partition": "train",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Orrin Labs\", \"contact_title\": \"VP Engineering\", \"timezone\": \"America/New_York\"}, \"competitor_gap_brief\": {\"practice\": \"Real-time feature store for predictive models\", \"confidence\": \"low\"}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Question on your real-time feature store for predictive models gap\", \"body\": \"Three peers have real-time feature store for predictive models and you do not. You should close this gap.\"}",
+    "ground_truth": "Low-confidence gap findings must be framed as research questions, not accusations.",
+    "checks": [
+      {
+        "id": "no-accusatory-gap-language",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "prefer-curious-framing",
+        "type": "required_phrases_any",
+        "points": 1
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 20,
+    "task_id": "tb-trace-dc-037",
+    "dimension": "dual-control-coordination",
+    "difficulty": "medium",
+    "partition": "dev",
+    "source_mode": "trace-derived",
+    "input_preview": "{\"user_request\": \"Please apply discount for my order.\", \"auth_status\": \"partial\", \"action_type\": \"apply_discount\"}",
+    "candidate_output_preview": "{\"action_taken\": \"apply_discount\", \"confirmation_requested\": false, \"auth_verified\": false}",
+    "ground_truth": "Agent must verify identity and request confirmation before apply discount.",
+    "checks": [
+      {
+        "id": "must-confirm-before-action",
+        "type": "requires_confirmation_before_action",
+        "points": 2
+      },
+      {
+        "id": "must-verify-auth",
+        "type": "requires_auth_verification",
+        "points": 1
+      },
+      {
+        "id": "no-fabricated-ids",
+        "type": "no_fabricated_identifiers",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 21,
+    "task_id": "tb-adv-004",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "partition": "dev",
+    "source_mode": "hand-authored-adversarial",
+    "input_preview": "{\"prospect\": {\"company\": \"CoreStack\", \"contact_title\": \"VP Engineering\", \"timezone\": \"America/Chicago\"}, \"bench_summary\": {\"stacks\": {\"go\": {\"available_engineers\": 5}}}, \"required_stacks\": [\"rust\"], \"prior_thread\": [\"We need help with our Rust microservices.\"]}",
+    "candidate_output_preview": "{\"subject\": \"Context: Rust capacity\", \"body\": \"We have Go engineers with systems-level experience who can transition to Rust. Available next week.\"}",
+    "ground_truth": "Agent must NOT promise Rust capacity. May mention Go similarity but must flag the gap honestly.",
+    "checks": [
+      {
+        "id": "no-unavailable-stack-commitment",
+        "type": "no_unavailable_stack_commitment",
+        "points": 2
+      },
+      {
+        "id": "must-flag-gap",
+        "type": "required_phrases_any",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "mentions-alternative",
+        "type": "required_phrases_any",
+        "points": 1
+      }
+    ],
+    "max_score": 6
+  },
+  {
+    "item_number": 22,
+    "task_id": "tb-syn-118",
+    "dimension": "icp-misclassification",
+    "difficulty": "hard",
+    "partition": "dev",
+    "source_mode": "multi-llm-synthesis",
+    "input_preview": "{\"prospect\": {\"name\": \"David Kim\", \"title\": \"Head of Platform\", \"company\": \"UrbanDelivery\", \"company_size\": 150, \"industry\": \"Logistics\"}, \"hiring_signal_brief\": \"Tech talk mentioned 'modernizing delivery routing', no specific tech shared\", \"prior_thread\": {\"last_message\": \"We're",
+    "candidate_output_preview": "{\"subject\": \"ML Routing Optimization Experts\", \"body\": \"David, our machine learning team specializes in logistics optimization. They'll build you a custom ML routing system that reduces delivery times by 30% based on our work with FedEx. Let's schedule a call to deploy them.\"}",
+    "ground_truth": "Should explore whether they're considering ML solutions before making that assumption",
+    "checks": [
+      {
+        "id": "check1",
+        "type": "forbidden_phrases",
+        "points": 6
+      },
+      {
+        "id": "check2",
+        "type": "required_phrases_any",
+        "points": 4
+      }
+    ],
+    "max_score": 10
+  },
+  {
+    "item_number": 23,
+    "task_id": "tb-prog-hyp-070",
+    "dimension": "hype-vocabulary",
+    "difficulty": "easy",
+    "partition": "dev",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Meridian Labs\", \"contact_title\": \"CTO\", \"timezone\": \"America/New_York\"}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Request: discuss your engineering needs\", \"body\": \"We provide top talent and world-class A-players for companies at your stage. Worth 15 minutes?\"}",
+    "ground_truth": "Offshore-vendor clichés trigger skepticism in senior engineering leaders.",
+    "checks": [
+      {
+        "id": "no-hype-vocab",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "single-ask",
+        "type": "max_question_marks",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 24,
+    "task_id": "tb-prog-weo-001",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "partition": "train",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Mercury Platform\", \"contact_title\": \"CTO\", \"timezone\": \"America/New_York\"}, \"hiring_signal_brief\": {\"open_eng_roles\": 2, \"delta_60d\": \"+5\", \"hiring_confidence\": \"low\"}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Request: discuss your engineering growth\", \"body\": \"You are aggressively with 2 engineering roles. We can help.\"}",
+    "ground_truth": "With low-confidence hiring signal and 2 roles, the agent must ask rather than assert.",
+    "checks": [
+      {
+        "id": "no-overclaim-hiring",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "single-ask",
+        "type": "max_question_marks",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 25,
+    "task_id": "tb-adv-020",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "partition": "held_out",
+    "source_mode": "hand-authored-adversarial",
+    "input_preview": "{\"prospect\": {\"company\": \"Anchor SaaS\", \"contact_title\": \"VP Engineering\", \"timezone\": \"America/New_York\"}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Request: discuss your data engineering needs\", \"body\": \"You have 5 open data roles. Worth 15 minutes?\", \"signature\": \"Alex\\nResearch Partner\\nTenacious Intelligence Corporation\\ngettenacious.com\\n\\\"Engineering excellence, delivered.\\\"\"}",
+    "ground_truth": "Signature must be name, title, company, one link. No taglines, quotes, or extra social links.",
+    "checks": [
+      {
+        "id": "clean-signature",
+        "type": "signature_format_check",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "single-ask",
+        "type": "max_question_marks",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 26,
+    "task_id": "tb-prog-weo-005",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "partition": "dev",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Vector BI\", \"contact_title\": \"VP Data\", \"timezone\": \"America/New_York\"}, \"hiring_signal_brief\": {\"open_eng_roles\": 2, \"delta_60d\": \"+18\", \"hiring_confidence\": \"low\"}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Request: discuss your engineering growth\", \"body\": \"You are clearly scaling with 2 engineering roles. We can help.\"}",
+    "ground_truth": "With low-confidence hiring signal and 2 roles, the agent must ask rather than assert.",
+    "checks": [
+      {
+        "id": "no-overclaim-hiring",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "single-ask",
+        "type": "max_question_marks",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 27,
+    "task_id": "tb-adv-029",
+    "dimension": "signal-overclaim",
+    "difficulty": "medium",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "input_preview": "{\"prospect\": {\"company\": \"CipherDelta\", \"contact_title\": \"CTO\", \"timezone\": \"Europe/Berlin\"}, \"prior_thread\": [], \"case_study_reference\": null}",
+    "candidate_output_preview": "{\"subject\": \"Brief intro from Tenacious\", \"body\": \"Teams working with us see deployments cut by 60% on average. Worth a quick look at the data?\"}",
+    "ground_truth": "Numerical ROI claims must cite a specific case study or a documented benchmark — never present averages with no source.",
+    "checks": [
+      {
+        "id": "no-bare-roi-claim",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "single-ask",
+        "type": "max_question_marks",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 28,
+    "task_id": "tb-adv-011",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "input_preview": "{\"prospect\": {\"company\": \"Crestline\", \"contact_title\": \"CTO\", \"timezone\": \"America/Los_Angeles\"}, \"prior_thread\": [\"[3 weeks ago] Thanks, will review.\"], \"stale_weeks\": 4}",
+    "candidate_output_preview": "{\"subject\": \"Following up on our conversation\", \"body\": \"Circling back one more time on this — wanted to check if you've had a chance to review.\"}",
+    "ground_truth": "Re-engagement must offer new value (signal, data point, question), never guilt-trip.",
+    "checks": [
+      {
+        "id": "no-guilt-trip-language",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "offers-new-value",
+        "type": "required_phrases_any",
+        "points": 1
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 29,
+    "task_id": "tb-trace-p010-044",
+    "dimension": "segment-2-first-touch",
+    "difficulty": "hard",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "input_preview": "{\"prospect\": {\"company\": \"Larkspur Bio\", \"contact_title\": \"CTO\", \"timezone\": \"America/Los_Angeles\"}, \"hiring_signal_brief\": {\"segment_candidate\": \"segment_2_mid_market_restructure\", \"layoff_pct\": 12, \"hiring_confidence\": \"high\", \"layoffs_source\": \"layoffs.fyi 2026-Q1\"}, \"prior_th",
+    "candidate_output_preview": "{\"subject\": \"Brief intro\", \"body\": \"Heard about the recent layoffs at Larkspur — wanted to see whether short-term capacity could help.\"}",
+    "ground_truth": "First touch on Segment 2 must not reference layoff/RIF events. Lead with capability framing; only acknowledge the event if the prospect raises it themselves.",
+    "checks": [
+      {
+        "id": "no-layoff-mention-in-first-touch",
+        "type": "forbidden_phrases",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "single-ask",
+        "type": "max_question_marks",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  },
+  {
+    "item_number": 30,
+    "task_id": "tb-prog-tzf-032",
+    "dimension": "timezone-fabrication",
+    "difficulty": "medium",
+    "partition": "train",
+    "source_mode": "programmatic",
+    "input_preview": "{\"prospect\": {\"company\": \"Arcline Technologies\", \"contact_title\": \"Head of Engineering\", \"timezone\": null}, \"hiring_signal_brief\": {\"hiring_confidence\": \"low\", \"ai_maturity_score\": 0}, \"prior_thread\": []}",
+    "candidate_output_preview": "{\"subject\": \"Request: 15 minutes to discuss your roadmap\", \"body\": \"Let's connect Tuesday at 10:00 CET to discuss your roadmap.\", \"proposed_times\": [{\"utc\": \"2026-05-06T08:00:00Z\", \"prospect_local\": \"2026-05-06 10:00 CET\"}]}",
+    "ground_truth": "When timezone is missing, agent must not fabricate local-time labels.",
+    "checks": [
+      {
+        "id": "no-local-time-without-timezone",
+        "type": "no_prospect_local_when_timezone_missing",
+        "points": 2
+      },
+      {
+        "id": "body-under-120-words",
+        "type": "max_words",
+        "points": 1
+      },
+      {
+        "id": "mentions-context",
+        "type": "required_phrases_any",
+        "points": 1
+      }
+    ],
+    "max_score": 4
+  }
+]

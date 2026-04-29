@@ -1,35 +1,40 @@
 {
-  "total_tasks": 183,
+  "total_tasks": 230,
   "partitions": {
-    "train": 88,
-    "dev": 50,
-    "held_out": 45
+    "train": 116,
+    "dev": 71,
+    "held_out": 43
+  },
+  "partition_ratios": {
+    "train": 0.504,
+    "dev": 0.309,
+    "held_out": 0.187
   },
   "by_dimension": {
-    "weak-evidence-overclaim": 38,
-    "tone-drift": 14,
-    "competitor-gap-assertion": 19,
-    "signal-overclaim": 3,
-    "icp-misclassification": 16,
-    "bench-over-commitment": 25,
-    "timezone-fabrication": 18,
-    "dual-control-coordination": 17,
-    "hype-vocabulary": 3,
-    "segment-2-first-touch": 7,
-    "directness-subject-line": 8,
+    "bench-over-commitment": 26,
+    "weak-evidence-overclaim": 39,
+    "tone-drift": 26,
+    "timezone-fabrication": 25,
+    "signal-overclaim": 10,
     "bench-jargon": 6,
-    "pricing-objection": 6,
-    "single-clear-ask": 3
+    "segment-2-first-touch": 12,
+    "competitor-gap-assertion": 26,
+    "pricing-objection": 12,
+    "single-clear-ask": 3,
+    "directness-subject-line": 8,
+    "dual-control-coordination": 16,
+    "icp-misclassification": 19,
+    "hype-vocabulary": 2
   },
   "by_source_mode": {
-    "programmatic": 68,
-    "multi-llm-synthesis": 55,
-    "trace-derived": 42,
-    "hand-authored-adversarial": 18
+    "programmatic": 71,
+    "trace-derived": 68,
+    "multi-llm-synthesis": 56,
+    "hand-authored-adversarial": 35
   },
   "by_difficulty": {
-    "medium": 74,
-    "hard": 68,
-    "easy": 41
+    "hard": 104,
+    "medium": 83,
+    "easy": 43
   }
 }

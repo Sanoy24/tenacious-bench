@@ -43,30 +43,36 @@ def load_partition(name: str) -> list[dict[str, Any]]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def extract_text(task: dict[str, Any]) -> str:
-    """Flatten a task's input and output fields into a single lowercase string.
+def _flatten_values(value: Any) -> list[str]:
+    """Recursively pull only the *values* out of a nested input field.
 
-    This is the text representation used for both n-gram and embedding checks.
+    Drops JSON keys and structural punctuation so a shared schema does not
+    register as content overlap; only repeated natural-language values do.
     """
-    parts: list[str] = []
+    out: list[str] = []
+    if isinstance(value, dict):
+        for v in value.values():
+            out.extend(_flatten_values(v))
+    elif isinstance(value, list):
+        for v in value:
+            out.extend(_flatten_values(v))
+    elif value is None or value == "":
+        return out
+    else:
+        out.append(str(value))
+    return out
 
-    # Input fields.
+
+def extract_text(task: dict[str, Any]) -> str:
+    """Return lowercased natural-language text from *input fields only*.
+
+    Per the brief: "less than 8-gram overlap on input fields". Output text
+    (candidate_output.subject / body) is intentionally excluded — those are
+    intervention targets, not the basis of the contamination rule.
+    """
     inp = task.get("input", {})
-    for key in ["prospect", "hiring_signal_brief", "competitor_gap_brief", "prior_thread"]:
-        val = inp.get(key, "")
-        if isinstance(val, dict):
-            parts.append(json.dumps(val, sort_keys=True))
-        elif isinstance(val, list):
-            parts.append(" ".join(str(v) for v in val))
-        elif val:
-            parts.append(str(val))
-
-    # Output fields.
-    out = task.get("candidate_output", {})
-    parts.append(out.get("subject", ""))
-    parts.append(out.get("body", ""))
-
-    return " ".join(parts).lower()
+    tokens = _flatten_values(inp)
+    return " ".join(tokens).lower()
 
 
 def content_hash(task: dict[str, Any]) -> str:
@@ -183,6 +189,46 @@ def check_content_hash_overlap(
     return violations
 
 
+# ── Check 4: Temporal Integrity ──────────────────────────────────────────────
+
+
+PUBLIC_DATA_SOURCES = {
+    "layoffs.fyi", "layoffs_csv",
+    "crunchbase", "crunchbase_odm",
+    "sec_edgar", "github_org",
+}
+
+
+def check_temporal_integrity(tasks: list[dict[str, Any]], partition_name: str) -> list[dict[str, Any]]:
+    """Time-shift verification (per challenge doc, line 150).
+
+    The brief mandates this check only for tasks grounded in *public data*
+    (layoffs.fyi, Crunchbase, SEC filings, etc.). Such tasks must declare a
+    `metadata.signal_source` that names the public source AND a
+    `metadata.time_window` documenting the snapshot window. Synthetic-signal
+    tasks (the default in v0.1) carry `signal_source: "synthetic"` and are
+    exempt — pretending synthetic data has a real time window is exactly
+    the fabrication the rule is designed to prevent.
+    """
+    violations: list[dict[str, Any]] = []
+    invalid_windows = {"", "placeholder", "tbd", "unknown", "n/a"}
+    for t in tasks:
+        meta = t.get("metadata", {})
+        signal_source = str(meta.get("signal_source", "")).strip().lower()
+        # Only tasks that *claim* a public source are subject to the check.
+        if signal_source in PUBLIC_DATA_SOURCES:
+            tw = str(meta.get("time_window", "")).strip().lower()
+            if not tw or tw in invalid_windows:
+                violations.append({
+                    "task": t.get("task_id"),
+                    "partition": partition_name,
+                    "signal_source": signal_source,
+                    "time_window_value": tw,
+                    "check": "temporal_integrity_missing",
+                })
+    return violations
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 
@@ -223,6 +269,13 @@ def main() -> None:
     for a, b, label in pairs:
         v = check_content_hash_overlap(a, b, label)
         logger.info("  %s: %d violations", label, len(v))
+        all_violations.extend(v)
+
+    # Check 4: Temporal Integrity (Time-Shift Verification)
+    logger.info("Running temporal integrity check (public signals must have time_window)...")
+    for partition, name in [(held_out, "held_out"), (dev, "dev"), (train, "train")]:
+        v = check_temporal_integrity(partition, name)
+        logger.info("  %s: %d violations", name, len(v))
         all_violations.extend(v)
 
     # ── Write report ──────────────────────────────────────────────────

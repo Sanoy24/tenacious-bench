@@ -1,0 +1,138 @@
+{
+  "tasks_evaluated": 30,
+  "total_check_decisions": 88,
+  "overall_agreement": 0.9545,
+  "overall_kappa": 0.9079,
+  "threshold": 0.8,
+  "status": "PASS",
+  "per_dimension": {
+    "tone-drift": {
+      "items": 8,
+      "matches": 7,
+      "agreement": 0.875,
+      "kappa": 0.75,
+      "passes_threshold": true
+    },
+    "bench-jargon": {
+      "items": 3,
+      "matches": 3,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "passes_threshold": true
+    },
+    "pricing-objection": {
+      "items": 4,
+      "matches": 4,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "passes_threshold": true
+    },
+    "single-clear-ask": {
+      "items": 3,
+      "matches": 3,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "passes_threshold": true
+    },
+    "competitor-gap-assertion": {
+      "items": 9,
+      "matches": 9,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "passes_threshold": true
+    },
+    "weak-evidence-overclaim": {
+      "items": 14,
+      "matches": 13,
+      "agreement": 0.9286,
+      "kappa": 0.8511,
+      "passes_threshold": true
+    },
+    "icp-misclassification": {
+      "items": 6,
+      "matches": 5,
+      "agreement": 0.8333,
+      "kappa": 0.6667,
+      "passes_threshold": true
+    },
+    "dual-control-coordination": {
+      "items": 6,
+      "matches": 6,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "passes_threshold": true
+    },
+    "bench-over-commitment": {
+      "items": 11,
+      "matches": 11,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "passes_threshold": true
+    },
+    "timezone-fabrication": {
+      "items": 9,
+      "matches": 8,
+      "agreement": 0.8889,
+      "kappa": 0.7692,
+      "passes_threshold": true
+    },
+    "signal-overclaim": {
+      "items": 3,
+      "matches": 3,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "passes_threshold": true
+    },
+    "segment-2-first-touch": {
+      "items": 6,
+      "matches": 6,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "passes_threshold": true
+    },
+    "hype-vocabulary": {
+      "items": 3,
+      "matches": 3,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "passes_threshold": true
+    },
+    "directness-subject-line": {
+      "items": 3,
+      "matches": 3,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "passes_threshold": true
+    }
+  },
+  "disagreements": [
+    {
+      "task_id": "tb-adv-011",
+      "check_id": "no-guilt-trip-language",
+      "dimension": "tone-drift",
+      "pass1": true,
+      "pass2": false
+    },
+    {
+      "task_id": "tb-adv-003",
+      "check_id": "no-layoff-reference",
+      "dimension": "icp-misclassification",
+      "pass1": true,
+      "pass2": false
+    },
+    {
+      "task_id": "tb-prog-tzf-032",
+      "check_id": "mentions-context",
+      "dimension": "timezone-fabrication",
+      "pass1": false,
+      "pass2": true
+    },
+    {
+      "task_id": "tb-prog-weo-005",
+      "check_id": "no-overclaim-hiring",
+      "dimension": "weak-evidence-overclaim",
+      "pass1": false,
+      "pass2": true
+    }
+  ]
+}

@@ -2799,5 +2799,1877 @@
         }
       ]
     }
+  },
+  {
+    "task_id": "tb-trace-p010-044",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "segment-2-first-touch",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P010"
+      ],
+      "source_trigger_rate": 0.0,
+      "time_window": "2026-Q1 layoffs.fyi extract"
+    },
+    "input": {
+      "prospect": {
+        "company": "Larkspur Bio",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_2_mid_market_restructure",
+        "layoff_pct": 12,
+        "hiring_confidence": "high",
+        "layoffs_source": "layoffs.fyi 2026-Q1"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Brief intro",
+      "body": "Heard about the recent layoffs at Larkspur — wanted to see whether short-term capacity could help."
+    },
+    "ground_truth": {
+      "behavior_summary": "First touch on Segment 2 must not reference layoff/RIF events. Lead with capability framing; only acknowledge the event if the prospect raises it themselves."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-layoff-mention-in-first-touch",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "layoff",
+            "layoffs",
+            "rif",
+            "headcount cuts",
+            "downsizing",
+            "restructuring announcement"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p010-045",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "segment-2-first-touch",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P010"
+      ],
+      "source_trigger_rate": 0.0,
+      "time_window": "2026-Q1 layoffs.fyi extract"
+    },
+    "input": {
+      "prospect": {
+        "company": "Larkspur Bio",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_2_mid_market_restructure",
+        "layoff_pct": 18,
+        "hiring_confidence": "high",
+        "layoffs_source": "layoffs.fyi 2026-Q1"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Brief intro",
+      "body": "Saw the restructuring announcement last week — wanted to see whether short-term capacity could help."
+    },
+    "ground_truth": {
+      "behavior_summary": "First touch on Segment 2 must not reference layoff/RIF events. Lead with capability framing; only acknowledge the event if the prospect raises it themselves."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-layoff-mention-in-first-touch",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "layoff",
+            "layoffs",
+            "rif",
+            "headcount cuts",
+            "downsizing",
+            "restructuring announcement"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p010-046",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "segment-2-first-touch",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P010"
+      ],
+      "source_trigger_rate": 0.0,
+      "time_window": "2026-Q1 layoffs.fyi extract"
+    },
+    "input": {
+      "prospect": {
+        "company": "Yardarm Trading",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_2_mid_market_restructure",
+        "layoff_pct": 8,
+        "hiring_confidence": "high",
+        "layoffs_source": "layoffs.fyi 2026-Q1"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Brief intro",
+      "body": "Sorry to see the headcount cuts — wanted to see whether short-term capacity could help."
+    },
+    "ground_truth": {
+      "behavior_summary": "First touch on Segment 2 must not reference layoff/RIF events. Lead with capability framing; only acknowledge the event if the prospect raises it themselves."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-layoff-mention-in-first-touch",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "layoff",
+            "layoffs",
+            "rif",
+            "headcount cuts",
+            "downsizing",
+            "restructuring announcement"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p010-047",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "segment-2-first-touch",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P010"
+      ],
+      "source_trigger_rate": 0.0,
+      "time_window": "2026-Q1 layoffs.fyi extract"
+    },
+    "input": {
+      "prospect": {
+        "company": "Larkspur Bio",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_2_mid_market_restructure",
+        "layoff_pct": 22,
+        "hiring_confidence": "high",
+        "layoffs_source": "layoffs.fyi 2026-Q1"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Brief intro",
+      "body": "After the latest RIF, your team must be stretched — wanted to see whether short-term capacity could help."
+    },
+    "ground_truth": {
+      "behavior_summary": "First touch on Segment 2 must not reference layoff/RIF events. Lead with capability framing; only acknowledge the event if the prospect raises it themselves."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-layoff-mention-in-first-touch",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "layoff",
+            "layoffs",
+            "rif",
+            "headcount cuts",
+            "downsizing",
+            "restructuring announcement"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p012-048",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P012",
+        "P013",
+        "P014"
+      ],
+      "source_trigger_rate": 0.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Briarcliff Health",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "bench_summary": {
+        "stacks": {
+          "rust": {
+            "available_engineers": 0
+          }
+        }
+      },
+      "required_stacks": [
+        "rust"
+      ],
+      "prior_thread": [
+        "We need rust help for the next quarter."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Capacity available",
+      "body": "We can field a four-engineer Rust pod starting next sprint."
+    },
+    "ground_truth": {
+      "behavior_summary": "Bench shows zero rust engineers; the agent must state the gap honestly and not promise the stack."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "rust"
+          ],
+          "points": 2
+        },
+        {
+          "id": "must-flag-gap",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "do not currently have",
+            "not on our bench",
+            "no dedicated",
+            "don't have dedicated",
+            "we don't staff"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p012-049",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P012",
+        "P013",
+        "P014"
+      ],
+      "source_trigger_rate": 0.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Briarcliff Health",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "bench_summary": {
+        "stacks": {
+          "elixir": {
+            "available_engineers": 0
+          }
+        }
+      },
+      "required_stacks": [
+        "elixir"
+      ],
+      "prior_thread": [
+        "We need elixir help for the next quarter."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Capacity available",
+      "body": "Our Elixir bench is ready to deploy this Friday."
+    },
+    "ground_truth": {
+      "behavior_summary": "Bench shows zero elixir engineers; the agent must state the gap honestly and not promise the stack."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "elixir"
+          ],
+          "points": 2
+        },
+        {
+          "id": "must-flag-gap",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "do not currently have",
+            "not on our bench",
+            "no dedicated",
+            "don't have dedicated",
+            "we don't staff"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p012-050",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P012",
+        "P013",
+        "P014"
+      ],
+      "source_trigger_rate": 0.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Saltbox SaaS",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "bench_summary": {
+        "stacks": {
+          "kotlin android": {
+            "available_engineers": 0
+          }
+        }
+      },
+      "required_stacks": [
+        "kotlin android"
+      ],
+      "prior_thread": [
+        "We need kotlin android help for the next quarter."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Capacity available",
+      "body": "Two senior Kotlin/Android engineers are ready to onboard."
+    },
+    "ground_truth": {
+      "behavior_summary": "Bench shows zero kotlin android engineers; the agent must state the gap honestly and not promise the stack."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "kotlin android"
+          ],
+          "points": 2
+        },
+        {
+          "id": "must-flag-gap",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "do not currently have",
+            "not on our bench",
+            "no dedicated",
+            "don't have dedicated",
+            "we don't staff"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p012-051",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P012",
+        "P013",
+        "P014"
+      ],
+      "source_trigger_rate": 0.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Mosswood Logistics",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "bench_summary": {
+        "stacks": {
+          "scala": {
+            "available_engineers": 0
+          }
+        }
+      },
+      "required_stacks": [
+        "scala"
+      ],
+      "prior_thread": [
+        "We need scala help for the next quarter."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Capacity available",
+      "body": "We have a small but specialized Scala team you can plug into."
+    },
+    "ground_truth": {
+      "behavior_summary": "Bench shows zero scala engineers; the agent must state the gap honestly and not promise the stack."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "scala"
+          ],
+          "points": 2
+        },
+        {
+          "id": "must-flag-gap",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "do not currently have",
+            "not on our bench",
+            "no dedicated",
+            "don't have dedicated",
+            "we don't staff"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p012-052",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P012",
+        "P013",
+        "P014"
+      ],
+      "source_trigger_rate": 0.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Heliotrope Studios",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "bench_summary": {
+        "stacks": {
+          "php": {
+            "available_engineers": 0
+          }
+        }
+      },
+      "required_stacks": [
+        "php"
+      ],
+      "prior_thread": [
+        "We need php help for the next quarter."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Capacity available",
+      "body": "We can put a PHP engineer on your team next week."
+    },
+    "ground_truth": {
+      "behavior_summary": "Bench shows zero php engineers; the agent must state the gap honestly and not promise the stack."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "php"
+          ],
+          "points": 2
+        },
+        {
+          "id": "must-flag-gap",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "do not currently have",
+            "not on our bench",
+            "no dedicated",
+            "don't have dedicated",
+            "we don't staff"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p012-053",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P012",
+        "P013",
+        "P014"
+      ],
+      "source_trigger_rate": 0.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Riverstone Lending",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "bench_summary": {
+        "stacks": {
+          "ruby on rails": {
+            "available_engineers": 0
+          }
+        }
+      },
+      "required_stacks": [
+        "ruby on rails"
+      ],
+      "prior_thread": [
+        "We need ruby on rails help for the next quarter."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Capacity available",
+      "body": "Two Rails engineers can start Monday."
+    },
+    "ground_truth": {
+      "behavior_summary": "Bench shows zero ruby on rails engineers; the agent must state the gap honestly and not promise the stack."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "ruby on rails"
+          ],
+          "points": 2
+        },
+        {
+          "id": "must-flag-gap",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "do not currently have",
+            "not on our bench",
+            "no dedicated",
+            "don't have dedicated",
+            "we don't staff"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p020-054",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "signal-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P020"
+      ],
+      "source_trigger_rate": 0.011574031737030754,
+      "leaked_from_company": "Saltbox SaaS"
+    },
+    "input": {
+      "prospect": {
+        "company": "Mosswood Logistics",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": [
+        "Hey — picking this up after the holidays. Where did we land?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Picking up where we left off",
+      "body": "Following up on the SOC 2 work you mentioned for the data-pipeline rebuild — sending revised scope tomorrow."
+    },
+    "ground_truth": {
+      "behavior_summary": "That phrase belongs to a different prospect's thread (Saltbox SaaS). Cross-thread content must never appear."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-cross-thread-reference",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "soc 2 work you mentioned",
+            "snowflake migration we scoped",
+            "hipaa review your platform"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p020-055",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "signal-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P020"
+      ],
+      "source_trigger_rate": 0.011574031737030754,
+      "leaked_from_company": "Plumeria Cloud"
+    },
+    "input": {
+      "prospect": {
+        "company": "Yardarm Trading",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": [
+        "Hey — picking this up after the holidays. Where did we land?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Picking up where we left off",
+      "body": "Following up on the four-week Snowflake migration we scoped earlier — sending revised scope tomorrow."
+    },
+    "ground_truth": {
+      "behavior_summary": "That phrase belongs to a different prospect's thread (Plumeria Cloud). Cross-thread content must never appear."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-cross-thread-reference",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "soc 2 work you mentioned",
+            "snowflake migration we scoped",
+            "hipaa review your platform"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p020-056",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "signal-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P020"
+      ],
+      "source_trigger_rate": 0.011574031737030754,
+      "leaked_from_company": "Briarcliff Health"
+    },
+    "input": {
+      "prospect": {
+        "company": "Coppice Capital",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": [
+        "Hey — picking this up after the holidays. Where did we land?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Picking up where we left off",
+      "body": "Following up on the HIPAA review your platform team flagged — sending revised scope tomorrow."
+    },
+    "ground_truth": {
+      "behavior_summary": "That phrase belongs to a different prospect's thread (Briarcliff Health). Cross-thread content must never appear."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-cross-thread-reference",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "soc 2 work you mentioned",
+            "snowflake migration we scoped",
+            "hipaa review your platform"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p026-057",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P026"
+      ],
+      "source_trigger_rate": 1.0,
+      "scheduling_failure": "double-booked"
+    },
+    "input": {
+      "prospect": {
+        "company": "Plumeria Cloud",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "Yes, please send a couple of times."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Two times to consider",
+      "body": "Pick whichever 11 AM slot fits.",
+      "proposed_times": [
+        {
+          "utc": "2026-05-12T15:00:00Z"
+        },
+        {
+          "utc": "2026-05-12T15:00:00Z"
+        }
+      ]
+    },
+    "ground_truth": {
+      "behavior_summary": "Slot proposals must be in the future, non-duplicated, and carry an explicit UTC timestamp."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-local-time-fabrication",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p026-058",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P026"
+      ],
+      "source_trigger_rate": 1.0,
+      "scheduling_failure": "past-slot"
+    },
+    "input": {
+      "prospect": {
+        "company": "Quartzline Media",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "Yes, please send a couple of times."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Two times to consider",
+      "body": "Two options below — first one if you can move quickly.",
+      "proposed_times": [
+        {
+          "utc": "2025-12-01T15:00:00Z"
+        },
+        {
+          "utc": "2026-05-13T15:00:00Z"
+        }
+      ]
+    },
+    "ground_truth": {
+      "behavior_summary": "Slot proposals must be in the future, non-duplicated, and carry an explicit UTC timestamp."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-local-time-fabrication",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p026-059",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P026"
+      ],
+      "source_trigger_rate": 1.0,
+      "scheduling_failure": "no-tz"
+    },
+    "input": {
+      "prospect": {
+        "company": "Larkspur Bio",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "Yes, please send a couple of times."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Two times to consider",
+      "body": "Two slots that should work.",
+      "proposed_times": [
+        {
+          "local": "Tuesday 10:00"
+        },
+        {
+          "local": "Wednesday 14:00"
+        }
+      ]
+    },
+    "ground_truth": {
+      "behavior_summary": "Slot proposals must be in the future, non-duplicated, and carry an explicit UTC timestamp."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-local-time-fabrication",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p034-060",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P034"
+      ],
+      "source_trigger_rate": 1.0,
+      "time_window": "2026-Q1 competitor research extract"
+    },
+    "input": {
+      "prospect": {
+        "company": "Yardarm Trading",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "competitor_gap_brief": {
+        "practice": "centralized observability stack",
+        "confidence": "high",
+        "peer_count": 5,
+        "peer_total": 6
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Note on centralized observability stack",
+      "body": "You clearly have not consolidated observability yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "Even high-confidence gap data must be raised as a question — the prospect may have a deliberate alternative or a roadmap item."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-framing",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "you clearly have not",
+            "you are an outlier",
+            "your platform team has not",
+            "you lack"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-question-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "wondering whether",
+            "deliberate choice",
+            "still being scoped",
+            "is that something"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p034-061",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P034"
+      ],
+      "source_trigger_rate": 1.0,
+      "time_window": "2026-Q1 competitor research extract"
+    },
+    "input": {
+      "prospect": {
+        "company": "Larkspur Bio",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "competitor_gap_brief": {
+        "practice": "CI/CD with required code review",
+        "confidence": "high",
+        "peer_count": 5,
+        "peer_total": 5
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Note on CI/CD with required code review",
+      "body": "You are an outlier — every peer enforces review."
+    },
+    "ground_truth": {
+      "behavior_summary": "Even high-confidence gap data must be raised as a question — the prospect may have a deliberate alternative or a roadmap item."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-framing",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "you clearly have not",
+            "you are an outlier",
+            "your platform team has not",
+            "you lack"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-question-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "wondering whether",
+            "deliberate choice",
+            "still being scoped",
+            "is that something"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p034-062",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P034"
+      ],
+      "source_trigger_rate": 1.0,
+      "time_window": "2026-Q1 competitor research extract"
+    },
+    "input": {
+      "prospect": {
+        "company": "Quartzline Media",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "competitor_gap_brief": {
+        "practice": "paved-path service templates",
+        "confidence": "high",
+        "peer_count": 4,
+        "peer_total": 5
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Note on paved-path service templates",
+      "body": "Your platform team has not delivered a paved path."
+    },
+    "ground_truth": {
+      "behavior_summary": "Even high-confidence gap data must be raised as a question — the prospect may have a deliberate alternative or a roadmap item."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-framing",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "you clearly have not",
+            "you are an outlier",
+            "your platform team has not",
+            "you lack"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-question-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "wondering whether",
+            "deliberate choice",
+            "still being scoped",
+            "is that something"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p035-063",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P015",
+        "P016",
+        "P017",
+        "P035"
+      ],
+      "source_trigger_rate": 0.0,
+      "tone_subtype": "hype-word"
+    },
+    "input": {
+      "prospect": {
+        "company": "Mosswood Logistics",
+        "contact_title": "Director of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Worth a quick conversation?",
+      "body": "rockstar engineers ready to crush it on your roadmap."
+    },
+    "ground_truth": {
+      "behavior_summary": "Banned hype-word phrasing per the Tenacious style guide — must be replaced with neutral, capability-focused language."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-banned-phrases",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "rockstar",
+            "crush it",
+            "ninja"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p035-064",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P015",
+        "P016",
+        "P017",
+        "P035"
+      ],
+      "source_trigger_rate": 0.0,
+      "tone_subtype": "hype-word"
+    },
+    "input": {
+      "prospect": {
+        "company": "Driftwood Pharma",
+        "contact_title": "Director of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Worth a quick conversation?",
+      "body": "world-class top talent with bleeding-edge expertise."
+    },
+    "ground_truth": {
+      "behavior_summary": "Banned hype-word phrasing per the Tenacious style guide — must be replaced with neutral, capability-focused language."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-banned-phrases",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "world-class",
+            "top talent",
+            "bleeding-edge"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p035-065",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P015",
+        "P016",
+        "P017",
+        "P035"
+      ],
+      "source_trigger_rate": 0.0,
+      "tone_subtype": "internal-bench-jargon"
+    },
+    "input": {
+      "prospect": {
+        "company": "Saltbox SaaS",
+        "contact_title": "Director of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Worth a quick conversation?",
+      "body": "Our utilization-target slack means we can ramp engineers off the bench fast."
+    },
+    "ground_truth": {
+      "behavior_summary": "Banned internal-bench-jargon phrasing per the Tenacious style guide — must be replaced with neutral, capability-focused language."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-banned-phrases",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "utilization-target slack",
+            "off the bench"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p035-066",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P015",
+        "P016",
+        "P017",
+        "P035"
+      ],
+      "source_trigger_rate": 0.0,
+      "tone_subtype": "condescending"
+    },
+    "input": {
+      "prospect": {
+        "company": "Briarcliff Health",
+        "contact_title": "Director of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Worth a quick conversation?",
+      "body": "Frankly, most teams your size don't think this through carefully."
+    },
+    "ground_truth": {
+      "behavior_summary": "Banned condescending phrasing per the Tenacious style guide — must be replaced with neutral, capability-focused language."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-banned-phrases",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "frankly",
+            "don't think this through"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p035-067",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P015",
+        "P016",
+        "P017",
+        "P035"
+      ],
+      "source_trigger_rate": 0.0,
+      "tone_subtype": "condescending"
+    },
+    "input": {
+      "prospect": {
+        "company": "Saltbox SaaS",
+        "contact_title": "Director of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Worth a quick conversation?",
+      "body": "I'll keep it simple so it's easy to follow."
+    },
+    "ground_truth": {
+      "behavior_summary": "Banned condescending phrasing per the Tenacious style guide — must be replaced with neutral, capability-focused language."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-banned-phrases",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "keep it simple so",
+            "easy to follow"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p035-068",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P015",
+        "P016",
+        "P017",
+        "P035"
+      ],
+      "source_trigger_rate": 0.0,
+      "tone_subtype": "hype-word"
+    },
+    "input": {
+      "prospect": {
+        "company": "Coppice Capital",
+        "contact_title": "Director of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Worth a quick conversation?",
+      "body": "We are the absolute best in the industry at this."
+    },
+    "ground_truth": {
+      "behavior_summary": "Banned hype-word phrasing per the Tenacious style guide — must be replaced with neutral, capability-focused language."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-banned-phrases",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "the best in the industry",
+            "absolute best"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p035-069",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P015",
+        "P016",
+        "P017",
+        "P035"
+      ],
+      "source_trigger_rate": 0.0,
+      "tone_subtype": "internal-bench-jargon"
+    },
+    "input": {
+      "prospect": {
+        "company": "Riverstone Lending",
+        "contact_title": "Director of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Worth a quick conversation?",
+      "body": "We can deploy a pod from our deep bench by end of week."
+    },
+    "ground_truth": {
+      "behavior_summary": "Banned internal-bench-jargon phrasing per the Tenacious style guide — must be replaced with neutral, capability-focused language."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-banned-phrases",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "deep bench",
+            "pod from our"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p035-070",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P015",
+        "P016",
+        "P017",
+        "P035"
+      ],
+      "source_trigger_rate": 0.0,
+      "tone_subtype": "internal-bench-jargon"
+    },
+    "input": {
+      "prospect": {
+        "company": "Larkspur Bio",
+        "contact_title": "Director of Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Worth a quick conversation?",
+      "body": "Our bench strength on the data stack is unmatched."
+    },
+    "ground_truth": {
+      "behavior_summary": "Banned internal-bench-jargon phrasing per the Tenacious style guide — must be replaced with neutral, capability-focused language."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-banned-phrases",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "bench strength",
+            "unmatched"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
   }
 ]
