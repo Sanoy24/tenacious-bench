@@ -6315,68 +6315,6 @@
     "partition": "train"
   },
   {
-    "task_id": "tb-prog-bjl-069",
-    "source_mode": "programmatic",
-    "dimension": "bench-jargon",
-    "difficulty": "easy",
-    "metadata": {
-      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
-      "probe_ids": [
-        "P015"
-      ]
-    },
-    "input": {
-      "prospect": {
-        "company": "NovaBridge",
-        "contact_title": "VP Engineering",
-        "timezone": "America/New_York"
-      },
-      "prior_thread": [
-        "Do you have engineers who could start soon?"
-      ]
-    },
-    "candidate_output": {
-      "subject": "Context: Python capacity",
-      "body": "We have engineers on the bench strength who can start next week on your Python project."
-    },
-    "ground_truth": {
-      "behavior_summary": "Professional wording must use capacity language, not internal bench jargon."
-    },
-    "scoring": {
-      "max_score": 4,
-      "checks": [
-        {
-          "id": "no-bench-strength",
-          "type": "forbidden_phrases",
-          "target": "body",
-          "phrases": [
-            "bench strength"
-          ],
-          "points": 2
-        },
-        {
-          "id": "mentions-capacity",
-          "type": "required_phrases_any",
-          "target": "body",
-          "phrases": [
-            "capacity",
-            "available",
-            "ready to deploy"
-          ],
-          "points": 1
-        },
-        {
-          "id": "body-under-120-words",
-          "type": "max_words",
-          "target": "body",
-          "max_words": 120,
-          "points": 1
-        }
-      ]
-    },
-    "partition": "train"
-  },
-  {
     "task_id": "tb-trace-p010-044",
     "source_mode": "trace-derived",
     "dimension": "segment-2-first-touch",
@@ -9384,7 +9322,7 @@
     "partition": "train"
   },
   {
-    "task_id": "tb-prog-hyp-072",
+    "task_id": "tb-prog-hyp-209",
     "source_mode": "programmatic",
     "dimension": "hype-vocabulary",
     "difficulty": "easy",
@@ -9396,31 +9334,40 @@
     },
     "input": {
       "prospect": {
-        "company": "StudioMesh",
-        "contact_title": "VP Data",
-        "timezone": "America/New_York"
+        "company": "Orbital Labs",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Chicago"
       },
       "prior_thread": []
     },
     "candidate_output": {
-      "subject": "Request: discuss your engineering needs",
-      "body": "We provide guaranteed cost savings of 40% for companies at your stage. Worth 15 minutes?"
+      "subject": "World-class engineers for Orbital Labs",
+      "body": "We provide world-class engineers and top talent to scale your team fast. Our A-players have shipped at FAANG and are ready to join your roadmap."
     },
     "ground_truth": {
-      "behavior_summary": "Offshore-vendor clichés trigger skepticism in senior engineering leaders."
+      "behavior_summary": "Phrases like 'world-class', 'top talent', and 'A-players' are offshore-vendor clichés that senior buyers dismiss on sight."
     },
     "scoring": {
-      "max_score": 4,
+      "max_score": 5,
       "checks": [
         {
-          "id": "no-hype-vocab",
+          "id": "no-hype-vocab-world-class",
           "type": "forbidden_phrases",
-          "target": "body",
+          "target": "full_email",
           "phrases": [
-            "guaranteed savings",
-            "cost savings of"
+            "world-class",
+            "top talent",
+            "a-players",
+            "a-player"
           ],
           "points": 2
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
         },
         {
           "id": "body-under-120-words",
@@ -9434,6 +9381,419 @@
           "type": "max_question_marks",
           "target": "body",
           "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "train"
+  },
+  {
+    "task_id": "tb-prog-hyp-210",
+    "source_mode": "programmatic",
+    "dimension": "hype-vocabulary",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P016"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Meridian Fintech",
+        "contact_title": "CTO",
+        "timezone": "Europe/London"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Rockstar engineers on demand",
+      "body": "Our bench is full of rockstar developers and engineering ninjas. Need a React wizard for your new product? We have A-players ready to embed within 72 hours."
+    },
+    "ground_truth": {
+      "behavior_summary": "Bro-culture superlatives ('rockstar', 'ninja', 'wizard') signal a low-trust vendor and will be filtered before the CTO reads past the first sentence."
+    },
+    "scoring": {
+      "max_score": 5,
+      "checks": [
+        {
+          "id": "no-bro-superlatives",
+          "type": "forbidden_phrases",
+          "target": "full_email",
+          "phrases": [
+            "rockstar",
+            "ninja",
+            "wizard",
+            "a-players",
+            "a-player"
+          ],
+          "points": 2
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "train"
+  },
+  {
+    "task_id": "tb-prog-hyp-212",
+    "source_mode": "programmatic",
+    "dimension": "hype-vocabulary",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P016"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Vantage Health",
+        "contact_title": "CPO",
+        "timezone": "America/Denver"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "A paradigm shift in how you staff engineers",
+      "body": "Tenacious is a game-changer in embedded staffing — a genuine disruptor that represents a paradigm shift in how product companies scale engineering. Ready for a quick call?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Disruption-era vocabulary ('game-changer', 'disruptor', 'paradigm shift') has been memed to death. Product leaders skip past it automatically."
+    },
+    "scoring": {
+      "max_score": 5,
+      "checks": [
+        {
+          "id": "no-disruption-vocab",
+          "type": "forbidden_phrases",
+          "target": "full_email",
+          "phrases": [
+            "game-changer",
+            "game changer",
+            "disruptor",
+            "paradigm shift"
+          ],
+          "points": 2
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "train"
+  },
+  {
+    "task_id": "tb-prog-hyp-213",
+    "source_mode": "programmatic",
+    "dimension": "hype-vocabulary",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P016"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "PulseWave Analytics",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Building synergies within your data ecosystem",
+      "body": "We help companies synergize their data and engineering teams to create lasting synergies across your entire technology ecosystem. Interested in exploring this?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Synergy vocabulary and the word 'ecosystem' used abstractly are MBA-speak. Technical buyers associate them with consultants who cannot ship."
+    },
+    "scoring": {
+      "max_score": 5,
+      "checks": [
+        {
+          "id": "no-synergy-ecosystem",
+          "type": "forbidden_phrases",
+          "target": "full_email",
+          "phrases": [
+            "synergy",
+            "synergies",
+            "synergize",
+            "ecosystem"
+          ],
+          "points": 2
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "train"
+  },
+  {
+    "task_id": "tb-prog-hyp-214",
+    "source_mode": "programmatic",
+    "dimension": "hype-vocabulary",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P016"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "NorthBridge Capital",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Our proprietary engineer-matching system — a perfect fit for NorthBridge",
+      "body": "Using our proprietary matching system, we identify engineers who fit your culture and technical stack. Our proprietary vetting process guarantees quality from day one."
+    },
+    "ground_truth": {
+      "behavior_summary": "Claiming a 'proprietary system' without specifics reads as black-box marketing. Buyers want to understand the process, not be impressed by vague IP claims."
+    },
+    "scoring": {
+      "max_score": 5,
+      "checks": [
+        {
+          "id": "no-proprietary-claim",
+          "type": "forbidden_phrases",
+          "target": "full_email",
+          "phrases": [
+            "our proprietary",
+            "proprietary system",
+            "proprietary process",
+            "proprietary matching"
+          ],
+          "points": 2
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "train"
+  },
+  {
+    "task_id": "tb-adv-218",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "guilt-trip-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "Stratum Cloud",
+        "contact_title": "CTO",
+        "timezone": "Europe/Berlin"
+      },
+      "prior_thread": [
+        "[3 weeks ago] Sent a detailed proposal for infra squad embed."
+      ],
+      "stale_weeks": 3
+    },
+    "candidate_output": {
+      "subject": "Re: Our proposal — following up",
+      "body": "Per my last email, I outlined three ways our infra team could help Stratum. As I mentioned, time-to-deploy is 7 days. Circling back to see if you're ready to move forward."
+    },
+    "ground_truth": {
+      "behavior_summary": "'Per my last email' and 'as I mentioned' carry a passive-aggressive undertone. They imply the prospect failed to read carefully — a sure way to kill the conversation."
+    },
+    "scoring": {
+      "max_score": 5,
+      "checks": [
+        {
+          "id": "no-per-last-email",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "per my last email",
+            "as i mentioned",
+            "as mentioned previously",
+            "circling back"
+          ],
+          "points": 2
+        },
+        {
+          "id": "offers-new-value",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "new signal",
+            "noticed",
+            "recent",
+            "wanted to share",
+            "thought you'd",
+            "update",
+            "happened to"
+          ],
+          "points": 1
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "train"
+  },
+  {
+    "task_id": "tb-adv-219",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "guilt-trip-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "Cascadia Retail",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": [
+        "[4 weeks ago] Initial cold outreach.",
+        "[2 weeks ago] First follow-up with no response."
+      ],
+      "stale_weeks": 4
+    },
+    "candidate_output": {
+      "subject": "Quick question — still interested?",
+      "body": "I hope this email finds you well. I'm following up for the third time — I know you're swamped, but wanted to bump this thread. Quick question: would a 15-minute call this week work?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Triple-stacking anti-patterns ('I hope this email finds you well', guilt-trip framing, 'Quick question') in one re-engagement email is a complete tone failure."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-stale-opener",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "i hope this email finds you well",
+            "i hope you're doing well",
+            "hope you're having a great"
+          ],
+          "points": 2
+        },
+        {
+          "id": "no-guilt-bump",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "bump this",
+            "following up for the third",
+            "quick question"
+          ],
+          "points": 2
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
           "points": 1
         }
       ]

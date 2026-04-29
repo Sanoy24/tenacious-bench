@@ -66,6 +66,12 @@ class Config:
             "JUDGE_MODEL", "google/gemini-2.0-flash-001"
         )
     )
+    # Eval-tier model used only for hard-seed generation and 50-task spot-check calibration.
+    EVAL_TIER_MODEL: str = field(
+        default_factory=lambda: os.environ.get(
+            "EVAL_TIER_MODEL", "anthropic/claude-sonnet-4-6"
+        )
+    )
     EMBEDDING_MODEL: str = field(
         default_factory=lambda: os.environ.get(
             "EMBEDDING_MODEL", "all-MiniLM-L6-v2"
@@ -78,6 +84,14 @@ class Config:
     )
     SYNTHESIS_BATCH_SIZE: int = field(
         default_factory=lambda: int(os.environ.get("SYNTHESIS_BATCH_SIZE", "7"))
+    )
+    # Number of hard seeds authored by the eval-tier model before bulk generation.
+    HARD_SEED_COUNT: int = field(
+        default_factory=lambda: int(os.environ.get("HARD_SEED_COUNT", "40"))
+    )
+    # How many accepted tasks to spot-check with the eval-tier judge for calibration.
+    SPOT_CHECK_COUNT: int = field(
+        default_factory=lambda: int(os.environ.get("SPOT_CHECK_COUNT", "50"))
     )
 
     # ── Contamination ──────────────────────────────────────────────────

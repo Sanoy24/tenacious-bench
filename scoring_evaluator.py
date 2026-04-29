@@ -80,6 +80,11 @@ def evaluate_check(task: dict[str, Any], check: dict[str, Any]) -> tuple[bool, s
         limit = int(check["max_words"])
         return actual <= limit, f"{actual} words (limit {limit})"
 
+    if check_type == "max_subject_chars":
+        actual = len(text)
+        limit = int(check["max_subject_chars"])
+        return actual <= limit, f"{actual} chars (limit {limit})"
+
     if check_type == "forbidden_phrases":
         phrases = [phrase.lower() for phrase in check.get("phrases", [])]
         hits = [phrase for phrase in phrases if phrase in lowered]

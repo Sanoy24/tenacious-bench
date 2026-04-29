@@ -4354,63 +4354,6 @@
     "partition": "dev"
   },
   {
-    "task_id": "tb-prog-dsl-053",
-    "source_mode": "programmatic",
-    "dimension": "directness-subject-line",
-    "difficulty": "easy",
-    "metadata": {
-      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
-      "probe_ids": []
-    },
-    "input": {
-      "prospect": {
-        "company": "PeakFlow AI",
-        "contact_title": "VP Data",
-        "timezone": "America/New_York"
-      },
-      "prior_thread": []
-    },
-    "candidate_output": {
-      "subject": "Quick follow-up on your roadmap",
-      "body": "Hope you're doing well. Worth 15 minutes next week?"
-    },
-    "ground_truth": {
-      "behavior_summary": "Subject lines must be direct. No filler words like Quick, Just, Hey."
-    },
-    "scoring": {
-      "max_score": 4,
-      "checks": [
-        {
-          "id": "no-filler-subject",
-          "type": "forbidden_phrases",
-          "target": "subject",
-          "phrases": [
-            "quick"
-          ],
-          "points": 2
-        },
-        {
-          "id": "no-hope-youre-well",
-          "type": "forbidden_phrases",
-          "target": "body",
-          "phrases": [
-            "hope you're doing well",
-            "hope this finds you well"
-          ],
-          "points": 1
-        },
-        {
-          "id": "body-under-120-words",
-          "type": "max_words",
-          "target": "body",
-          "max_words": 120,
-          "points": 1
-        }
-      ]
-    },
-    "partition": "dev"
-  },
-  {
     "task_id": "tb-prog-hyp-070",
     "source_mode": "programmatic",
     "dimension": "hype-vocabulary",
@@ -4462,6 +4405,214 @@
           "type": "max_question_marks",
           "target": "body",
           "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "dev"
+  },
+  {
+    "task_id": "tb-prog-hyp-215",
+    "source_mode": "programmatic",
+    "dimension": "hype-vocabulary",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P016"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Brightfield SaaS",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Engineer staffing — let's connect",
+      "body": "I hope this email finds you well. We can help Brightfield 10x its engineering throughput. Our world-class bench is ready to integrate with your team immediately."
+    },
+    "ground_truth": {
+      "behavior_summary": "Cold email openers like 'I hope this email finds you well' combined with ungrounded 10x claims are two distinct style violations in a single email."
+    },
+    "scoring": {
+      "max_score": 5,
+      "checks": [
+        {
+          "id": "no-stale-opener",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "i hope this email finds you well",
+            "i hope you're doing well"
+          ],
+          "points": 2
+        },
+        {
+          "id": "no-velocity-hype",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "10x",
+            "world-class"
+          ],
+          "points": 1
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "dev"
+  },
+  {
+    "task_id": "tb-prog-hyp-216",
+    "source_mode": "programmatic",
+    "dimension": "hype-vocabulary",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P016"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Helio Payments",
+        "contact_title": "VP Product",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Leverage elite engineers to hit your H2 goals",
+      "body": "Leverage our A-players to unlock elite engineering capacity at Helio. We help you leverage top talent during critical sprints so your internal team stays focused on core product."
+    },
+    "ground_truth": {
+      "behavior_summary": "Using 'leverage' three times in a cold email combined with 'A-players' and 'elite' reads as keyword-stuffed template copy, not credible outreach."
+    },
+    "scoring": {
+      "max_score": 5,
+      "checks": [
+        {
+          "id": "no-leverage-aplayer",
+          "type": "forbidden_phrases",
+          "target": "full_email",
+          "phrases": [
+            "a-players",
+            "a-player",
+            "leverage our",
+            "leverage top"
+          ],
+          "points": 2
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "dev"
+  },
+  {
+    "task_id": "tb-adv-220",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "guilt-trip-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "Tidal Media",
+        "contact_title": "CTO",
+        "timezone": "America/Denver"
+      },
+      "prior_thread": [
+        "[2 weeks ago] Initial outreach about frontend engineers."
+      ],
+      "stale_weeks": 2
+    },
+    "candidate_output": {
+      "subject": "Quick question for you, Tidal Media",
+      "body": "Quick question — circling back on my last note. Just following up to see if frontend capacity is still a challenge. Happy to keep this brief if you prefer."
+    },
+    "ground_truth": {
+      "behavior_summary": "'Quick question' as a subject hook plus 'circling back' body opener stacks two of the most recognised spam-style patterns in B2B outreach."
+    },
+    "scoring": {
+      "max_score": 5,
+      "checks": [
+        {
+          "id": "no-quick-question",
+          "type": "forbidden_phrases",
+          "target": "full_email",
+          "phrases": [
+            "quick question",
+            "quick chat",
+            "circling back",
+            "just following up"
+          ],
+          "points": 2
+        },
+        {
+          "id": "offers-new-value",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "new signal",
+            "noticed",
+            "recent",
+            "wanted to share",
+            "thought you'd",
+            "update"
+          ],
+          "points": 1
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
           "points": 1
         }
       ]

@@ -2798,5 +2798,323 @@
       ]
     },
     "partition": "held_out"
+  },
+  {
+    "task_id": "tb-prog-bjl-069",
+    "source_mode": "programmatic",
+    "dimension": "bench-jargon",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P015"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "NovaBridge",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "Do you have engineers who could start soon?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: Python capacity",
+      "body": "We have engineers on the bench strength who can start next week on your Python project."
+    },
+    "ground_truth": {
+      "behavior_summary": "Professional wording must use capacity language, not internal bench jargon."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-bench-strength",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "bench strength"
+          ],
+          "points": 2
+        },
+        {
+          "id": "mentions-capacity",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "capacity",
+            "available",
+            "ready to deploy"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-prog-hyp-072",
+    "source_mode": "programmatic",
+    "dimension": "hype-vocabulary",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P016"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "StudioMesh",
+        "contact_title": "VP Data",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering needs",
+      "body": "We provide guaranteed cost savings of 40% for companies at your stage. Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Offshore-vendor clichés trigger skepticism in senior engineering leaders."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-hype-vocab",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "guaranteed savings",
+            "cost savings of"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-prog-hyp-211",
+    "source_mode": "programmatic",
+    "dimension": "hype-vocabulary",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P016"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "ClearRoute Logistics",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Supercharge your engineering velocity",
+      "body": "We can help you 10x your engineering output and skyrocket delivery speed. Our squads supercharge teams within weeks of onboarding."
+    },
+    "ground_truth": {
+      "behavior_summary": "Velocity promises ('10x', 'skyrocket', 'supercharge') are ungrounded and trigger immediate credibility loss with engineering leaders."
+    },
+    "scoring": {
+      "max_score": 5,
+      "checks": [
+        {
+          "id": "no-velocity-hype",
+          "type": "forbidden_phrases",
+          "target": "full_email",
+          "phrases": [
+            "skyrocket",
+            "supercharge",
+            "10x your",
+            "10x the"
+          ],
+          "points": 2
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-adv-217",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "guilt-trip-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "Ironclad Systems",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/Chicago"
+      },
+      "prior_thread": [
+        "[2 weeks ago] Sent initial outreach about embedded Python squad."
+      ],
+      "stale_weeks": 2
+    },
+    "candidate_output": {
+      "subject": "Following up on my previous email",
+      "body": "Just following up — I haven't heard back from you. I know you're busy but wanted to see if you had a chance to review my note about our Python engineers."
+    },
+    "ground_truth": {
+      "behavior_summary": "Re-engagement emails must lead with new value. Guilt-trip openers like 'just following up' and 'haven't heard back' signal desperation and erode trust."
+    },
+    "scoring": {
+      "max_score": 5,
+      "checks": [
+        {
+          "id": "no-guilt-follow-up",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "just following up",
+            "haven't heard back",
+            "haven't heard from you",
+            "just checking in",
+            "touching base"
+          ],
+          "points": 2
+        },
+        {
+          "id": "offers-new-value",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "new signal",
+            "noticed",
+            "recent",
+            "wanted to share",
+            "thought you'd",
+            "update"
+          ],
+          "points": 1
+        },
+        {
+          "id": "subject-under-60-chars",
+          "type": "max_subject_chars",
+          "target": "subject",
+          "max_subject_chars": 60,
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-prog-dsl-053",
+    "source_mode": "programmatic",
+    "dimension": "directness-subject-line",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": []
+    },
+    "input": {
+      "prospect": {
+        "company": "PeakFlow AI",
+        "contact_title": "VP Data",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Quick follow-up on your roadmap",
+      "body": "Hope you're doing well. Worth 15 minutes next week?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Subject lines must be direct. No filler words like Quick, Just, Hey."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-filler-subject",
+          "type": "forbidden_phrases",
+          "target": "subject",
+          "phrases": [
+            "quick"
+          ],
+          "points": 2
+        },
+        {
+          "id": "no-hope-youre-well",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "hope you're doing well",
+            "hope this finds you well"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    },
+    "partition": "held_out"
   }
 ]

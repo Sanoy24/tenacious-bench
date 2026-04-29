@@ -1,40 +1,40 @@
 {
-  "total_tasks": 230,
+  "total_tasks": 242,
   "partitions": {
-    "train": 116,
-    "dev": 71,
-    "held_out": 43
+    "train": 121,
+    "dev": 73,
+    "held_out": 48
   },
-  "partition_ratios": {
-    "train": 0.504,
-    "dev": 0.309,
-    "held_out": 0.187
+  "partition_pct": {
+    "train": 50.0,
+    "dev": 30.2,
+    "held_out": 19.8
   },
-  "by_dimension": {
-    "bench-over-commitment": 26,
-    "weak-evidence-overclaim": 39,
-    "tone-drift": 26,
-    "timezone-fabrication": 25,
-    "signal-overclaim": 10,
+  "dimensions": {
     "bench-jargon": 6,
-    "segment-2-first-touch": 12,
+    "bench-over-commitment": 26,
     "competitor-gap-assertion": 26,
-    "pricing-objection": 12,
-    "single-clear-ask": 3,
     "directness-subject-line": 8,
     "dual-control-coordination": 16,
+    "hype-vocabulary": 10,
     "icp-misclassification": 19,
-    "hype-vocabulary": 2
+    "pricing-objection": 12,
+    "segment-2-first-touch": 12,
+    "signal-overclaim": 10,
+    "single-clear-ask": 3,
+    "timezone-fabrication": 25,
+    "tone-drift": 30,
+    "weak-evidence-overclaim": 39
   },
-  "by_source_mode": {
-    "programmatic": 71,
-    "trace-derived": 68,
+  "source_modes": {
+    "hand-authored-adversarial": 39,
     "multi-llm-synthesis": 56,
-    "hand-authored-adversarial": 35
+    "programmatic": 79,
+    "trace-derived": 68
   },
-  "by_difficulty": {
-    "hard": 104,
-    "medium": 83,
-    "easy": 43
+  "difficulty": {
+    "easy": 47,
+    "hard": 106,
+    "medium": 89
   }
 }
