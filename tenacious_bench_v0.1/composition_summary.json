@@ -1,0 +1,35 @@
+{
+  "total_tasks": 183,
+  "partitions": {
+    "train": 88,
+    "dev": 50,
+    "held_out": 45
+  },
+  "by_dimension": {
+    "weak-evidence-overclaim": 38,
+    "tone-drift": 14,
+    "competitor-gap-assertion": 19,
+    "signal-overclaim": 3,
+    "icp-misclassification": 16,
+    "bench-over-commitment": 25,
+    "timezone-fabrication": 18,
+    "dual-control-coordination": 17,
+    "hype-vocabulary": 3,
+    "segment-2-first-touch": 7,
+    "directness-subject-line": 8,
+    "bench-jargon": 6,
+    "pricing-objection": 6,
+    "single-clear-ask": 3
+  },
+  "by_source_mode": {
+    "programmatic": 68,
+    "multi-llm-synthesis": 55,
+    "trace-derived": 42,
+    "hand-authored-adversarial": 18
+  },
+  "by_difficulty": {
+    "medium": 74,
+    "hard": 68,
+    "easy": 41
+  }
+}

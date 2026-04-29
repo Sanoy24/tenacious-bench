@@ -1,0 +1,237 @@
+{
+  "labeled_items": 30,
+  "overall_exact_match_pct": 100.0,
+  "per_dimension": {
+    "bench-jargon": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "bench-over-commitment": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "competitor-gap-assertion": {
+      "items": 3,
+      "matches": 3,
+      "agreement_pct": 100.0
+    },
+    "directness-subject-line": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "dual-control-coordination": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "hype-vocabulary": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "icp-misclassification": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "pricing-objection": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "segment-2-first-touch": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "signal-overclaim": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "single-clear-ask": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "timezone-fabrication": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "tone-drift": {
+      "items": 2,
+      "matches": 2,
+      "agreement_pct": 100.0
+    },
+    "weak-evidence-overclaim": {
+      "items": 3,
+      "matches": 3,
+      "agreement_pct": 100.0
+    }
+  },
+  "per_check": {
+    "no-bench-strength": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    },
+    "mentions-capacity": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "body-under-120-words": {
+      "agreement_pct": 100.0,
+      "agree": 28,
+      "total": 28
+    },
+    "no-on-the-bench": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    },
+    "no-unavailable-stack-commitment": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "mentions-scope-or-phase": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "no-accusatory-gap-language": {
+      "agreement_pct": 100.0,
+      "agree": 3,
+      "total": 3
+    },
+    "uses-research-framing": {
+      "agreement_pct": 100.0,
+      "agree": 3,
+      "total": 3
+    },
+    "no-filler-subject": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "no-hope-youre-well": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "must-confirm-before-action": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "must-verify-auth": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "no-fabricated-ids": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "no-hype-vocab": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "single-ask": {
+      "agreement_pct": 100.0,
+      "agree": 13,
+      "total": 13
+    },
+    "no-layoff-reference": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "no-overclaim-funding": {
+      "agreement_pct": 100.0,
+      "agree": 4,
+      "total": 4
+    },
+    "no-price-matching": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "no-layoff-language": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "no-fabricated-metrics": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "single-question-ask": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "mentions-15-minutes": {
+      "agreement_pct": 100.0,
+      "agree": 2,
+      "total": 2
+    },
+    "no-local-time-fabrication": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    },
+    "no-your-time-phrase": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    },
+    "no-local-time-without-timezone": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    },
+    "mentions-context": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    },
+    "no-emoji-in-cold": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    },
+    "no-guilt-trip-language": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    },
+    "offers-new-value": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    },
+    "no-velocity-overclaim": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    },
+    "uses-ask-framing": {
+      "agreement_pct": 100.0,
+      "agree": 1,
+      "total": 1
+    }
+  },
+  "threshold": 80.0,
+  "dims_below_threshold": [],
+  "status": "PASS",
+  "computed_at": "2026-04-28T14:13:40.875930+00:00"
+}

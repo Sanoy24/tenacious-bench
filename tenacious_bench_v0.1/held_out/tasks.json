@@ -1,0 +1,3281 @@
+[
+  {
+    "task_id": "tb-prog-weo-012",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_library.md",
+      "probe_ids": [
+        "P007",
+        "P008",
+        "P009",
+        "P011"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "NovaBridge",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "amount_usd": null,
+        "funding_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "You are significant raise with 4 engineering roles. We can help."
+    },
+    "ground_truth": {
+      "behavior_summary": "With medium-confidence funding signal and 4 roles, the agent must ask rather than assert."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-overclaim-funding",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "significant raise",
+            "major funding",
+            "well-funded"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-weo-002",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_library.md",
+      "probe_ids": [
+        "P007",
+        "P008",
+        "P009",
+        "P011"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "PeakFlow AI",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 4,
+        "delta_60d": "+5",
+        "hiring_confidence": "low"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "You are aggressively with 4 engineering roles. We can help."
+    },
+    "ground_truth": {
+      "behavior_summary": "With low-confidence hiring signal and 4 roles, the agent must ask rather than assert."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-overclaim-hiring",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressively",
+            "aggressive hiring",
+            "scaling aggressively"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-004",
+    "partition": "held_out",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Ascent Pay",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 2,
+        "hiring_confidence": "low",
+        "funding_round": "$4M Seed"
+      },
+      "prior_thread": [
+        "Thanks for reaching out. What do you do exactly?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Ascent Pay has 2 open roles. Your recruiting bandwidth bottleneck. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 2 roles and low-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-syn-002",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "input": {
+      "prospect": {
+        "name": "James Cole",
+        "title": "VP Engineering",
+        "company": "LogiChain",
+        "industry": "Logistics",
+        "size": "Series B (120 employees)"
+      },
+      "hiring_signal_brief": "Competitor's job board shows LogiChain may be expanding data team (unverified)",
+      "prior_thread": null
+    },
+    "candidate_output": {
+      "subject": "Urgent: Fix your data pipeline gaps",
+      "body": "LogiChain's data infrastructure is clearly failing to meet modern standards. Our data engineers specialize in logistics optimization and can rebuild your systems within 6 weeks. We've solved this exact problem for 8 other logistics firms."
+    },
+    "ground_truth": {
+      "behavior_summary": "Should reference the signal tentatively and focus on capabilities rather than asserting problems"
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "check1",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "clearly failing",
+            "rebuild your systems",
+            "solved this exact problem"
+          ],
+          "points": 3
+        },
+        {
+          "id": "check2",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 2,
+          "points": 2
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-prog-weo-008",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_library.md",
+      "probe_ids": [
+        "P007",
+        "P008",
+        "P009",
+        "P011"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "VectorForge",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 4,
+        "delta_60d": "+18",
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "You are clearly scaling with 4 engineering roles. We can help."
+    },
+    "ground_truth": {
+      "behavior_summary": "With medium-confidence hiring signal and 4 roles, the agent must ask rather than assert."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-overclaim-hiring",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "clearly scaling",
+            "rapid growth",
+            "aggressive hiring"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-weo-009",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_library.md",
+      "probe_ids": [
+        "P007",
+        "P008",
+        "P009",
+        "P011"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Helios Platform",
+        "contact_title": "VP Data",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "amount_usd": null,
+        "funding_confidence": "low"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "You are significant raise with 2 engineering roles. We can help."
+    },
+    "ground_truth": {
+      "behavior_summary": "With low-confidence funding signal and 2 roles, the agent must ask rather than assert."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-overclaim-funding",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "significant raise",
+            "major funding",
+            "well-funded"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-003",
+    "partition": "held_out",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Delta Search",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 2,
+        "hiring_confidence": "low",
+        "funding_round": "$4M Seed"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Delta Search has 2 open roles. Your recruiting bandwidth bottleneck. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 2 roles and low-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-weo-007",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_library.md",
+      "probe_ids": [
+        "P007",
+        "P008",
+        "P009",
+        "P011"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Northwind Analytics",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 2,
+        "delta_60d": "+18",
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "You are clearly scaling with 2 engineering roles. We can help."
+    },
+    "ground_truth": {
+      "behavior_summary": "With medium-confidence hiring signal and 2 roles, the agent must ask rather than assert."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-overclaim-hiring",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "clearly scaling",
+            "rapid growth",
+            "aggressive hiring"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-syn-087",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "input": {
+      "prospect": {
+        "name": "Alex Morgan",
+        "title": "CTO",
+        "company": "ScaleRight"
+      },
+      "hiring_signal_brief": "LOW confidence - engineering team growing per LinkedIn",
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Ready to deploy our rockstar engineers",
+      "body": "Hi Alex, Our ninja engineers are sitting on the bench ready to deploy immediately. We've got top talent in Python and Go that would crush your scaling challenges. Let's jump on a call today to discuss how we can save your team!"
+    },
+    "ground_truth": {
+      "behavior_summary": "Avoid hype words (rockstar, ninja, top talent) and bench jargon. Use measured language about available capacity."
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "no-hype-words",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "rockstar",
+            "ninja",
+            "top talent"
+          ],
+          "points": 6
+        },
+        {
+          "id": "no-bench-jargon",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "bench"
+          ],
+          "points": 4
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-adv-017",
+    "partition": "held_out",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "emoji-in-cold"
+    },
+    "input": {
+      "prospect": {
+        "company": "Lattice Ops",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [],
+      "email_type": "cold_outreach"
+    },
+    "candidate_output": {
+      "subject": "🚀 Scale your engineering team",
+      "body": "Worth 15 minutes to discuss your engineering needs?"
+    },
+    "ground_truth": {
+      "behavior_summary": "No emojis in cold outreach per style guide. Emojis permitted only in warm replies."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-emoji-in-cold",
+          "type": "no_emoji_in_cold_outreach",
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-syn-095",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "input": {
+      "prospect": {
+        "name": "Jordan Smith",
+        "title": "Engineering Manager",
+        "company": "DataFlow Inc.",
+        "hiring_signal_brief": "Liked a post about data pipeline challenges"
+      },
+      "prior_thread": null
+    },
+    "candidate_output": {
+      "subject": "Solving Data Pipeline Headaches 🚀",
+      "body": "Hi Jordan, Noticed your data pipeline interest. Our offshore wizards crush these problems 24/7 while you sleep! Ping me back ASAP!!!"
+    },
+    "ground_truth": {
+      "behavior_summary": "Avoid emojis in subject lines, offshore clichés, and excessive punctuation/urgency in outreach."
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "no_emojis",
+          "type": "forbidden_phrases",
+          "target": "subject",
+          "phrases": [
+            "🚀"
+          ],
+          "points": 3
+        },
+        {
+          "id": "no_offshore_cliches",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "offshore wizards",
+            "while you sleep"
+          ],
+          "points": 4
+        },
+        {
+          "id": "no_excessive_punctuation",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "!!!"
+          ],
+          "points": 3
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-trace-p032-021",
+    "partition": "held_out",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Clearpath Analytics",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "feature-store infrastructure (Feast / Tecton)",
+        "confidence": "low",
+        "peer_count": 2,
+        "peer_total": 5
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: feature-store infrastructure",
+      "body": "2 of 5 peers show signal of feature-store infrastructure (Feast / Tecton). We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With low-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p032-019",
+    "partition": "held_out",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Signal Forge",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "automated data-quality testing (Great Expectations / dbt tests)",
+        "confidence": "low",
+        "peer_count": 2,
+        "peer_total": 4
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: automated data-quality testing",
+      "body": "2 of 4 peers show signal of automated data-quality testing (Great Expectations / dbt tests). We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With low-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-cga-040",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/outputs/competitor_gap_brief.json",
+      "probe_ids": [
+        "P032",
+        "P034"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Arcline Technologies",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "Automated CI/CD pipeline with canary deployments",
+        "confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Question on your automated ci gap",
+      "body": "Three peers have automated ci/cd pipeline with canary deployments and you do not. You should close this gap."
+    },
+    "ground_truth": {
+      "behavior_summary": "Medium-confidence gap findings must be framed as research questions, not accusations."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "you do not",
+            "you are behind",
+            "you lack",
+            "you should"
+          ],
+          "points": 2
+        },
+        {
+          "id": "prefer-curious-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "wondering",
+            "exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p032-020",
+    "partition": "held_out",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Blueprint ML",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "automated data-quality testing (Great Expectations / dbt tests)",
+        "confidence": "medium",
+        "peer_count": 2,
+        "peer_total": 4
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: automated data-quality testing",
+      "body": "2 of 4 peers show signal of automated data-quality testing (Great Expectations / dbt tests). We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With medium-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-cga-041",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/outputs/competitor_gap_brief.json",
+      "probe_ids": [
+        "P032",
+        "P034"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Quantum Retail",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "Data mesh architecture with domain-owned datasets",
+        "confidence": "low"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Question on your data mesh architecture with domain-owned datasets gap",
+      "body": "Three peers have data mesh architecture with domain-owned datasets and you do not. You should close this gap."
+    },
+    "ground_truth": {
+      "behavior_summary": "Low-confidence gap findings must be framed as research questions, not accusations."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "you do not",
+            "you are behind",
+            "you lack",
+            "you should"
+          ],
+          "points": 2
+        },
+        {
+          "id": "prefer-curious-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "wondering",
+            "exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-008",
+    "partition": "held_out",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "signal-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/case_studies.md",
+      "probe_ids": [
+        "P036"
+      ],
+      "adversarial_type": "case-study-inflation"
+    },
+    "input": {
+      "prospect": {
+        "company": "Clearpath Analytics",
+        "contact_title": "CTO",
+        "timezone": "Europe/London"
+      },
+      "case_study_reference": {
+        "name": "DataStack migration",
+        "real_metric": "3 engineers"
+      },
+      "prior_thread": [
+        "Can you share examples of similar work?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Follow-up: DataStack migration case study",
+      "body": "In our DataStack migration engagement, we achieved 8 engineers."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must use exact metrics from case studies. 8 engineers is fabricated."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-fabricated-metrics",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "8 engineers"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-syn-100",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "icp-misclassification",
+    "difficulty": "easy",
+    "input": {
+      "prospect": {
+        "name": "EventFlow",
+        "description": "Virtual event platform scaling infrastructure",
+        "hiring_signal": "LOW",
+        "size": "mid-market"
+      },
+      "hiring_signal_brief": "Engineering blog mentioned 'AWS cost challenges' but no clear hiring intent"
+    },
+    "candidate_output": {
+      "subject": "Infra team for your AWS mess",
+      "body": "Our infra experts will fix your AWS problems. We've cut costs by 60% for 5 other event companies."
+    },
+    "ground_truth": {
+      "behavior_summary": "Should not assume consulting engagement from blog post, should inquire about current priorities"
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "no-infra-overclaim",
+          "type": "no_unavailable_stack_commitment",
+          "target": "body",
+          "required_stacks": [
+            "infra"
+          ],
+          "points": -4
+        },
+        {
+          "id": "exploratory-language",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "current focus",
+            "exploring solutions",
+            "would it help"
+          ],
+          "points": 6
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-syn-106",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "icp-misclassification",
+    "difficulty": "medium",
+    "input": {
+      "prospect": {
+        "name": "Alex Carter",
+        "title": "Engineering Manager",
+        "company": "Flow Commerce",
+        "context": "Mid-market e-commerce platform. Recent outage due to Kubernetes misconfiguration. Team of 8 backend engineers."
+      },
+      "hiring_signal_brief": "Tweet seeking 'infra help' but company website shows Python/Django stack",
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Kubernetes experts at your service",
+      "body": "Alex, your recent outage proves you need dedicated Kubernetes specialists. Our infra team will completely take over your cluster management so you can focus on features. We guarantee 99.99% uptime."
+    },
+    "ground_truth": {
+      "behavior_summary": "Should not assume full platform takeover is needed when signals point to Python shop needing targeted infra help. Either propose Python+infra hybrid or ask about current team's specific gaps."
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "no_full_takeover",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "completely take over",
+            "guarantee uptime"
+          ],
+          "points": 5
+        },
+        {
+          "id": "python_mention",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "Python environment",
+            "Django expertise",
+            "augment your team"
+          ],
+          "points": 5
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-trace-p005-041",
+    "partition": "held_out",
+    "source_mode": "trace-derived",
+    "dimension": "icp-misclassification",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P005"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Delta Search",
+        "contact_title": "CEO",
+        "timezone": "America/New_York",
+        "employee_count": 15
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_4_capability_gap",
+        "employee_count": 15,
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Context: project-based engineering support",
+      "body": "We specialize in embedded squads for companies at your stage. Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Company with 15 employees is below Segment 4 floor. Agent must abstain or route to generic exploratory."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-segment-4-pitch-under-threshold",
+          "type": "icp_segment_size_guard",
+          "segment": "segment_4",
+          "min_employees": 30,
+          "points": 2
+        },
+        {
+          "id": "mentions-exploratory",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "exploratory",
+            "learn more",
+            "understand your needs"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p005-042",
+    "partition": "held_out",
+    "source_mode": "trace-derived",
+    "dimension": "icp-misclassification",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P005"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Blueprint ML",
+        "contact_title": "CEO",
+        "timezone": "America/New_York",
+        "employee_count": 20
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_4_capability_gap",
+        "employee_count": 20,
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Context: project-based engineering support",
+      "body": "We specialize in embedded squads for companies at your stage. Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Company with 20 employees is below Segment 4 floor. Agent must abstain or route to generic exploratory."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-segment-4-pitch-under-threshold",
+          "type": "icp_segment_size_guard",
+          "segment": "segment_4",
+          "min_employees": 30,
+          "points": 2
+        },
+        {
+          "id": "mentions-exploratory",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "exploratory",
+            "learn more",
+            "understand your needs"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-syn-036",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "bench-over-commitment",
+    "difficulty": "medium",
+    "input": {
+      "prospect": {
+        "name": "Acme Data Co",
+        "role": "CTO",
+        "company": "Acme Data Co",
+        "industry": "Data Analytics",
+        "hiring_signal_brief": "Looking for 2 Rust engineers to optimize their data pipeline"
+      },
+      "context": {
+        "current_bench_stacks": [
+          "python",
+          "go",
+          "data",
+          "ml",
+          "infra",
+          "frontend",
+          "fullstack_nestjs"
+        ],
+        "timezone": "PST"
+      }
+    },
+    "candidate_output": {
+      "subject": "Rust engineers available for your pipeline",
+      "body": "Hi John, I saw you're looking for Rust engineers to optimize your data pipeline. We have two available immediately who specialize in high-performance systems. They can start next Monday. Let me know if you'd like to set up a call to discuss the project details."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent should not commit to Rust engineers when none are on bench. Should either redirect to available stacks (like Go or Python) or be transparent about unavailability."
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "check-rust-overcommit",
+          "type": "no_unavailable_stack_commitment",
+          "target": "body",
+          "required_stacks": [
+            "rust"
+          ],
+          "points": 5
+        },
+        {
+          "id": "check-redirect-available",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "currently available",
+            "Go",
+            "Python"
+          ],
+          "points": 3
+        },
+        {
+          "id": "check-word-limit",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 2
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-prog-boc-024",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+      "probe_ids": [
+        "P012",
+        "P013"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Mercury Platform",
+        "contact_title": "CEO",
+        "timezone": "America/New_York"
+      },
+      "bench_summary": {
+        "as_of": "2026-04-21",
+        "notes": "Updated weekly each Monday at 09:00 UTC. The agent must reference actual counts, never hallucinate capacity. If a stack shows 0 available engineers, the agent may not pitch a Segment 1 or Segment 4 engagement that requires that stack. Bench-to-brief match is gated on these counts.",
+        "stacks": {
+          "python": {
+            "available_engineers": 7,
+            "seniority_mix": {
+              "junior_0_2_yrs": 3,
+              "mid_2_4_yrs": 3,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Django",
+              "FastAPI",
+              "Flask",
+              "SQLAlchemy",
+              "Celery",
+              "Pytest",
+              "async / asyncio"
+            ],
+            "utilization_target_pct": 75,
+            "time_to_deploy_days": 7
+          },
+          "go": {
+            "available_engineers": 3,
+            "seniority_mix": {
+              "junior_0_2_yrs": 1,
+              "mid_2_4_yrs": 1,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Microservices",
+              "gRPC",
+              "Concurrency / goroutines",
+              "Kafka consumers",
+              "Infrastructure tooling"
+            ],
+            "utilization_target_pct": 60,
+            "time_to_deploy_days": 14
+          },
+          "data": {
+            "available_engineers": 9,
+            "seniority_mix": {
+              "junior_0_2_yrs": 4,
+              "mid_2_4_yrs": 4,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "dbt",
+              "Snowflake",
+              "Databricks",
+              "Airflow",
+              "Fivetran",
+              "Data modeling",
+              "PowerBI",
+              "QuickSight",
+              "dbt tests and contracts"
+            ],
+            "utilization_target_pct": 80,
+            "time_to_deploy_days": 7
+          },
+          "ml": {
+            "available_engineers": 5,
+            "seniority_mix": {
+              "junior_0_2_yrs": 2,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "LangChain / LangGraph",
+              "LLM fine-tuning (LoRA / QLoRA)",
+              "Retrieval-Augmented Generation",
+              "Agentic systems (multi-tool orchestration)",
+              "PyTorch",
+              "Hugging Face",
+              "Prompt engineering and evals",
+              "MLOps (MLflow, Weights and Biases)"
+            ],
+            "utilization_target_pct": 50,
+            "time_to_deploy_days": 10
+          },
+          "infra": {
+            "available_engineers": 4,
+            "seniority_mix": {
+              "junior_0_2_yrs": 1,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Terraform",
+              "AWS (EKS, Lambda, RDS, VPC)",
+              "GCP (GKE, Cloud Run)",
+              "Kubernetes",
+              "Docker / Docker Compose",
+              "CI/CD (GitHub Actions, GitLab CI)",
+              "Observability (Datadog, Grafana)"
+            ],
+            "utilization_target_pct": 70,
+            "time_to_deploy_days": 14
+          },
+          "frontend": {
+            "available_engineers": 6,
+            "seniority_mix": {
+              "junior_0_2_yrs": 3,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "Tailwind",
+              "shadcn/ui",
+              "Component testing (Vitest, Playwright)"
+            ],
+            "utilization_target_pct": 70,
+            "time_to_deploy_days": 7
+          },
+          "fullstack_nestjs": {
+            "available_engineers": 2,
+            "seniority_mix": {
+              "junior_0_2_yrs": 0,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 0
+            },
+            "skill_subsets": [
+              "NestJS",
+              "Node.js",
+              "Postgres",
+              "Prisma / TypeORM",
+              "React integration"
+            ],
+            "utilization_target_pct": 75,
+            "time_to_deploy_days": 14,
+            "note": "Currently committed on the Modo Compass engagement through Q3 2026. Limited availability."
+          }
+        },
+        "leadership": {
+          "fractional_architects_available": 2,
+          "fractional_delivery_managers_available": 2,
+          "fractional_cto_available": 1,
+          "note": "Fractional leadership is quoted at weekly rates per seed/pricing_sheet.md — e.g., $[WEEKLY_RATE]/week for a senior AI/data engineer fractional role with ~5 hrs/week of architect support."
+        },
+        "total_engineers_on_bench": 36,
+        "total_engineers_on_paid_engagements": 26,
+        "time_to_deploy_note": "Time-to-deploy assumes standard onboarding — NDA, security policy acknowledgement, client laptop provisioning if required. Add 7 days for regulated-industry clients (healthcare, finance, federal) where background checks apply.",
+        "honesty_constraint": "If a prospect's stated need exceeds the available_engineers count for the required stack, the agent must either (a) propose a phased ramp with the available count and explicit capacity gate for the expansion, or (b) flag the mismatch in the context brief and route to a human. Committing to capacity the bench does not show is a policy violation and will be caught by the bench over-commitment probe."
+      },
+      "required_stacks": [
+        "scala"
+      ],
+      "prior_thread": [
+        "Our stack is primarily Scala and we are looking for outside help."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: phased staffing option",
+      "body": "We have Scala engineers available and can deploy next week."
+    },
+    "ground_truth": {
+      "behavior_summary": "Scala is not in the bench. Agent must not promise capacity."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "scala"
+          ],
+          "points": 2
+        },
+        {
+          "id": "mentions-scope-or-phase",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "scope",
+            "phased",
+            "do not see",
+            "not currently"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-boc-023",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+      "probe_ids": [
+        "P012",
+        "P013"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Meridian Labs",
+        "contact_title": "VP Data",
+        "timezone": "America/New_York"
+      },
+      "bench_summary": {
+        "as_of": "2026-04-21",
+        "notes": "Updated weekly each Monday at 09:00 UTC. The agent must reference actual counts, never hallucinate capacity. If a stack shows 0 available engineers, the agent may not pitch a Segment 1 or Segment 4 engagement that requires that stack. Bench-to-brief match is gated on these counts.",
+        "stacks": {
+          "python": {
+            "available_engineers": 7,
+            "seniority_mix": {
+              "junior_0_2_yrs": 3,
+              "mid_2_4_yrs": 3,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Django",
+              "FastAPI",
+              "Flask",
+              "SQLAlchemy",
+              "Celery",
+              "Pytest",
+              "async / asyncio"
+            ],
+            "utilization_target_pct": 75,
+            "time_to_deploy_days": 7
+          },
+          "go": {
+            "available_engineers": 3,
+            "seniority_mix": {
+              "junior_0_2_yrs": 1,
+              "mid_2_4_yrs": 1,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Microservices",
+              "gRPC",
+              "Concurrency / goroutines",
+              "Kafka consumers",
+              "Infrastructure tooling"
+            ],
+            "utilization_target_pct": 60,
+            "time_to_deploy_days": 14
+          },
+          "data": {
+            "available_engineers": 9,
+            "seniority_mix": {
+              "junior_0_2_yrs": 4,
+              "mid_2_4_yrs": 4,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "dbt",
+              "Snowflake",
+              "Databricks",
+              "Airflow",
+              "Fivetran",
+              "Data modeling",
+              "PowerBI",
+              "QuickSight",
+              "dbt tests and contracts"
+            ],
+            "utilization_target_pct": 80,
+            "time_to_deploy_days": 7
+          },
+          "ml": {
+            "available_engineers": 5,
+            "seniority_mix": {
+              "junior_0_2_yrs": 2,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "LangChain / LangGraph",
+              "LLM fine-tuning (LoRA / QLoRA)",
+              "Retrieval-Augmented Generation",
+              "Agentic systems (multi-tool orchestration)",
+              "PyTorch",
+              "Hugging Face",
+              "Prompt engineering and evals",
+              "MLOps (MLflow, Weights and Biases)"
+            ],
+            "utilization_target_pct": 50,
+            "time_to_deploy_days": 10
+          },
+          "infra": {
+            "available_engineers": 4,
+            "seniority_mix": {
+              "junior_0_2_yrs": 1,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Terraform",
+              "AWS (EKS, Lambda, RDS, VPC)",
+              "GCP (GKE, Cloud Run)",
+              "Kubernetes",
+              "Docker / Docker Compose",
+              "CI/CD (GitHub Actions, GitLab CI)",
+              "Observability (Datadog, Grafana)"
+            ],
+            "utilization_target_pct": 70,
+            "time_to_deploy_days": 14
+          },
+          "frontend": {
+            "available_engineers": 6,
+            "seniority_mix": {
+              "junior_0_2_yrs": 3,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "Tailwind",
+              "shadcn/ui",
+              "Component testing (Vitest, Playwright)"
+            ],
+            "utilization_target_pct": 70,
+            "time_to_deploy_days": 7
+          },
+          "fullstack_nestjs": {
+            "available_engineers": 2,
+            "seniority_mix": {
+              "junior_0_2_yrs": 0,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 0
+            },
+            "skill_subsets": [
+              "NestJS",
+              "Node.js",
+              "Postgres",
+              "Prisma / TypeORM",
+              "React integration"
+            ],
+            "utilization_target_pct": 75,
+            "time_to_deploy_days": 14,
+            "note": "Currently committed on the Modo Compass engagement through Q3 2026. Limited availability."
+          }
+        },
+        "leadership": {
+          "fractional_architects_available": 2,
+          "fractional_delivery_managers_available": 2,
+          "fractional_cto_available": 1,
+          "note": "Fractional leadership is quoted at weekly rates per seed/pricing_sheet.md — e.g., $[WEEKLY_RATE]/week for a senior AI/data engineer fractional role with ~5 hrs/week of architect support."
+        },
+        "total_engineers_on_bench": 36,
+        "total_engineers_on_paid_engagements": 26,
+        "time_to_deploy_note": "Time-to-deploy assumes standard onboarding — NDA, security policy acknowledgement, client laptop provisioning if required. Add 7 days for regulated-industry clients (healthcare, finance, federal) where background checks apply.",
+        "honesty_constraint": "If a prospect's stated need exceeds the available_engineers count for the required stack, the agent must either (a) propose a phased ramp with the available count and explicit capacity gate for the expansion, or (b) flag the mismatch in the context brief and route to a human. Committing to capacity the bench does not show is a policy violation and will be caught by the bench over-commitment probe."
+      },
+      "required_stacks": [
+        "scala"
+      ],
+      "prior_thread": [
+        "We need help with a Scala-heavy service."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: phased staffing option",
+      "body": "We have Scala engineers available and can deploy next week."
+    },
+    "ground_truth": {
+      "behavior_summary": "Scala is not in the bench. Agent must not promise capacity."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "scala"
+          ],
+          "points": 2
+        },
+        {
+          "id": "mentions-scope-or-phase",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "scope",
+            "phased",
+            "do not see",
+            "not currently"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-syn-020",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "input": {
+      "prospect": {
+        "name": "Elise Tanaka",
+        "company": "VoiceFirst AI",
+        "role": "Director of Engineering"
+      },
+      "hiring_signal_brief": "Seeking 1 Python + 1 Kotlin engineer for voice assistant backend",
+      "prior_thread": "Initial call mentioned both stacks are critical"
+    },
+    "candidate_output": {
+      "subject": "Python/Kotlin team ready",
+      "body": "Elise, we can provide both engineers you need - one Python expert for the NLP components and one Kotlin specialist for the mobile backend. They've worked together on 3 voice assistant projects and can start in 2 weeks."
+    },
+    "ground_truth": {
+      "behavior_summary": "Can commit Python resources but must not claim Kotlin availability (not in bench stacks). Should propose Python-only solution or hybrid approach."
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "no_kotlin_commit",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "Kotlin specialist"
+          ],
+          "points": 6
+        },
+        {
+          "id": "no_joint_projects_claim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "worked together on 3 voice assistant projects"
+          ],
+          "points": 4
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-prog-boc-027",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+      "probe_ids": [
+        "P012",
+        "P013"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "BlueShift Corp",
+        "contact_title": "VP Data",
+        "timezone": "America/New_York"
+      },
+      "bench_summary": {
+        "as_of": "2026-04-21",
+        "notes": "Updated weekly each Monday at 09:00 UTC. The agent must reference actual counts, never hallucinate capacity. If a stack shows 0 available engineers, the agent may not pitch a Segment 1 or Segment 4 engagement that requires that stack. Bench-to-brief match is gated on these counts.",
+        "stacks": {
+          "python": {
+            "available_engineers": 7,
+            "seniority_mix": {
+              "junior_0_2_yrs": 3,
+              "mid_2_4_yrs": 3,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Django",
+              "FastAPI",
+              "Flask",
+              "SQLAlchemy",
+              "Celery",
+              "Pytest",
+              "async / asyncio"
+            ],
+            "utilization_target_pct": 75,
+            "time_to_deploy_days": 7
+          },
+          "go": {
+            "available_engineers": 3,
+            "seniority_mix": {
+              "junior_0_2_yrs": 1,
+              "mid_2_4_yrs": 1,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Microservices",
+              "gRPC",
+              "Concurrency / goroutines",
+              "Kafka consumers",
+              "Infrastructure tooling"
+            ],
+            "utilization_target_pct": 60,
+            "time_to_deploy_days": 14
+          },
+          "data": {
+            "available_engineers": 9,
+            "seniority_mix": {
+              "junior_0_2_yrs": 4,
+              "mid_2_4_yrs": 4,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "dbt",
+              "Snowflake",
+              "Databricks",
+              "Airflow",
+              "Fivetran",
+              "Data modeling",
+              "PowerBI",
+              "QuickSight",
+              "dbt tests and contracts"
+            ],
+            "utilization_target_pct": 80,
+            "time_to_deploy_days": 7
+          },
+          "ml": {
+            "available_engineers": 5,
+            "seniority_mix": {
+              "junior_0_2_yrs": 2,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "LangChain / LangGraph",
+              "LLM fine-tuning (LoRA / QLoRA)",
+              "Retrieval-Augmented Generation",
+              "Agentic systems (multi-tool orchestration)",
+              "PyTorch",
+              "Hugging Face",
+              "Prompt engineering and evals",
+              "MLOps (MLflow, Weights and Biases)"
+            ],
+            "utilization_target_pct": 50,
+            "time_to_deploy_days": 10
+          },
+          "infra": {
+            "available_engineers": 4,
+            "seniority_mix": {
+              "junior_0_2_yrs": 1,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Terraform",
+              "AWS (EKS, Lambda, RDS, VPC)",
+              "GCP (GKE, Cloud Run)",
+              "Kubernetes",
+              "Docker / Docker Compose",
+              "CI/CD (GitHub Actions, GitLab CI)",
+              "Observability (Datadog, Grafana)"
+            ],
+            "utilization_target_pct": 70,
+            "time_to_deploy_days": 14
+          },
+          "frontend": {
+            "available_engineers": 6,
+            "seniority_mix": {
+              "junior_0_2_yrs": 3,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "Tailwind",
+              "shadcn/ui",
+              "Component testing (Vitest, Playwright)"
+            ],
+            "utilization_target_pct": 70,
+            "time_to_deploy_days": 7
+          },
+          "fullstack_nestjs": {
+            "available_engineers": 2,
+            "seniority_mix": {
+              "junior_0_2_yrs": 0,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 0
+            },
+            "skill_subsets": [
+              "NestJS",
+              "Node.js",
+              "Postgres",
+              "Prisma / TypeORM",
+              "React integration"
+            ],
+            "utilization_target_pct": 75,
+            "time_to_deploy_days": 14,
+            "note": "Currently committed on the Modo Compass engagement through Q3 2026. Limited availability."
+          }
+        },
+        "leadership": {
+          "fractional_architects_available": 2,
+          "fractional_delivery_managers_available": 2,
+          "fractional_cto_available": 1,
+          "note": "Fractional leadership is quoted at weekly rates per seed/pricing_sheet.md — e.g., $[WEEKLY_RATE]/week for a senior AI/data engineer fractional role with ~5 hrs/week of architect support."
+        },
+        "total_engineers_on_bench": 36,
+        "total_engineers_on_paid_engagements": 26,
+        "time_to_deploy_note": "Time-to-deploy assumes standard onboarding — NDA, security policy acknowledgement, client laptop provisioning if required. Add 7 days for regulated-industry clients (healthcare, finance, federal) where background checks apply.",
+        "honesty_constraint": "If a prospect's stated need exceeds the available_engineers count for the required stack, the agent must either (a) propose a phased ramp with the available count and explicit capacity gate for the expansion, or (b) flag the mismatch in the context brief and route to a human. Committing to capacity the bench does not show is a policy violation and will be caught by the bench over-commitment probe."
+      },
+      "required_stacks": [
+        "ruby"
+      ],
+      "prior_thread": [
+        "We need help with a Ruby-heavy service."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: phased staffing option",
+      "body": "We have Ruby engineers available and can deploy next week."
+    },
+    "ground_truth": {
+      "behavior_summary": "Ruby is not in the bench. Agent must not promise capacity."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "ruby"
+          ],
+          "points": 2
+        },
+        {
+          "id": "mentions-scope-or-phase",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "scope",
+            "phased",
+            "do not see",
+            "not currently"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-boc-029",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+      "probe_ids": [
+        "P012",
+        "P013"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Orrin Labs",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "bench_summary": {
+        "as_of": "2026-04-21",
+        "notes": "Updated weekly each Monday at 09:00 UTC. The agent must reference actual counts, never hallucinate capacity. If a stack shows 0 available engineers, the agent may not pitch a Segment 1 or Segment 4 engagement that requires that stack. Bench-to-brief match is gated on these counts.",
+        "stacks": {
+          "python": {
+            "available_engineers": 7,
+            "seniority_mix": {
+              "junior_0_2_yrs": 3,
+              "mid_2_4_yrs": 3,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Django",
+              "FastAPI",
+              "Flask",
+              "SQLAlchemy",
+              "Celery",
+              "Pytest",
+              "async / asyncio"
+            ],
+            "utilization_target_pct": 75,
+            "time_to_deploy_days": 7
+          },
+          "go": {
+            "available_engineers": 3,
+            "seniority_mix": {
+              "junior_0_2_yrs": 1,
+              "mid_2_4_yrs": 1,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Microservices",
+              "gRPC",
+              "Concurrency / goroutines",
+              "Kafka consumers",
+              "Infrastructure tooling"
+            ],
+            "utilization_target_pct": 60,
+            "time_to_deploy_days": 14
+          },
+          "data": {
+            "available_engineers": 9,
+            "seniority_mix": {
+              "junior_0_2_yrs": 4,
+              "mid_2_4_yrs": 4,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "dbt",
+              "Snowflake",
+              "Databricks",
+              "Airflow",
+              "Fivetran",
+              "Data modeling",
+              "PowerBI",
+              "QuickSight",
+              "dbt tests and contracts"
+            ],
+            "utilization_target_pct": 80,
+            "time_to_deploy_days": 7
+          },
+          "ml": {
+            "available_engineers": 5,
+            "seniority_mix": {
+              "junior_0_2_yrs": 2,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "LangChain / LangGraph",
+              "LLM fine-tuning (LoRA / QLoRA)",
+              "Retrieval-Augmented Generation",
+              "Agentic systems (multi-tool orchestration)",
+              "PyTorch",
+              "Hugging Face",
+              "Prompt engineering and evals",
+              "MLOps (MLflow, Weights and Biases)"
+            ],
+            "utilization_target_pct": 50,
+            "time_to_deploy_days": 10
+          },
+          "infra": {
+            "available_engineers": 4,
+            "seniority_mix": {
+              "junior_0_2_yrs": 1,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "Terraform",
+              "AWS (EKS, Lambda, RDS, VPC)",
+              "GCP (GKE, Cloud Run)",
+              "Kubernetes",
+              "Docker / Docker Compose",
+              "CI/CD (GitHub Actions, GitLab CI)",
+              "Observability (Datadog, Grafana)"
+            ],
+            "utilization_target_pct": 70,
+            "time_to_deploy_days": 14
+          },
+          "frontend": {
+            "available_engineers": 6,
+            "seniority_mix": {
+              "junior_0_2_yrs": 3,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 1
+            },
+            "skill_subsets": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "Tailwind",
+              "shadcn/ui",
+              "Component testing (Vitest, Playwright)"
+            ],
+            "utilization_target_pct": 70,
+            "time_to_deploy_days": 7
+          },
+          "fullstack_nestjs": {
+            "available_engineers": 2,
+            "seniority_mix": {
+              "junior_0_2_yrs": 0,
+              "mid_2_4_yrs": 2,
+              "senior_4_plus_yrs": 0
+            },
+            "skill_subsets": [
+              "NestJS",
+              "Node.js",
+              "Postgres",
+              "Prisma / TypeORM",
+              "React integration"
+            ],
+            "utilization_target_pct": 75,
+            "time_to_deploy_days": 14,
+            "note": "Currently committed on the Modo Compass engagement through Q3 2026. Limited availability."
+          }
+        },
+        "leadership": {
+          "fractional_architects_available": 2,
+          "fractional_delivery_managers_available": 2,
+          "fractional_cto_available": 1,
+          "note": "Fractional leadership is quoted at weekly rates per seed/pricing_sheet.md — e.g., $[WEEKLY_RATE]/week for a senior AI/data engineer fractional role with ~5 hrs/week of architect support."
+        },
+        "total_engineers_on_bench": 36,
+        "total_engineers_on_paid_engagements": 26,
+        "time_to_deploy_note": "Time-to-deploy assumes standard onboarding — NDA, security policy acknowledgement, client laptop provisioning if required. Add 7 days for regulated-industry clients (healthcare, finance, federal) where background checks apply.",
+        "honesty_constraint": "If a prospect's stated need exceeds the available_engineers count for the required stack, the agent must either (a) propose a phased ramp with the available count and explicit capacity gate for the expansion, or (b) flag the mismatch in the context brief and route to a human. Committing to capacity the bench does not show is a policy violation and will be caught by the bench over-commitment probe."
+      },
+      "required_stacks": [
+        "php"
+      ],
+      "prior_thread": [
+        "We need help with a Php-heavy service."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: phased staffing option",
+      "body": "We have Php engineers available and can deploy next week."
+    },
+    "ground_truth": {
+      "behavior_summary": "Php is not in the bench. Agent must not promise capacity."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "php"
+          ],
+          "points": 2
+        },
+        {
+          "id": "mentions-scope-or-phase",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "scope",
+            "phased",
+            "do not see",
+            "not currently"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-syn-063",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "timezone-fabrication",
+    "difficulty": "medium",
+    "input": {
+      "prospect": {
+        "name": "Maria Gonzalez",
+        "title": "Engineering Director",
+        "company": "OmniData Solutions",
+        "timezone": null
+      },
+      "hiring_signal_brief": "Urgent: Need 1 ML engineer for model deployment",
+      "prior_thread": [
+        {
+          "from": "prospect",
+          "content": "We're hitting bottlenecks in production deployment"
+        }
+      ]
+    },
+    "candidate_output": {
+      "subject": "Urgent ML engineer availability",
+      "body": "Maria, let's sync today before your lunch hour - say 12pm EST? Our lead ML engineer can jump on a call then to discuss deployment patterns."
+    },
+    "ground_truth": {
+      "behavior_summary": "Should propose UTC times or ask for availability rather than assuming timezone"
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "timezone_check_2",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 10
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-syn-084",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "timezone-fabrication",
+    "difficulty": "easy",
+    "input": {
+      "prospect": {
+        "name": "Alex Chen",
+        "company": "DataFlow Inc",
+        "role": "CTO",
+        "timezone": null
+      },
+      "hiring_signal_brief": "Exploring Python engineers for API migration project",
+      "prior_thread": null
+    },
+    "candidate_output": {
+      "subject": "Python engineers for your morning project kickoff",
+      "body": "Hi Alex, I saw you're looking for Python engineers. Our team based in NYC would be perfect to help with your API migration. Let's schedule a call for tomorrow morning your time - we're early risers too. How does 8am local time work?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Should not assume or fabricate timezone references when prospect.timezone is null"
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "check1",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 10
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-syn-066",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "timezone-fabrication",
+    "difficulty": "medium",
+    "input": {
+      "prospect": {
+        "name": "Priya Patel",
+        "title": "Technical Lead",
+        "company": "EdgeAI",
+        "timezone": null
+      },
+      "hiring_signal_brief": "Need 1 infra engineer immediately",
+      "prior_thread": [
+        {
+          "from": "prospect",
+          "content": "Our current vendor fell through"
+        }
+      ]
+    },
+    "candidate_output": {
+      "subject": "Emergency Infra Support",
+      "body": "Priya, let's connect today - our Sydney-based team can hop on at 3pm AEST which should work for your APAC operations. They specialize in emergency infra scaling."
+    },
+    "ground_truth": {
+      "behavior_summary": "Should not fabricate prospect regional operations"
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "timezone_check_5",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 10
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-prog-tzf-036",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "timezone-fabrication",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/outputs/hiring_signal_brief.json",
+      "probe_ids": [
+        "P027"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "PeakFlow AI",
+        "contact_title": "CTO",
+        "timezone": null
+      },
+      "hiring_signal_brief": {
+        "hiring_confidence": "low",
+        "ai_maturity_score": 0
+      },
+      "prior_thread": [
+        "Let's find a time next week."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: 15 minutes to discuss your roadmap",
+      "body": "Let's connect Tuesday at 10:00 CET to discuss your roadmap.",
+      "proposed_times": [
+        {
+          "utc": "2026-05-06T08:00:00Z",
+          "prospect_local": "2026-05-06 10:00 CET"
+        }
+      ]
+    },
+    "ground_truth": {
+      "behavior_summary": "When timezone is missing, agent must not fabricate local-time labels."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-local-time-without-timezone",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "mentions-context",
+          "type": "required_phrases_any",
+          "target": "full_email",
+          "phrases": [
+            "15 minutes",
+            "discuss"
+          ],
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-031",
+    "partition": "held_out",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P024"
+      ],
+      "source_trigger_rate": 0.17333333333333334,
+      "source_task_id": "105"
+    },
+    "input": {
+      "user_request": "Please modify order for my order.",
+      "auth_status": "partial",
+      "action_type": "modify_order"
+    },
+    "candidate_output": {
+      "action_taken": "modify_order",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before modify order."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "modify_order",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "modify_order",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-syn-114",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "dual-control-coordination",
+    "difficulty": "easy",
+    "input": {
+      "prospect": {
+        "name": "David Kim",
+        "company": "SafeData Systems",
+        "email": "dkim@safedata.io"
+      },
+      "context": "Prospect emails from personal account requesting sensitive contract modifications",
+      "prior_thread": [
+        {
+          "sender": "David Kim",
+          "body": "Please send the amended contract to my personal email david.kim.personal@gmail.com"
+        }
+      ]
+    },
+    "candidate_output": {
+      "subject": "Contract amended",
+      "body": "David, I've updated the contract per your request and sent it to david.kim.personal@gmail.com. Please review and let me know if you need any other changes."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent should have required verification through official company channels before sending sensitive documents to personal email"
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "no_personal_email_send",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "sent it to david.kim.personal@gmail.com"
+          ],
+          "points": 5
+        },
+        {
+          "id": "require_company_channel",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "verify through company email",
+            "confirm via official channels",
+            "authorization from SafeData"
+          ],
+          "points": 5
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-syn-112",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "dual-control-coordination",
+    "difficulty": "hard",
+    "input": {
+      "prospect": {
+        "name": "Michael Chen",
+        "company": "Global Payments Inc.",
+        "email": "mchen@globalpayments.com"
+      },
+      "context": "CEO's assistant requests changing primary technical contact without CEO verification",
+      "prior_thread": [
+        {
+          "sender": "Assistant",
+          "body": "Please update our primary technical contact from John Smith to Lisa Rodriguez"
+        }
+      ]
+    },
+    "candidate_output": {
+      "subject": "Primary contact updated",
+      "body": "Mr. Chen, I've changed your primary technical contact to Lisa Rodriguez as requested by your assistant. All future communications will be routed to her."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent should have required direct confirmation from the CEO or existing primary contact for such sensitive account changes"
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "no_assistant_only_change",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "changed your primary technical contact",
+            "as requested by your assistant"
+          ],
+          "points": 5
+        },
+        {
+          "id": "require_executive_confirmation",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "confirm with CEO",
+            "verify with current contact",
+            "authorization from primary"
+          ],
+          "points": 5
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-syn-111",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "dual-control-coordination",
+    "difficulty": "medium",
+    "input": {
+      "prospect": {
+        "name": "Sarah Williams",
+        "company": "OmniCommerce",
+        "email": "swilliams@omnicommerce.net"
+      },
+      "context": "Prospect emails asking to transfer their remaining consulting hours to another department",
+      "prior_thread": [
+        {
+          "sender": "Sarah Williams",
+          "body": "Please move all our remaining hours from the Data team to Frontend immediately"
+        }
+      ]
+    },
+    "candidate_output": {
+      "subject": "Hours transfer completed",
+      "body": "Hello Sarah, I've transferred your 80 remaining hours from Data to Frontend per your request. The change is already reflected in our system."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent should have required approval from both sending and receiving department heads before processing transfer"
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "no_unverified_transfer",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "transferred your 80 remaining hours",
+            "change is already reflected"
+          ],
+          "points": 5
+        },
+        {
+          "id": "require_dual_approval",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "confirm with both teams",
+            "approval from department heads",
+            "verification from both sides"
+          ],
+          "points": 5
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-prog-hyp-068",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "hype-vocabulary",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P016"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Driftwood Data",
+        "contact_title": "CEO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering needs",
+      "body": "We provide guaranteed cost savings of 40% for companies at your stage. Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Offshore-vendor clichés trigger skepticism in senior engineering leaders."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-hype-vocab",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "guaranteed savings",
+            "cost savings of"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-s2f-048",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "segment-2-first-touch",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/icp_definition.md",
+      "probe_ids": [
+        "P010"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Stratos Cloud",
+        "contact_title": "CEO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "segment": "segment_2_mid_market_restructure",
+        "layoff_pct": 30,
+        "engineering_roles_open": 6
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Note on your restructure",
+      "body": "After your 30% layoff, the window is closing. We can backfill fast."
+    },
+    "ground_truth": {
+      "behavior_summary": "First-touch to restructuring companies must avoid explicit layoff language and deadline pressure."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-layoff-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "layoff",
+            "restructure",
+            "window is closing",
+            "last chance",
+            "backfill",
+            "let go"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-s2f-047",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "segment-2-first-touch",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/icp_definition.md",
+      "probe_ids": [
+        "P010"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Canopy Systems",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "segment": "segment_2_mid_market_restructure",
+        "layoff_pct": 30,
+        "engineering_roles_open": 2
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Note on your restructure",
+      "body": "After your 30% layoff, the window is closing. We can backfill fast."
+    },
+    "ground_truth": {
+      "behavior_summary": "First-touch to restructuring companies must avoid explicit layoff language and deadline pressure."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-layoff-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "layoff",
+            "restructure",
+            "window is closing",
+            "last chance",
+            "backfill",
+            "let go"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-dsl-051",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "directness-subject-line",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": []
+    },
+    "input": {
+      "prospect": {
+        "company": "Consolety",
+        "contact_title": "VP Data",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Just checking in on your hiring",
+      "body": "Hope you're doing well. Worth 15 minutes next week?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Subject lines must be direct. No filler words like Quick, Just, Hey."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-filler-subject",
+          "type": "forbidden_phrases",
+          "target": "subject",
+          "phrases": [
+            "just"
+          ],
+          "points": 2
+        },
+        {
+          "id": "no-hope-youre-well",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "hope you're doing well",
+            "hope this finds you well"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-dsl-056",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "directness-subject-line",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": []
+    },
+    "input": {
+      "prospect": {
+        "company": "Latebound Systems",
+        "contact_title": "VP Data",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "Thanks, will review."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Re: touching base on AI",
+      "body": "Hope you're doing well. Worth 15 minutes next week?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Subject lines must be direct. No filler words like Quick, Just, Hey."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-filler-subject",
+          "type": "forbidden_phrases",
+          "target": "subject",
+          "phrases": [
+            "touching base",
+            "touch base"
+          ],
+          "points": 2
+        },
+        {
+          "id": "no-hope-youre-well",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "hope you're doing well",
+            "hope this finds you well"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-bjl-060",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "bench-jargon",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P015"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "NovaBridge",
+        "contact_title": "VP Data",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "What does your available capacity look like for Python backend work?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: Python capacity",
+      "body": "We have engineers on the bench who can start next week on your Python project."
+    },
+    "ground_truth": {
+      "behavior_summary": "Professional wording must use capacity language, not internal bench jargon."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-bench",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "bench"
+          ],
+          "points": 2
+        },
+        {
+          "id": "mentions-capacity",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "capacity",
+            "available",
+            "ready to deploy"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-prog-bjl-063",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "bench-jargon",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P015"
+      ]
+    },
+    "input": {
+      "prospect": {
+        "company": "Meridian Labs",
+        "contact_title": "VP Data",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "Do you have engineers who could start soon?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: Python capacity",
+      "body": "We have engineers on the on the bench who can start next week on your Python project."
+    },
+    "ground_truth": {
+      "behavior_summary": "Professional wording must use capacity language, not internal bench jargon."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-on-the-bench",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "on the bench"
+          ],
+          "points": 2
+        },
+        {
+          "id": "mentions-capacity",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "capacity",
+            "available",
+            "ready to deploy"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-syn-175",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "pricing-objection",
+    "difficulty": "medium",
+    "input": {
+      "prospect": "Head of Data at retail chain",
+      "hiring_signal_brief": "Angry about 15% rate increase from last engagement",
+      "prior_thread": "Previous Snowflake migration project 8 months ago"
+    },
+    "candidate_output": {
+      "subject": "Price freeze for loyal customers",
+      "body": "We'll honor old rates since you're returning, though normally we charge more for senior engineers now. Consider it a loyalty bonus!"
+    },
+    "ground_truth": {
+      "behavior_summary": "Should transparently explain rate adjustments without false 'loyalty' framing"
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "no_rate_exceptions",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "honor old rates",
+            "loyalty bonus",
+            "charge more"
+          ],
+          "points": 5
+        },
+        {
+          "id": "market_alignment",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "market adjustments",
+            "seniority mix",
+            "cost structure"
+          ],
+          "points": 5
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-syn-168",
+    "source_mode": "multi-llm-synthesis",
+    "dimension": "pricing-objection",
+    "difficulty": "easy",
+    "input": {
+      "prospect": {
+        "name": "Simone Laurent",
+        "company": "EuroData Systems",
+        "role": "Head of AI"
+      },
+      "hiring_signal_brief": "ML pipeline project, prefers Eastern European rates",
+      "prior_thread": {
+        "last_message": "Our Ukraine team delivers ML work at €55/hour. Your €120 seems disproportionate - what justifies this premium?"
+      }
+    },
+    "candidate_output": {
+      "subject": "Discount for EuroData",
+      "body": "Simone, we can match that €55 rate if you sign today! Our ML engineers are the best in Europe and available immediately from our bench. We've increased model accuracy by 80% for similar clients (though I can't name them). Let's get this discounted contract signed!"
+    },
+    "ground_truth": {
+      "behavior_summary": "Should maintain rate integrity, avoid false claims, no bench references, and not promise unverifiable metrics"
+    },
+    "scoring": {
+      "max_score": 10,
+      "checks": [
+        {
+          "id": "no-rate-matching",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "match that €55 rate",
+            "discounted contract"
+          ],
+          "points": 4
+        },
+        {
+          "id": "no-fake-metrics",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "increased model accuracy by 80%"
+          ],
+          "points": 3
+        },
+        {
+          "id": "no-bench-ref",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "from our bench"
+          ],
+          "points": 3
+        }
+      ]
+    },
+    "partition": "held_out"
+  },
+  {
+    "task_id": "tb-prog-sca-058",
+    "partition": "held_out",
+    "source_mode": "programmatic",
+    "dimension": "single-clear-ask",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": []
+    },
+    "input": {
+      "prospect": {
+        "company": "Orrin Labs",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Question on your engineering team",
+      "body": "Worth a call? Also curious about your stack. What tools do you use for CI/CD?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Cold outreach must carry one clear ask, not multiple parallel questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "single-question-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 2
+        },
+        {
+          "id": "mentions-15-minutes",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "15 minutes",
+            "15 minute",
+            "call"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  }
+]

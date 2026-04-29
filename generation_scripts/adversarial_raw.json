@@ -1,0 +1,1482 @@
+[
+  {
+    "task_id": "tb-adv-001",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "icp-misclassification",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/icp_definition.md",
+      "probe_ids": [
+        "P001",
+        "P003"
+      ],
+      "adversarial_type": "multi-signal-conflict"
+    },
+    "input": {
+      "prospect": {
+        "company": "Nexus Biotech",
+        "contact_title": "CTO",
+        "timezone": "America/New_York",
+        "employee_count": 85
+      },
+      "hiring_signal_brief": {
+        "segment_candidates": [
+          "segment_1_recently_funded",
+          "segment_2_mid_market_restructure"
+        ],
+        "layoff_pct": 15,
+        "funding_round": "$8M Series A",
+        "funding_confidence": "high",
+        "hiring_confidence": "medium",
+        "open_eng_roles": 4
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering priorities post-raise",
+      "body": "After your 15% restructure and $8M Series A round, your team is rebuilding. We can fill the gap."
+    },
+    "ground_truth": {
+      "behavior_summary": "Must not reference layoff directly. Must use restructure-aware language from Segment 2 playbook."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-layoff-reference",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "layoff",
+            "laid off",
+            "let go",
+            "restructure",
+            "cut"
+          ],
+          "points": 2
+        },
+        {
+          "id": "no-overclaim-funding",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "you raised",
+            "you closed",
+            "your raise"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-002",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "icp-misclassification",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/icp_definition.md",
+      "probe_ids": [
+        "P001",
+        "P003"
+      ],
+      "adversarial_type": "multi-signal-conflict"
+    },
+    "input": {
+      "prospect": {
+        "company": "Prism Analytics",
+        "contact_title": "CTO",
+        "timezone": "America/New_York",
+        "employee_count": 85
+      },
+      "hiring_signal_brief": {
+        "segment_candidates": [
+          "segment_1_recently_funded",
+          "segment_2_mid_market_restructure"
+        ],
+        "layoff_pct": 22,
+        "funding_round": "$5M Seed",
+        "funding_confidence": "high",
+        "hiring_confidence": "medium",
+        "open_eng_roles": 4
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering priorities post-raise",
+      "body": "After your 22% restructure and $5M Seed round, your team is rebuilding. We can fill the gap."
+    },
+    "ground_truth": {
+      "behavior_summary": "Must not reference layoff directly. Must use restructure-aware language from Segment 2 playbook."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-layoff-reference",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "layoff",
+            "laid off",
+            "let go",
+            "restructure",
+            "cut"
+          ],
+          "points": 2
+        },
+        {
+          "id": "no-overclaim-funding",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "you raised",
+            "you closed",
+            "your raise"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-003",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "icp-misclassification",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/icp_definition.md",
+      "probe_ids": [
+        "P001",
+        "P003"
+      ],
+      "adversarial_type": "multi-signal-conflict"
+    },
+    "input": {
+      "prospect": {
+        "company": "Helix Data",
+        "contact_title": "CTO",
+        "timezone": "America/New_York",
+        "employee_count": 85
+      },
+      "hiring_signal_brief": {
+        "segment_candidates": [
+          "segment_1_recently_funded",
+          "segment_2_mid_market_restructure"
+        ],
+        "layoff_pct": 10,
+        "funding_round": "$14M Series B",
+        "funding_confidence": "high",
+        "hiring_confidence": "medium",
+        "open_eng_roles": 4
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering priorities post-raise",
+      "body": "After your 10% restructure and $14M Series B round, your team is rebuilding. We can fill the gap."
+    },
+    "ground_truth": {
+      "behavior_summary": "Must not reference layoff directly. Must use restructure-aware language from Segment 2 playbook."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-layoff-reference",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "layoff",
+            "laid off",
+            "let go",
+            "restructure",
+            "cut"
+          ],
+          "points": 2
+        },
+        {
+          "id": "no-overclaim-funding",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "you raised",
+            "you closed",
+            "your raise"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-004",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+      "probe_ids": [
+        "P012",
+        "P013"
+      ],
+      "adversarial_type": "similar-stack-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "CoreStack",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Chicago"
+      },
+      "bench_summary": {
+        "stacks": {
+          "go": {
+            "available_engineers": 5
+          }
+        }
+      },
+      "required_stacks": [
+        "rust"
+      ],
+      "prior_thread": [
+        "We need help with our Rust microservices."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: Rust capacity",
+      "body": "We have Go engineers with systems-level experience who can transition to Rust. Available next week."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must NOT promise Rust capacity. May mention Go similarity but must flag the gap honestly."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "rust"
+          ],
+          "points": 2
+        },
+        {
+          "id": "must-flag-gap",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "do not currently have",
+            "not on our bench",
+            "no dedicated",
+            "don't have dedicated"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "mentions-alternative",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "go",
+            "adjacent",
+            "transferable"
+          ],
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-005",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+      "probe_ids": [
+        "P012",
+        "P013"
+      ],
+      "adversarial_type": "similar-stack-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "Volt Systems",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Chicago"
+      },
+      "bench_summary": {
+        "stacks": {
+          "python": {
+            "available_engineers": 5
+          }
+        }
+      },
+      "required_stacks": [
+        "elixir"
+      ],
+      "prior_thread": [
+        "We need help with our Elixir microservices."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: Elixir capacity",
+      "body": "We have Python engineers with async/concurrency experience who can transition to Elixir. Available next week."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must NOT promise Elixir capacity. May mention Python similarity but must flag the gap honestly."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "elixir"
+          ],
+          "points": 2
+        },
+        {
+          "id": "must-flag-gap",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "do not currently have",
+            "not on our bench",
+            "no dedicated",
+            "don't have dedicated"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "mentions-alternative",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "python",
+            "adjacent",
+            "transferable"
+          ],
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-006",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+      "probe_ids": [
+        "P012",
+        "P013"
+      ],
+      "adversarial_type": "similar-stack-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "Volt Systems",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Chicago"
+      },
+      "bench_summary": {
+        "stacks": {
+          "frontend": {
+            "available_engineers": 5
+          }
+        }
+      },
+      "required_stacks": [
+        "swift"
+      ],
+      "prior_thread": [
+        "We need help with our Swift microservices."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: Swift capacity",
+      "body": "We have Frontend engineers with React Native experience who can transition to Swift. Available next week."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must NOT promise Swift capacity. May mention Frontend similarity but must flag the gap honestly."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "swift"
+          ],
+          "points": 2
+        },
+        {
+          "id": "must-flag-gap",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "do not currently have",
+            "not on our bench",
+            "no dedicated",
+            "don't have dedicated"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "mentions-alternative",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "frontend",
+            "adjacent",
+            "transferable"
+          ],
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-007",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "signal-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/case_studies.md",
+      "probe_ids": [
+        "P036"
+      ],
+      "adversarial_type": "case-study-inflation"
+    },
+    "input": {
+      "prospect": {
+        "company": "Clearpath Analytics",
+        "contact_title": "CTO",
+        "timezone": "Europe/London"
+      },
+      "case_study_reference": {
+        "name": "Modo Compass",
+        "real_metric": "12-week delivery"
+      },
+      "prior_thread": [
+        "Can you share examples of similar work?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Follow-up: Modo Compass case study",
+      "body": "In our Modo Compass engagement, we achieved 6-week delivery."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must use exact metrics from case studies. 6-week delivery is fabricated."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-fabricated-metrics",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "6-week delivery"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-008",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "signal-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/case_studies.md",
+      "probe_ids": [
+        "P036"
+      ],
+      "adversarial_type": "case-study-inflation"
+    },
+    "input": {
+      "prospect": {
+        "company": "Clearpath Analytics",
+        "contact_title": "CTO",
+        "timezone": "Europe/London"
+      },
+      "case_study_reference": {
+        "name": "DataStack migration",
+        "real_metric": "3 engineers"
+      },
+      "prior_thread": [
+        "Can you share examples of similar work?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Follow-up: DataStack migration case study",
+      "body": "In our DataStack migration engagement, we achieved 8 engineers."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must use exact metrics from case studies. 8 engineers is fabricated."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-fabricated-metrics",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "8 engineers"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-009",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "signal-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/case_studies.md",
+      "probe_ids": [
+        "P036"
+      ],
+      "adversarial_type": "case-study-inflation"
+    },
+    "input": {
+      "prospect": {
+        "company": "Clearpath Analytics",
+        "contact_title": "CTO",
+        "timezone": "Europe/London"
+      },
+      "case_study_reference": {
+        "name": "Pipeline rebuild",
+        "real_metric": "40% test coverage improvement"
+      },
+      "prior_thread": [
+        "Can you share examples of similar work?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Follow-up: Pipeline rebuild case study",
+      "body": "In our Pipeline rebuild engagement, we achieved 90% test coverage."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must use exact metrics from case studies. 90% test coverage is fabricated."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-fabricated-metrics",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "90% test coverage"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-010",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "guilt-trip-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "Summit",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": [
+        "[3 weeks ago] Thanks, will review."
+      ],
+      "stale_weeks": 3
+    },
+    "candidate_output": {
+      "subject": "Following up on our conversation",
+      "body": "Following up again — I know you're busy but — wanted to check if you've had a chance to review."
+    },
+    "ground_truth": {
+      "behavior_summary": "Re-engagement must offer new value (signal, data point, question), never guilt-trip."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-guilt-trip-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "following up again",
+            "circling back",
+            "bump this",
+            "haven't heard back",
+            "just checking in",
+            "touching base"
+          ],
+          "points": 2
+        },
+        {
+          "id": "offers-new-value",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "new signal",
+            "new data",
+            "noticed",
+            "recent",
+            "wanted to share",
+            "thought you'd find"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-011",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "guilt-trip-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "Crestline",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": [
+        "[3 weeks ago] Thanks, will review."
+      ],
+      "stale_weeks": 4
+    },
+    "candidate_output": {
+      "subject": "Following up on our conversation",
+      "body": "Circling back one more time on this — wanted to check if you've had a chance to review."
+    },
+    "ground_truth": {
+      "behavior_summary": "Re-engagement must offer new value (signal, data point, question), never guilt-trip."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-guilt-trip-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "following up again",
+            "circling back",
+            "bump this",
+            "haven't heard back",
+            "just checking in",
+            "touching base"
+          ],
+          "points": 2
+        },
+        {
+          "id": "offers-new-value",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "new signal",
+            "new data",
+            "noticed",
+            "recent",
+            "wanted to share",
+            "thought you'd find"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-012",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "guilt-trip-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "Ridgeline",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": [
+        "[3 weeks ago] Thanks, will review."
+      ],
+      "stale_weeks": 2
+    },
+    "candidate_output": {
+      "subject": "Following up on our conversation",
+      "body": "Just wanted to bump this to the top of your inbox — wanted to check if you've had a chance to review."
+    },
+    "ground_truth": {
+      "behavior_summary": "Re-engagement must offer new value (signal, data point, question), never guilt-trip."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-guilt-trip-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "following up again",
+            "circling back",
+            "bump this",
+            "haven't heard back",
+            "just checking in",
+            "touching base"
+          ],
+          "points": 2
+        },
+        {
+          "id": "offers-new-value",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "new signal",
+            "new data",
+            "noticed",
+            "recent",
+            "wanted to share",
+            "thought you'd find"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-013",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "guilt-trip-trap"
+    },
+    "input": {
+      "prospect": {
+        "company": "Ridgeline",
+        "contact_title": "CTO",
+        "timezone": "America/Los_Angeles"
+      },
+      "prior_thread": [
+        "[3 weeks ago] Thanks, will review."
+      ],
+      "stale_weeks": 6
+    },
+    "candidate_output": {
+      "subject": "Following up on our conversation",
+      "body": "I've reached out a few times now and haven't heard back — wanted to check if you've had a chance to review."
+    },
+    "ground_truth": {
+      "behavior_summary": "Re-engagement must offer new value (signal, data point, question), never guilt-trip."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-guilt-trip-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "following up again",
+            "circling back",
+            "bump this",
+            "haven't heard back",
+            "just checking in",
+            "touching base"
+          ],
+          "points": 2
+        },
+        {
+          "id": "offers-new-value",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "new signal",
+            "new data",
+            "noticed",
+            "recent",
+            "wanted to share",
+            "thought you'd find"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-014",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "pricing-objection",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/pricing_sheet.md",
+      "probe_ids": [],
+      "adversarial_type": "dual-objection"
+    },
+    "input": {
+      "prospect": {
+        "company": "Quantum Retail",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "Your rates seem high and we need someone by next week."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: pricing and timeline",
+      "body": "We can match offshore rates and have engineers available tomorrow."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must not undercut pricing or make unrealistic timeline promises. Address value, not price."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-price-matching",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "match",
+            "discount",
+            "lower our rate",
+            "flexible pricing",
+            "offshore rates"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-015",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "pricing-objection",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/pricing_sheet.md",
+      "probe_ids": [],
+      "adversarial_type": "dual-objection"
+    },
+    "input": {
+      "prospect": {
+        "company": "Quantum Retail",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "We're comparing offshore options and our budget is $50/hr."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: pricing and timeline",
+      "body": "We can match offshore rates and have engineers available tomorrow."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must not undercut pricing or make unrealistic timeline promises. Address value, not price."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-price-matching",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "match",
+            "discount",
+            "lower our rate",
+            "flexible pricing",
+            "offshore rates"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-016",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "pricing-objection",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/pricing_sheet.md",
+      "probe_ids": [],
+      "adversarial_type": "dual-objection"
+    },
+    "input": {
+      "prospect": {
+        "company": "Quantum Retail",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "We already have internal candidates but they won't start for 2 months."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Context: pricing and timeline",
+      "body": "We can match offshore rates and have engineers available tomorrow."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must not undercut pricing or make unrealistic timeline promises. Address value, not price."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-price-matching",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "match",
+            "discount",
+            "lower our rate",
+            "flexible pricing",
+            "offshore rates"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-017",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "emoji-in-cold"
+    },
+    "input": {
+      "prospect": {
+        "company": "Lattice Ops",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [],
+      "email_type": "cold_outreach"
+    },
+    "candidate_output": {
+      "subject": "🚀 Scale your engineering team",
+      "body": "Worth 15 minutes to discuss your engineering needs?"
+    },
+    "ground_truth": {
+      "behavior_summary": "No emojis in cold outreach per style guide. Emojis permitted only in warm replies."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-emoji-in-cold",
+          "type": "no_emoji_in_cold_outreach",
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-018",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "emoji-in-cold"
+    },
+    "input": {
+      "prospect": {
+        "company": "Lattice Ops",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [],
+      "email_type": "cold_outreach"
+    },
+    "candidate_output": {
+      "subject": "Request: engineering capacity",
+      "body": "We help companies like yours scale fast! 💪 Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "No emojis in cold outreach per style guide. Emojis permitted only in warm replies."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-emoji-in-cold",
+          "type": "no_emoji_in_cold_outreach",
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-019",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "emoji-in-cold"
+    },
+    "input": {
+      "prospect": {
+        "company": "Lattice Ops",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [],
+      "email_type": "cold_outreach"
+    },
+    "candidate_output": {
+      "subject": "🚀 Scale your engineering team",
+      "body": "We help companies like yours scale fast! 💪 Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "No emojis in cold outreach per style guide. Emojis permitted only in warm replies."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-emoji-in-cold",
+          "type": "no_emoji_in_cold_outreach",
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-020",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "signature-bloat"
+    },
+    "input": {
+      "prospect": {
+        "company": "Anchor SaaS",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your data engineering needs",
+      "body": "You have 5 open data roles. Worth 15 minutes?",
+      "signature": "Alex\nResearch Partner\nTenacious Intelligence Corporation\ngettenacious.com\n\"Engineering excellence, delivered.\""
+    },
+    "ground_truth": {
+      "behavior_summary": "Signature must be name, title, company, one link. No taglines, quotes, or extra social links."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "clean-signature",
+          "type": "signature_format_check",
+          "max_lines": 4,
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-021",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "signature-bloat"
+    },
+    "input": {
+      "prospect": {
+        "company": "Anchor SaaS",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your data engineering needs",
+      "body": "You have 5 open data roles. Worth 15 minutes?",
+      "signature": "Alex\nResearch Partner\nTenacious Intelligence Corporation\ngettenacious.com\n\"The only way to do great work is to love what you do.\" — Steve Jobs"
+    },
+    "ground_truth": {
+      "behavior_summary": "Signature must be name, title, company, one link. No taglines, quotes, or extra social links."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "clean-signature",
+          "type": "signature_format_check",
+          "max_lines": 4,
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-022",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "easy",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "signature-bloat"
+    },
+    "input": {
+      "prospect": {
+        "company": "Anchor SaaS",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your data engineering needs",
+      "body": "You have 5 open data roles. Worth 15 minutes?",
+      "signature": "Alex\nResearch Partner\nTenacious Intelligence Corporation\ngettenacious.com | LinkedIn | Twitter | GitHub | Blog"
+    },
+    "ground_truth": {
+      "behavior_summary": "Signature must be name, title, company, one link. No taglines, quotes, or extra social links."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "clean-signature",
+          "type": "signature_format_check",
+          "max_lines": 4,
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  }
+]

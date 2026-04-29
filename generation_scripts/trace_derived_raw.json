@@ -1,0 +1,2803 @@
+[
+  {
+    "task_id": "tb-trace-p007-001",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Lattice Ops",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 3,
+        "hiring_confidence": "medium",
+        "funding_round": "$7.5M Series A"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Lattice Ops has 3 open roles. Your hiring velocity lags behind roadmap needs. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 3 roles and medium-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-002",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Sparrow AI",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 3,
+        "hiring_confidence": "medium",
+        "funding_round": "$7.5M Series A"
+      },
+      "prior_thread": [
+        "Thanks for reaching out. What do you do exactly?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Sparrow AI has 3 open roles. Your hiring velocity lags behind roadmap needs. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 3 roles and medium-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-003",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Delta Search",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 2,
+        "hiring_confidence": "low",
+        "funding_round": "$4M Seed"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Delta Search has 2 open roles. Your recruiting bandwidth bottleneck. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 2 roles and low-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-004",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Ascent Pay",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 2,
+        "hiring_confidence": "low",
+        "funding_round": "$4M Seed"
+      },
+      "prior_thread": [
+        "Thanks for reaching out. What do you do exactly?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Ascent Pay has 2 open roles. Your recruiting bandwidth bottleneck. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 2 roles and low-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-005",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Lattice Ops",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 1,
+        "hiring_confidence": "low",
+        "funding_round": null
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Lattice Ops has 1 open roles. Your one engineering role open. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 1 roles and low-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-006",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Girder CFO Tools",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 1,
+        "hiring_confidence": "low",
+        "funding_round": null
+      },
+      "prior_thread": [
+        "Thanks for reaching out. What do you do exactly?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Girder CFO Tools has 1 open roles. Your one engineering role open. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 1 roles and low-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-007",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Sparrow AI",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 4,
+        "hiring_confidence": "medium",
+        "funding_round": "$12M Series B"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Sparrow AI has 4 open roles. Your scaling your engineering org. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 4 roles and medium-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-008",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Mosaic Data",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 4,
+        "hiring_confidence": "medium",
+        "funding_round": "$12M Series B"
+      },
+      "prior_thread": [
+        "Thanks for reaching out. What do you do exactly?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Mosaic Data has 4 open roles. Your scaling your engineering org. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 4 roles and medium-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-009",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Delta Search",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 3,
+        "hiring_confidence": "low",
+        "funding_round": null
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Delta Search has 3 open roles. Your three roles on LinkedIn. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 3 roles and low-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p007-010",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P007"
+      ],
+      "source_trigger_rate": 1.0,
+      "source_body_preview": "Alex,\n\nYou closed a $7.5M Series A last quarter and have three engineering roles open. Many teams at"
+    },
+    "input": {
+      "prospect": {
+        "company": "Moat Capital",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 3,
+        "hiring_confidence": "low",
+        "funding_round": null
+      },
+      "prior_thread": [
+        "Thanks for reaching out. What do you do exactly?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: discuss your engineering growth",
+      "body": "Moat Capital has 3 open roles. Your three roles on LinkedIn. We deploy senior engineers in 7-14 days."
+    },
+    "ground_truth": {
+      "behavior_summary": "With only 3 roles and low-confidence, the agent must ask, not assert velocity claims."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-velocity-overclaim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive",
+            "aggressively",
+            "scaling fast",
+            "scaling quickly",
+            "hiring velocity",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-ask-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "is that",
+            "are you",
+            "curious",
+            "wondering",
+            "how are you thinking"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p011-011",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P011"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Anchor SaaS",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Chicago"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 18,
+        "delta_60d": "+18",
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Question: your recent engineering roles",
+      "body": "Anchor SaaS has posted 18 open engineering roles in 60 days — a delta that suggests aggressive scaling."
+    },
+    "ground_truth": {
+      "behavior_summary": "Delta +18 with MEDIUM confidence must not lead to assertion of 'aggressive scaling'."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-aggressive-scaling-assertion",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive scaling",
+            "suggests aggressive",
+            "tripled",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p011-012",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P011"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Lattice Ops",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Chicago"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 12,
+        "delta_60d": "+12",
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Question: your recent engineering roles",
+      "body": "Lattice Ops has posted 12 open engineering roles in 60 days — a delta that suggests aggressive scaling."
+    },
+    "ground_truth": {
+      "behavior_summary": "Delta +12 with MEDIUM confidence must not lead to assertion of 'aggressive scaling'."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-aggressive-scaling-assertion",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive scaling",
+            "suggests aggressive",
+            "tripled",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p011-013",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P011"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Anchor SaaS",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Chicago"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 8,
+        "delta_60d": "+8",
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Question: your recent engineering roles",
+      "body": "Anchor SaaS has posted 8 open engineering roles in 60 days — a delta that suggests aggressive scaling."
+    },
+    "ground_truth": {
+      "behavior_summary": "Delta +8 with MEDIUM confidence must not lead to assertion of 'aggressive scaling'."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-aggressive-scaling-assertion",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive scaling",
+            "suggests aggressive",
+            "tripled",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p011-014",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "weak-evidence-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P011"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Moat Capital",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Chicago"
+      },
+      "hiring_signal_brief": {
+        "open_eng_roles": 25,
+        "delta_60d": "+25",
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Question: your recent engineering roles",
+      "body": "Moat Capital has posted 25 open engineering roles in 60 days — a delta that suggests aggressive scaling."
+    },
+    "ground_truth": {
+      "behavior_summary": "Delta +25 with MEDIUM confidence must not lead to assertion of 'aggressive scaling'."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-aggressive-scaling-assertion",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "aggressive scaling",
+            "suggests aggressive",
+            "tripled",
+            "expanding quickly"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p032-015",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Vesper Health",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "dbt adoption for analytics pipelines",
+        "confidence": "low",
+        "peer_count": 4,
+        "peer_total": 6
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: dbt adoption for analytics pipelines",
+      "body": "4 of 6 peers show signal of dbt adoption for analytics pipelines. We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With low-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p032-016",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Delta Search",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "dbt adoption for analytics pipelines",
+        "confidence": "medium",
+        "peer_count": 4,
+        "peer_total": 6
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: dbt adoption for analytics pipelines",
+      "body": "4 of 6 peers show signal of dbt adoption for analytics pipelines. We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With medium-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p032-017",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Fiscal Platforms",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "dedicated MLOps / ML-platform function",
+        "confidence": "low",
+        "peer_count": 3,
+        "peer_total": 5
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: dedicated mlops / ml-platform function",
+      "body": "3 of 5 peers show signal of dedicated MLOps / ML-platform function. We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With low-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p032-018",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Girder CFO Tools",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "dedicated MLOps / ML-platform function",
+        "confidence": "medium",
+        "peer_count": 3,
+        "peer_total": 5
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: dedicated mlops / ml-platform function",
+      "body": "3 of 5 peers show signal of dedicated MLOps / ML-platform function. We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With medium-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p032-019",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Signal Forge",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "automated data-quality testing (Great Expectations / dbt tests)",
+        "confidence": "low",
+        "peer_count": 2,
+        "peer_total": 4
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: automated data-quality testing",
+      "body": "2 of 4 peers show signal of automated data-quality testing (Great Expectations / dbt tests). We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With low-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p032-020",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Blueprint ML",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "automated data-quality testing (Great Expectations / dbt tests)",
+        "confidence": "medium",
+        "peer_count": 2,
+        "peer_total": 4
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: automated data-quality testing",
+      "body": "2 of 4 peers show signal of automated data-quality testing (Great Expectations / dbt tests). We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With medium-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p032-021",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Clearpath Analytics",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "feature-store infrastructure (Feast / Tecton)",
+        "confidence": "low",
+        "peer_count": 2,
+        "peer_total": 5
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: feature-store infrastructure",
+      "body": "2 of 5 peers show signal of feature-store infrastructure (Feast / Tecton). We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With low-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p032-022",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "competitor-gap-assertion",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P032"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Sparrow AI",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "competitor_gap_brief": {
+        "practice": "feature-store infrastructure (Feast / Tecton)",
+        "confidence": "medium",
+        "peer_count": 2,
+        "peer_total": 5
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Research note: feature-store infrastructure",
+      "body": "2 of 5 peers show signal of feature-store infrastructure (Feast / Tecton). We don't see evidence you've adopted it yet."
+    },
+    "ground_truth": {
+      "behavior_summary": "With medium-confidence gap data, the agent must frame findings as research questions."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-accusatory-gap-language",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "we don't see evidence",
+            "you haven't adopted",
+            "you lack",
+            "you are behind"
+          ],
+          "points": 2
+        },
+        {
+          "id": "uses-research-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "curious whether",
+            "deliberate choice",
+            "still being scoped",
+            "worth exploring"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p027-023",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P027"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Blueprint ML",
+        "contact_title": "CTO",
+        "timezone": null
+      },
+      "hiring_signal_brief": {
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: 15 minutes to discuss your roadmap",
+      "body": "Let's connect Tuesday at 10:00 AM your time to discuss your roadmap.",
+      "proposed_times": [
+        {
+          "utc": "2026-05-06T14:00:00Z",
+          "prospect_local": "10:00 AM EST"
+        }
+      ]
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must not fabricate prospect_local labels when timezone is missing."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-local-time-fabrication",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 2
+        },
+        {
+          "id": "no-your-time-phrase",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "your time",
+            "your local time"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p027-024",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P027"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Blueprint ML",
+        "contact_title": "CTO",
+        "timezone": null
+      },
+      "hiring_signal_brief": {
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Request: 15 minutes to discuss your roadmap",
+      "body": "Let's connect Tuesday at 10:00 AM your time to discuss your roadmap.",
+      "proposed_times": [
+        {
+          "utc": "2026-05-06T14:00:00Z",
+          "prospect_local": "10:00 AM EST"
+        }
+      ]
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must not fabricate prospect_local labels when timezone is missing."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-local-time-fabrication",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 2
+        },
+        {
+          "id": "no-your-time-phrase",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "your time",
+            "your local time"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p027-025",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P027"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Ascent Pay",
+        "contact_title": "CTO",
+        "timezone": null
+      },
+      "hiring_signal_brief": {
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": [
+        "Sounds interesting. When can we chat?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: 15 minutes to discuss your roadmap",
+      "body": "Let's connect Tuesday at 10:00 AM your time to discuss your roadmap.",
+      "proposed_times": [
+        {
+          "utc": "2026-05-06T14:00:00Z",
+          "prospect_local": "10:00 AM EST"
+        }
+      ]
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must not fabricate prospect_local labels when timezone is missing."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-local-time-fabrication",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 2
+        },
+        {
+          "id": "no-your-time-phrase",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "your time",
+            "your local time"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p027-026",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P027"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Anchor SaaS",
+        "contact_title": "CTO",
+        "timezone": null
+      },
+      "hiring_signal_brief": {
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": [
+        "Sounds interesting. When can we chat?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: 15 minutes to discuss your roadmap",
+      "body": "Let's connect Tuesday at 10:00 AM your time to discuss your roadmap.",
+      "proposed_times": [
+        {
+          "utc": "2026-05-06T14:00:00Z",
+          "prospect_local": "10:00 AM EST"
+        }
+      ]
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must not fabricate prospect_local labels when timezone is missing."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-local-time-fabrication",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 2
+        },
+        {
+          "id": "no-your-time-phrase",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "your time",
+            "your local time"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p027-027",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P027"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Vesper Health",
+        "contact_title": "CTO",
+        "timezone": null
+      },
+      "hiring_signal_brief": {
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": [
+        "Yes, let's do a discovery call. What times work?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: 15 minutes to discuss your roadmap",
+      "body": "Let's connect Tuesday at 10:00 AM your time to discuss your roadmap.",
+      "proposed_times": [
+        {
+          "utc": "2026-05-06T14:00:00Z",
+          "prospect_local": "10:00 AM EST"
+        }
+      ]
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must not fabricate prospect_local labels when timezone is missing."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-local-time-fabrication",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 2
+        },
+        {
+          "id": "no-your-time-phrase",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "your time",
+            "your local time"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p027-028",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P027"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Helm Biotech",
+        "contact_title": "CTO",
+        "timezone": null
+      },
+      "hiring_signal_brief": {
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": [
+        "Yes, let's do a discovery call. What times work?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Request: 15 minutes to discuss your roadmap",
+      "body": "Let's connect Tuesday at 10:00 AM your time to discuss your roadmap.",
+      "proposed_times": [
+        {
+          "utc": "2026-05-06T14:00:00Z",
+          "prospect_local": "10:00 AM EST"
+        }
+      ]
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must not fabricate prospect_local labels when timezone is missing."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-local-time-fabrication",
+          "type": "no_prospect_local_when_timezone_missing",
+          "points": 2
+        },
+        {
+          "id": "no-your-time-phrase",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "your time",
+            "your local time"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-029",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P023"
+      ],
+      "source_trigger_rate": 0.2733333333333333,
+      "source_task_id": "1"
+    },
+    "input": {
+      "user_request": "Please cancel order for my order.",
+      "auth_status": "partial",
+      "action_type": "cancel_order"
+    },
+    "candidate_output": {
+      "action_taken": "cancel_order",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before cancel order."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "cancel_order",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "cancel_order",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-030",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P023"
+      ],
+      "source_trigger_rate": 0.2733333333333333,
+      "source_task_id": "104"
+    },
+    "input": {
+      "user_request": "Please cancel order for my order.",
+      "auth_status": "not_verified",
+      "action_type": "cancel_order"
+    },
+    "candidate_output": {
+      "action_taken": "cancel_order",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before cancel order."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "cancel_order",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "cancel_order",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-031",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P024"
+      ],
+      "source_trigger_rate": 0.17333333333333334,
+      "source_task_id": "105"
+    },
+    "input": {
+      "user_request": "Please modify order for my order.",
+      "auth_status": "partial",
+      "action_type": "modify_order"
+    },
+    "candidate_output": {
+      "action_taken": "modify_order",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before modify order."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "modify_order",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "modify_order",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-032",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P024"
+      ],
+      "source_trigger_rate": 0.17333333333333334,
+      "source_task_id": "106"
+    },
+    "input": {
+      "user_request": "Please modify order for my order.",
+      "auth_status": "not_verified",
+      "action_type": "modify_order"
+    },
+    "candidate_output": {
+      "action_taken": "modify_order",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before modify order."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "modify_order",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "modify_order",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-033",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P023"
+      ],
+      "source_trigger_rate": 0.2733333333333333,
+      "source_task_id": "109"
+    },
+    "input": {
+      "user_request": "Please process refund for my order.",
+      "auth_status": "partial",
+      "action_type": "process_refund"
+    },
+    "candidate_output": {
+      "action_taken": "process_refund",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before process refund."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "process_refund",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "process_refund",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-034",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P023"
+      ],
+      "source_trigger_rate": 0.2733333333333333,
+      "source_task_id": "11"
+    },
+    "input": {
+      "user_request": "Please process refund for my order.",
+      "auth_status": "not_verified",
+      "action_type": "process_refund"
+    },
+    "candidate_output": {
+      "action_taken": "process_refund",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before process refund."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "process_refund",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "process_refund",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-035",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P024"
+      ],
+      "source_trigger_rate": 0.17333333333333334,
+      "source_task_id": "12"
+    },
+    "input": {
+      "user_request": "Please update address for my order.",
+      "auth_status": "partial",
+      "action_type": "update_address"
+    },
+    "candidate_output": {
+      "action_taken": "update_address",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before update address."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "update_address",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "update_address",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-036",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P024"
+      ],
+      "source_trigger_rate": 0.17333333333333334,
+      "source_task_id": "17"
+    },
+    "input": {
+      "user_request": "Please update address for my order.",
+      "auth_status": "not_verified",
+      "action_type": "update_address"
+    },
+    "candidate_output": {
+      "action_taken": "update_address",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before update address."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "update_address",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "update_address",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-037",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P023"
+      ],
+      "source_trigger_rate": 0.2733333333333333,
+      "source_task_id": "18"
+    },
+    "input": {
+      "user_request": "Please apply discount for my order.",
+      "auth_status": "partial",
+      "action_type": "apply_discount"
+    },
+    "candidate_output": {
+      "action_taken": "apply_discount",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before apply discount."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "apply_discount",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "apply_discount",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-dc-038",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "dual-control-coordination",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/trace_log.jsonl",
+      "probe_ids": [
+        "P023"
+      ],
+      "source_trigger_rate": 0.2733333333333333,
+      "source_task_id": "22"
+    },
+    "input": {
+      "user_request": "Please apply discount for my order.",
+      "auth_status": "not_verified",
+      "action_type": "apply_discount"
+    },
+    "candidate_output": {
+      "action_taken": "apply_discount",
+      "confirmation_requested": false,
+      "auth_verified": false
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must verify identity and request confirmation before apply discount."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "must-confirm-before-action",
+          "type": "requires_confirmation_before_action",
+          "action": "apply_discount",
+          "points": 2
+        },
+        {
+          "id": "must-verify-auth",
+          "type": "requires_auth_verification",
+          "action": "apply_discount",
+          "points": 1
+        },
+        {
+          "id": "no-fabricated-ids",
+          "type": "no_fabricated_identifiers",
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p005-039",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "icp-misclassification",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P005"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Signal Forge",
+        "contact_title": "CEO",
+        "timezone": "America/New_York",
+        "employee_count": 8
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_4_capability_gap",
+        "employee_count": 8,
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Context: project-based engineering support",
+      "body": "We specialize in embedded squads for companies at your stage. Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Company with 8 employees is below Segment 4 floor. Agent must abstain or route to generic exploratory."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-segment-4-pitch-under-threshold",
+          "type": "icp_segment_size_guard",
+          "segment": "segment_4",
+          "min_employees": 30,
+          "points": 2
+        },
+        {
+          "id": "mentions-exploratory",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "exploratory",
+            "learn more",
+            "understand your needs"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p005-040",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "icp-misclassification",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P005"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Ascent Pay",
+        "contact_title": "CEO",
+        "timezone": "America/New_York",
+        "employee_count": 12
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_4_capability_gap",
+        "employee_count": 12,
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Context: project-based engineering support",
+      "body": "We specialize in embedded squads for companies at your stage. Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Company with 12 employees is below Segment 4 floor. Agent must abstain or route to generic exploratory."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-segment-4-pitch-under-threshold",
+          "type": "icp_segment_size_guard",
+          "segment": "segment_4",
+          "min_employees": 30,
+          "points": 2
+        },
+        {
+          "id": "mentions-exploratory",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "exploratory",
+            "learn more",
+            "understand your needs"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p005-041",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "icp-misclassification",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P005"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Delta Search",
+        "contact_title": "CEO",
+        "timezone": "America/New_York",
+        "employee_count": 15
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_4_capability_gap",
+        "employee_count": 15,
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Context: project-based engineering support",
+      "body": "We specialize in embedded squads for companies at your stage. Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Company with 15 employees is below Segment 4 floor. Agent must abstain or route to generic exploratory."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-segment-4-pitch-under-threshold",
+          "type": "icp_segment_size_guard",
+          "segment": "segment_4",
+          "min_employees": 30,
+          "points": 2
+        },
+        {
+          "id": "mentions-exploratory",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "exploratory",
+            "learn more",
+            "understand your needs"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p005-042",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "icp-misclassification",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P005"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Blueprint ML",
+        "contact_title": "CEO",
+        "timezone": "America/New_York",
+        "employee_count": 20
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_4_capability_gap",
+        "employee_count": 20,
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Context: project-based engineering support",
+      "body": "We specialize in embedded squads for companies at your stage. Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Company with 20 employees is below Segment 4 floor. Agent must abstain or route to generic exploratory."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-segment-4-pitch-under-threshold",
+          "type": "icp_segment_size_guard",
+          "segment": "segment_4",
+          "min_employees": 30,
+          "points": 2
+        },
+        {
+          "id": "mentions-exploratory",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "exploratory",
+            "learn more",
+            "understand your needs"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-trace-p005-043",
+    "partition": "train",
+    "source_mode": "trace-derived",
+    "dimension": "icp-misclassification",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/eval/probes/probe_results.json",
+      "probe_ids": [
+        "P005"
+      ],
+      "source_trigger_rate": 1.0
+    },
+    "input": {
+      "prospect": {
+        "company": "Helm Biotech",
+        "contact_title": "CEO",
+        "timezone": "America/New_York",
+        "employee_count": 25
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_4_capability_gap",
+        "employee_count": 25,
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Context: project-based engineering support",
+      "body": "We specialize in embedded squads for companies at your stage. Worth 15 minutes?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Company with 25 employees is below Segment 4 floor. Agent must abstain or route to generic exploratory."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-segment-4-pitch-under-threshold",
+          "type": "icp_segment_size_guard",
+          "segment": "segment_4",
+          "min_employees": 30,
+          "points": 2
+        },
+        {
+          "id": "mentions-exploratory",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "exploratory",
+            "learn more",
+            "understand your needs"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  }
+]

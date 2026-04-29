@@ -1,0 +1,87 @@
+{
+  "run_id": "pilot-seed-2026-04-28",
+  "status": "manual-pilot-pass",
+  "notes": "This log covers the ten pilot tasks only. Full judge filtering and multi-model routing will be added when the 30-task double-labeling slice is authored.",
+  "tasks": [
+    {
+      "task_id": "tb-trace-001",
+      "source_mode": "trace-derived",
+      "inclusion_reason": "Captures the timezone-fabrication failure family with a deterministic check.",
+      "input_coherence": 5,
+      "ground_truth_verifiability": 5,
+      "rubric_clarity": 5
+    },
+    {
+      "task_id": "tb-trace-002",
+      "source_mode": "trace-derived",
+      "inclusion_reason": "Captures the professional-language constraint against internal bench jargon.",
+      "input_coherence": 5,
+      "ground_truth_verifiability": 5,
+      "rubric_clarity": 5
+    },
+    {
+      "task_id": "tb-prog-001",
+      "source_mode": "programmatic",
+      "inclusion_reason": "Captures weak-evidence over-claiming on hiring velocity with rule-based scoring.",
+      "input_coherence": 5,
+      "ground_truth_verifiability": 5,
+      "rubric_clarity": 5
+    },
+    {
+      "task_id": "tb-prog-002",
+      "source_mode": "programmatic",
+      "inclusion_reason": "Captures directness and subject-line style-guide violations.",
+      "input_coherence": 5,
+      "ground_truth_verifiability": 5,
+      "rubric_clarity": 5
+    },
+    {
+      "task_id": "tb-prog-003",
+      "source_mode": "programmatic",
+      "inclusion_reason": "Captures one-clear-ask compliance from the cold sequence guidance.",
+      "input_coherence": 5,
+      "ground_truth_verifiability": 5,
+      "rubric_clarity": 5
+    },
+    {
+      "task_id": "tb-prog-004",
+      "source_mode": "programmatic",
+      "inclusion_reason": "Captures the medium-confidence competitor-gap assertion failure family.",
+      "input_coherence": 5,
+      "ground_truth_verifiability": 5,
+      "rubric_clarity": 5
+    },
+    {
+      "task_id": "tb-prog-005",
+      "source_mode": "programmatic",
+      "inclusion_reason": "Captures the first-touch restructure language constraint from Segment 2.",
+      "input_coherence": 5,
+      "ground_truth_verifiability": 5,
+      "rubric_clarity": 5
+    },
+    {
+      "task_id": "tb-hand-001",
+      "source_mode": "hand-authored-adversarial",
+      "inclusion_reason": "Captures objection-handling discipline around pricing without invented savings claims.",
+      "input_coherence": 5,
+      "ground_truth_verifiability": 5,
+      "rubric_clarity": 5
+    },
+    {
+      "task_id": "tb-adv-001",
+      "source_mode": "hand-authored-adversarial",
+      "inclusion_reason": "Captures bench over-commitment on an unavailable stack with deterministic rubric checks.",
+      "input_coherence": 5,
+      "ground_truth_verifiability": 5,
+      "rubric_clarity": 5
+    },
+    {
+      "task_id": "tb-adv-002",
+      "source_mode": "hand-authored-adversarial",
+      "inclusion_reason": "Captures non-public case-study metric fabrication on the franchise case.",
+      "input_coherence": 5,
+      "ground_truth_verifiability": 5,
+      "rubric_clarity": 5
+    }
+  ]
+}

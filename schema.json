@@ -1,0 +1,667 @@
+{
+  "version": "tenacious-bench-v0.1-pilot",
+  "description": "Pilot schema for a machine-verifiable Tenacious sales benchmark. This release expands the initial scaffold into a 10-task slice with an exact 50/30/20 split and direct grounding in Week 10 Tenacious seed materials.",
+  "task_schema": {
+    "type": "object",
+    "required": [
+      "task_id",
+      "partition",
+      "source_mode",
+      "dimension",
+      "difficulty",
+      "input",
+      "candidate_output",
+      "scoring"
+    ],
+    "properties": {
+      "task_id": { "type": "string" },
+      "partition": {
+        "type": "string",
+        "enum": ["train", "dev", "held_out"]
+      },
+      "source_mode": {
+        "type": "string",
+        "enum": ["trace-derived", "programmatic", "multi-llm-synthesis", "hand-authored-adversarial"]
+      },
+      "dimension": { "type": "string" },
+      "difficulty": {
+        "type": "string",
+        "enum": ["easy", "medium", "hard"]
+      },
+      "metadata": {
+        "type": "object",
+        "properties": {
+          "seed_artifact": { "type": "string" },
+          "probe_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "time_window": { "type": "string" }
+        }
+      },
+      "input": {
+        "type": "object",
+        "required": ["prospect", "prior_thread"],
+        "properties": {
+          "prospect": { "type": "object" },
+          "hiring_signal_brief": { "type": "object" },
+          "competitor_gap_brief": { "type": "object" },
+          "bench_summary": { "type": "object" },
+          "required_stacks": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "prior_thread": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "candidate_output": {
+        "type": "object",
+        "properties": {
+          "subject": { "type": "string" },
+          "body": { "type": "string" },
+          "proposed_times": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "utc": { "type": "string" },
+                "prospect_local": { "type": ["string", "null"] }
+              }
+            }
+          }
+        }
+      },
+      "ground_truth": {
+        "type": "object",
+        "properties": {
+          "behavior_summary": { "type": "string" }
+        }
+      },
+      "scoring": {
+        "type": "object",
+        "required": ["max_score", "checks"],
+        "properties": {
+          "max_score": { "type": "integer" },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "type", "points"],
+              "properties": {
+                "id": { "type": "string" },
+                "type": { "type": "string" },
+                "points": { "type": "integer" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "example_tasks": [
+    {
+      "task_id": "tb-trace-001",
+      "partition": "train",
+      "source_mode": "trace-derived",
+      "dimension": "timezone-fabrication",
+      "difficulty": "medium",
+      "metadata": {
+        "seed_artifact": "week10-data/outputs/hiring_signal_brief.json",
+        "probe_ids": ["P027"]
+      },
+      "input": {
+        "prospect": {
+          "company": "Consolety",
+          "contact_title": "CTO",
+          "timezone": null
+        },
+        "hiring_signal_brief": {
+          "hiring_confidence": "low",
+          "ai_maturity_score": 0,
+          "language_notes": "Ask rather than assert when AI signal is weak."
+        },
+        "prior_thread": []
+      },
+      "candidate_output": {
+        "subject": "Request: 15 minutes to discuss your AI roadmap",
+        "body": "Looking at your current roadmap, I would suggest Tuesday 10:00 CET or Wednesday 14:00 CET for a quick discussion about where AI hiring may fit.",
+        "proposed_times": [
+          {
+            "utc": "2026-05-06T08:00:00Z",
+            "prospect_local": "2026-05-06 10:00 CET"
+          }
+        ]
+      },
+      "ground_truth": {
+        "behavior_summary": "When timezone data is missing, the agent must avoid inventing a local-time label."
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "no-local-time-without-timezone",
+            "type": "no_prospect_local_when_timezone_missing",
+            "points": 2
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1
+          },
+          {
+            "id": "mentions-ai-context",
+            "type": "required_phrases_any",
+            "target": "full_email",
+            "phrases": ["AI", "roadmap"],
+            "points": 1
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "tb-trace-002",
+      "partition": "train",
+      "source_mode": "trace-derived",
+      "dimension": "bench-jargon",
+      "difficulty": "easy",
+      "metadata": {
+        "seed_artifact": "week10-data/eval/probes/probe_library.md",
+        "probe_ids": ["P015"]
+      },
+      "input": {
+        "prospect": {
+          "company": "Orrin Labs",
+          "contact_title": "VP Engineering",
+          "timezone": "America/Los_Angeles"
+        },
+        "prior_thread": [
+          "What does your available capacity look like for Python backend work?"
+        ]
+      },
+      "candidate_output": {
+        "subject": "Context: Python capacity for Q3 backend work",
+        "body": "We have Python delivery capacity available next week, and I would rather scope the workload before forcing a number. If the stack fit is right, we can walk through the first backend milestone in 15 minutes."
+      },
+      "ground_truth": {
+        "behavior_summary": "Professional wording should use capacity language, not the internal word bench."
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "no-bench-word",
+            "type": "forbidden_phrases",
+            "target": "body",
+            "phrases": ["bench"],
+            "points": 2
+          },
+          {
+            "id": "mentions-capacity-or-scope",
+            "type": "required_phrases_any",
+            "target": "body",
+            "phrases": ["capacity", "scope"],
+            "points": 1
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "tb-prog-001",
+      "partition": "train",
+      "source_mode": "programmatic",
+      "dimension": "weak-evidence-overclaim",
+      "difficulty": "medium",
+      "metadata": {
+        "seed_artifact": "week10-data/eval/probes/probe_library.md",
+        "probe_ids": ["P007", "P011"]
+      },
+      "input": {
+        "prospect": {
+          "company": "Northwind Analytics",
+          "contact_title": "VP Engineering",
+          "timezone": "America/New_York"
+        },
+        "hiring_signal_brief": {
+          "open_eng_roles": 3,
+          "delta_60d": "+18",
+          "hiring_confidence": "medium"
+        },
+        "prior_thread": []
+      },
+      "candidate_output": {
+        "subject": "Request: discuss your hiring ramp",
+        "body": "You are clearly hiring aggressively with +18 engineering roles in 60 days. We can help you move faster next week."
+      },
+      "ground_truth": {
+        "behavior_summary": "With three open roles and only medium-confidence velocity data, the agent must ask rather than assert aggressive hiring."
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "no-aggressive-hiring-claim",
+            "type": "forbidden_phrases",
+            "target": "body",
+            "phrases": ["aggressively", "aggressive hiring", "scaling aggressively"],
+            "points": 2
+          },
+          {
+            "id": "no-medium-confidence-delta-assertion",
+            "type": "forbidden_regex",
+            "target": "body",
+            "patterns": ["\\+?18\\s+(?:engineering\\s+)?roles", "18\\s+.*60\\s+days"],
+            "points": 1
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "tb-prog-002",
+      "partition": "train",
+      "source_mode": "programmatic",
+      "dimension": "directness-subject-line",
+      "difficulty": "easy",
+      "metadata": {
+        "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+        "probe_ids": []
+      },
+      "input": {
+        "prospect": {
+          "company": "Orrin Labs",
+          "contact_title": "CTO",
+          "timezone": "America/New_York"
+        },
+        "prior_thread": []
+      },
+      "candidate_output": {
+        "subject": "Quick follow-up on your roadmap",
+        "body": "Hope you're doing well. You closed the Series B in February and have three data-platform roles open. Worth 15 minutes next week?"
+      },
+      "ground_truth": {
+        "behavior_summary": "Cold email subjects should be direct and should not lean on filler like Quick or hope-youre-doing-well language."
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "no-quick-just-hey-subject",
+            "type": "forbidden_phrases",
+            "target": "subject",
+            "phrases": ["quick", "just", "hey"],
+            "points": 2
+          },
+          {
+            "id": "no-hope-youre-doing-well",
+            "type": "forbidden_phrases",
+            "target": "body",
+            "phrases": ["hope you're doing well", "hope this finds you well", "touch base"],
+            "points": 1
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "tb-prog-003",
+      "partition": "train",
+      "source_mode": "programmatic",
+      "dimension": "single-clear-ask",
+      "difficulty": "easy",
+      "metadata": {
+        "seed_artifact": "week10-data/tenacious_sales_data/seed/email_sequences/cold.md",
+        "probe_ids": []
+      },
+      "input": {
+        "prospect": {
+          "company": "Vector BI",
+          "contact_title": "VP Engineering",
+          "timezone": "America/New_York"
+        },
+        "prior_thread": []
+      },
+      "candidate_output": {
+        "subject": "Question on your data-platform hiring",
+        "body": "You have three data-platform roles open and the usual bottleneck there is recruiting capacity, not budget. We run embedded squads for that exact situation. Worth 15 minutes Tuesday to compare notes?"
+      },
+      "ground_truth": {
+        "behavior_summary": "Cold outreach should carry one clear ask, not a menu of parallel asks."
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "single-question-ask",
+            "type": "max_question_marks",
+            "target": "body",
+            "max_question_marks": 1,
+            "points": 2
+          },
+          {
+            "id": "mentions-15-minutes",
+            "type": "required_phrases_any",
+            "target": "body",
+            "phrases": ["15 minutes", "15 minute"],
+            "points": 1
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "tb-prog-004",
+      "partition": "dev",
+      "source_mode": "programmatic",
+      "dimension": "competitor-gap-assertion",
+      "difficulty": "medium",
+      "metadata": {
+        "seed_artifact": "week10-data/tenacious_sales_data/schemas/sample_competitor_gap_brief.json",
+        "probe_ids": ["P032"]
+      },
+      "input": {
+        "prospect": {
+          "company": "Orrin Labs",
+          "contact_title": "CTO",
+          "timezone": "America/New_York"
+        },
+        "competitor_gap_brief": {
+          "practice": "Dedicated MLOps / ML-platform engineering function",
+          "confidence": "medium"
+        },
+        "prior_thread": []
+      },
+      "candidate_output": {
+        "subject": "Question on your MLOps gap",
+        "body": "Three peers have MLOps teams and you do not. You are behind on the capability and should close the gap this quarter."
+      },
+      "ground_truth": {
+        "behavior_summary": "Medium-confidence competitor-gap findings should be framed as research questions, not direct accusations that the prospect lacks a capability."
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "no-you-do-not-gap-assertion",
+            "type": "forbidden_phrases",
+            "target": "body",
+            "phrases": ["you do not", "you are behind", "you lack"],
+            "points": 2
+          },
+          {
+            "id": "prefer-curious-framing",
+            "type": "required_phrases_any",
+            "target": "body",
+            "phrases": ["curious whether", "deliberate choice", "still being scoped"],
+            "points": 1
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "tb-prog-005",
+      "partition": "dev",
+      "source_mode": "programmatic",
+      "dimension": "segment-2-first-touch",
+      "difficulty": "medium",
+      "metadata": {
+        "seed_artifact": "week10-data/tenacious_sales_data/seed/email_sequences/cold.md",
+        "probe_ids": ["P010"]
+      },
+      "input": {
+        "prospect": {
+          "company": "Mercury Platform",
+          "contact_title": "VP Engineering",
+          "timezone": "America/Chicago"
+        },
+        "hiring_signal_brief": {
+          "segment": "segment_2_mid_market_restructure",
+          "layoff_pct": 18,
+          "engineering_roles_open": 4
+        },
+        "prior_thread": []
+      },
+      "candidate_output": {
+        "subject": "Note on your restructure",
+        "body": "After your 18% layoff, the window is closing to preserve delivery capacity. We can move fast before the restructure hits velocity any further."
+      },
+      "ground_truth": {
+        "behavior_summary": "Segment 2 first-touch language should be neutral and cost-discipline aware, not explicit about layoffs or deadline pressure."
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "no-layoff-language-in-first-touch",
+            "type": "forbidden_phrases",
+            "target": "body",
+            "phrases": ["layoff", "restructure", "window is closing", "last chance"],
+            "points": 2
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1
+          },
+          {
+            "id": "single-question-ask",
+            "type": "max_question_marks",
+            "target": "body",
+            "max_question_marks": 1,
+            "points": 1
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "tb-hand-001",
+      "partition": "dev",
+      "source_mode": "hand-authored-adversarial",
+      "dimension": "pricing-objection-handling",
+      "difficulty": "hard",
+      "metadata": {
+        "seed_artifact": "week10-data/tenacious_sales_data/seed/pricing_sheet.md",
+        "probe_ids": []
+      },
+      "input": {
+        "prospect": {
+          "company": "Latebound Systems",
+          "contact_title": "VP Engineering",
+          "timezone": "America/New_York"
+        },
+        "prior_thread": [
+          "Your price is likely higher than India. We only need a small POC."
+        ]
+      },
+      "candidate_output": {
+        "subject": "Re: pricing and a starter scope",
+        "body": "Fair - we are rarely the cheapest. We compete on reliability and retention, not hourly rate. The smallest real engagement we do is a fixed-scope starter project, and any number beyond that needs a scoping conversation. If the shape is right, we can scope that in 30 minutes."
+      },
+      "ground_truth": {
+        "behavior_summary": "The correct pricing-objection response is to acknowledge the objection, avoid discounts or invented savings, and route specific commercial numbers to a scoping call."
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "no-guaranteed-savings",
+            "type": "forbidden_phrases",
+            "target": "body",
+            "phrases": ["guaranteed", "discount", "40% savings"],
+            "points": 2
+          },
+          {
+            "id": "mentions-scoping-conversation",
+            "type": "required_phrases_any",
+            "target": "body",
+            "phrases": ["scoping conversation", "starter project", "not the cheapest"],
+            "points": 1
+          },
+          {
+            "id": "body-under-150-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 150,
+            "points": 1
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "tb-adv-001",
+      "partition": "held_out",
+      "source_mode": "hand-authored-adversarial",
+      "dimension": "bench-over-commitment",
+      "difficulty": "hard",
+      "metadata": {
+        "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+        "probe_ids": ["P012", "P013"]
+      },
+      "input": {
+        "prospect": {
+          "company": "VectorForge",
+          "contact_title": "CTO",
+          "timezone": "Europe/London"
+        },
+        "bench_summary": {
+          "as_of": "2026-04-21",
+          "stacks": {
+            "python": { "available_engineers": 7 },
+            "go": { "available_engineers": 3 },
+            "data": { "available_engineers": 9 },
+            "ml": { "available_engineers": 5 }
+          }
+        },
+        "required_stacks": ["rust"],
+        "prior_thread": [
+          "We are evaluating outside help for a Rust-heavy ingestion service."
+        ]
+      },
+      "candidate_output": {
+        "subject": "Context: phased staffing option",
+        "body": "We do not see bench capacity for Rust today, so I would scope the requirement before proposing a team. If Python, ML, or data engineering are the first bottlenecks, we can map a phased option."
+      },
+      "ground_truth": {
+        "behavior_summary": "When the required stack is unavailable, the agent must avoid promising capacity and instead scope or phase the work."
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "no-unavailable-stack-commitment",
+            "type": "no_unavailable_stack_commitment",
+            "target": "full_email",
+            "required_stacks": ["rust"],
+            "points": 2
+          },
+          {
+            "id": "mentions-scope-or-phase",
+            "type": "required_phrases_any",
+            "target": "body",
+            "phrases": ["scope", "phased", "do not see bench capacity"],
+            "points": 1
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "tb-adv-002",
+      "partition": "held_out",
+      "source_mode": "hand-authored-adversarial",
+      "dimension": "case-study-overclaim",
+      "difficulty": "hard",
+      "metadata": {
+        "seed_artifact": "week10-data/tenacious_sales_data/seed/case_studies.md",
+        "probe_ids": []
+      },
+      "input": {
+        "prospect": {
+          "company": "StudioMesh",
+          "contact_title": "CEO",
+          "timezone": "America/Toronto"
+        },
+        "prior_thread": [
+          "Can you share a relevant reference in multi-location operations?"
+        ]
+      },
+      "candidate_output": {
+        "subject": "Context: a franchise automation example",
+        "body": "Our multi-location fitness franchise engagement delivered a 42% conversion improvement and a 3x increase in studio sales, so I am confident we can reproduce that pattern for you."
+      },
+      "ground_truth": {
+        "behavior_summary": "The franchise case study may be described by engagement shape, but the agent must not invent quantitative outcomes that are not public."
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "no-invented-quantitative-outcomes",
+            "type": "forbidden_regex",
+            "target": "body",
+            "patterns": ["\\b\\d+%\\b", "\\b\\d+x\\b"],
+            "points": 2
+          },
+          {
+            "id": "mentions-shape-not-invented-metric",
+            "type": "required_phrases_any",
+            "target": "body",
+            "phrases": ["five-phase", "without requiring migration", "shape of the engagement"],
+            "points": 1
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1
+          }
+        ]
+      }
+    }
+  ]
+}
