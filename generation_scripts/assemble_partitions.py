@@ -71,6 +71,41 @@ def content_hash(task: dict[str, Any]) -> str:
     return hashlib.sha256(content.encode()).hexdigest()[:16]
 
 
+SYNTHETIC_PLACEHOLDER_TIME_WINDOWS = {
+    "2026-q1 layoffs.fyi extract",
+    "2026-q1 competitor research extract",
+    "2026-q1 icp-segment-boundary review",
+}
+
+
+def stamp_signal_lineage(tasks: list[dict[str, Any]]) -> None:
+    """Mark each signal-bearing task with an explicit data-lineage label.
+
+    Tenacious-Bench v0.1 is built on synthetic prospect / signal data — no
+    task is grounded in a real layoffs.csv row or a real Crunchbase entry.
+    Marking `metadata.signal_source = "synthetic"` makes that lineage
+    explicit in the dataset itself and lets the contamination check skip
+    the time-shift rule (which only applies to tasks grounded in public
+    data, per the brief).
+
+    Any placeholder `time_window` strings introduced before this lineage
+    field existed are stripped here, so synthetic tasks do not appear to
+    claim a real-world snapshot they were never derived from.
+    """
+    for t in tasks:
+        inp = t.get("input", {})
+        has_signal = bool(inp.get("hiring_signal_brief")) or bool(inp.get("competitor_gap_brief"))
+        if not has_signal:
+            continue
+        meta = t.setdefault("metadata", {})
+        meta.setdefault("signal_source", "synthetic")
+        # Drop fabricated placeholder windows on synthetic tasks.
+        if meta.get("signal_source") == "synthetic":
+            tw = str(meta.get("time_window", "")).strip().lower()
+            if tw in SYNTHETIC_PLACEHOLDER_TIME_WINDOWS:
+                meta.pop("time_window", None)
+
+
 def dedup_by_content(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Remove near-duplicate tasks based on input content hash."""
     seen_hashes: set[str] = set()
@@ -183,6 +218,9 @@ def main() -> None:
     all_tasks = dedup_by_id(all_tasks)
     all_tasks = dedup_by_content(all_tasks)
     logger.info("Final task count after dedup: %d", len(all_tasks))
+
+    # Stamp data-lineage metadata before partitioning.
+    stamp_signal_lineage(all_tasks)
 
     # Partition.
     logger.info("Partitioning (50/30/20)...")

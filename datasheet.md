@@ -12,17 +12,17 @@ Week 10 evidence showed a strong cluster of failures around over-claiming weak s
 
 ### Microscopic
 
-This release is the interim submission benchmark, containing 128 tasks across 14 failure dimensions. It covers the core failure families identified in the Week 10 audit and is designed to validate schema, evaluator behavior, and partition integrity before expansion to the 200-300 task target.
+This release is the interim submission benchmark, containing 230 tasks across 14 failure dimensions, in the brief's 200–300 range. It covers the core failure families identified in the Week 10 audit and validates schema, evaluator behavior, partition integrity, and contamination resistance.
 
 ## 2. Composition
 
 ### Telescopic
 
-Current composition: **128 tasks** total.
+Current composition: **230 tasks** total.
 
-- **train**: 61 tasks (48%)
-- **dev**: 35 tasks (27%)
-- **held_out**: 32 tasks (25%)
+- **train**: 116 tasks (50%)
+- **dev**: 71 tasks (31%)
+- **held_out**: 43 tasks (19%)
 
 ### Periscopic
 
@@ -30,20 +30,20 @@ The dataset covers **14 failure dimensions**:
 
 | Dimension | Count | Source Probes |
 |---|---|---|
-| weak-evidence-overclaim | 30 | P007, P008, P009, P011 |
-| bench-over-commitment | 17 | P012, P013, P014 |
-| competitor-gap-assertion | 14 | P032, P034 |
-| timezone-fabrication | 11 | P027 |
-| dual-control-coordination | 10 | P023, P024 |
+| weak-evidence-overclaim | 39 | P007, P008, P009, P011 |
+| bench-over-commitment | 26 | P012, P013, P014 |
+| tone-drift | 26 | P015, P016, P017, P035 |
+| competitor-gap-assertion | 26 | P032, P034 |
+| timezone-fabrication | 25 | P026, P027 |
+| icp-misclassification | 19 | P001, P005, P006 |
+| dual-control-coordination | 16 | P023, P024, P025 |
+| segment-2-first-touch | 12 | P010 |
+| pricing-objection | 12 | — |
+| signal-overclaim | 10 | P020, P036 |
 | directness-subject-line | 8 | — |
-| icp-misclassification | 8 | P001, P005, P006 |
 | bench-jargon | 6 | P015 |
-| segment-2-first-touch | 6 | P010 |
-| tone-drift | 6 | P015, P016, P017, P035 |
-| signal-overclaim | 3 | P036 |
-| pricing-objection | 3 | — |
-| hype-vocabulary | 3 | — |
 | single-clear-ask | 3 | — |
+| hype-vocabulary | 2 | — |
 
 ### Microscopic
 
@@ -51,7 +51,7 @@ Each task includes:
 
 - `task_id` — unique identifier with source-mode prefix
 - `partition` — train, dev, or held_out
-- `source_mode` — one of: programmatic, trace-derived, hand-authored-adversarial
+- `source_mode` — one of: programmatic, trace-derived, multi-llm-synthesis, hand-authored-adversarial
 - `dimension` — the failure family being tested
 - `difficulty` — easy, medium, or hard
 - `input` — structured prospect and signal context
@@ -63,7 +63,7 @@ Each task includes:
 
 ### Telescopic
 
-Tasks were built from Week 10 artifacts already present in the repository, using three offline generation modes.
+Tasks were built from Week 10 artifacts already present in the repository, using four generation modes (three offline, one routed multi-LLM with judge filtering).
 
 ### Periscopic
 
@@ -83,10 +83,11 @@ Task provenance by source mode:
 
 | Source Mode | Tasks | Share | API Cost |
 |---|---|---|---|
-| Programmatic sweeps | 68 | 53% | $0.00 |
-| Trace-derived | 42 | 33% | $0.00 |
-| Hand-authored adversarial | 18 | 14% | $0.00 |
-| **Total** | **128** | **100%** | **$0.00** |
+| Programmatic sweeps | 71 | 31% | $0.00 |
+| Trace-derived | 68 | 30% | $0.00 |
+| Multi-LLM synthesis | 56 | 24% | $0.10 |
+| Hand-authored adversarial | 35 | 15% | $0.00 |
+| **Total** | **230** | **100%** | **$0.10** |
 
 ## 4. Preprocessing / Labeling / Scoring
 

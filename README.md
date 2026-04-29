@@ -14,11 +14,12 @@ Tenacious-Bench is a domain-specific evaluation benchmark for B2B sales agents o
 
 ## Status
 
-**Phase**: Acts I–II complete (Audit + Dataset Authoring + Evaluation)  
-**Path**: B — Preference-tuned judge/critic  
-**Tasks**: 128 (interim) across 14 failure dimensions  
-**Partitions**: train (61), dev (35), held_out (32)  
-**Inter-rater**: 100% agreement across all dimensions (30-task sample)
+**Phase**: Acts I–II complete (Audit + Dataset Authoring + Evaluation)
+**Path**: B — Preference-tuned judge/critic
+**Tasks**: 230 across 14 failure dimensions
+**Partitions**: train 116 (50%), dev 71 (31%), held_out 43 (19%)
+**Contamination check**: PASS — 0 violations on n-gram (8), embedding cosine (>0.85), content hash, and temporal-integrity checks
+**Inter-rater agreement**: 95.5% overall, Cohen's κ = 0.91 across 30-task hand-labeled sample. All 14 dimensions ≥ 80%; 4 phrase-list refinements queued for v0.2 (see [inter_rater_agreement.md](inter_rater_agreement.md))
 
 ## Repository Structure
 
@@ -104,10 +105,10 @@ uv run python scoring_evaluator.py --partition dev
 
 | Mode | Share | Tasks | Description |
 |---|---|---|---|
-| Programmatic sweeps | 53% | 68 | Controlled coverage via combinatorial expansion |
-| Trace-derived | 33% | 42 | Grounded in real Week 10 agent failures |
-| Hand-authored adversarial | 14% | 18 | Sharpest edge cases, highest originality |
-| Multi-LLM synthesis | Pending | ~63 | Hard variants generated + judge-filtered |
+| Programmatic sweeps | 31% | 71 | Controlled coverage via combinatorial expansion |
+| Trace-derived | 30% | 68 | Grounded in real Week 10 agent failures (probe-linked) |
+| Multi-LLM synthesis | 24% | 56 | DeepSeek V3 generator + GPT-4o-mini judge filter |
+| Hand-authored adversarial | 15% | 35 | Sharpest edge cases, highest originality |
 
 ## Failure Dimensions
 

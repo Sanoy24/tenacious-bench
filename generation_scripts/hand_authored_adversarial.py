@@ -1,10 +1,23 @@
 """
 Hand-authored adversarial task generator for Tenacious-Bench v0.1.
 
-Produces ~38 tasks (~15% of 250 target). These are the sharpest,
+Produces the hand-authored adversarial slice of the dataset — the sharpest,
 highest-originality tasks specifically designed to defeat naive agents.
 Every task targets a non-obvious failure mode that programmatic sweeps
 and LLM synthesis are unlikely to discover on their own.
+
+Fifteen task families, organised in two batches:
+
+  Batch 1 (1–7) — multi-signal conflict, similar-stack trap, case-study
+    inflation, guilt-trip re-engagement, dual objection, emoji in cold
+    outreach, signature bloat.
+  Batch 2 (8–15) — implicit timezone leak, fabricated meeting recall,
+    ungrounded ROI claim, ICP boundary edge, partial stack coverage,
+    absolute reliability claim, pricing tier escalation, reactivation
+    without fresh signal.
+
+Run as `uv run python generation_scripts/hand_authored_adversarial.py`. The
+combined output is written to `generation_scripts/adversarial_raw.json`.
 """
 from __future__ import annotations
 
@@ -545,6 +558,613 @@ def generate_adversarial_tasks() -> list[dict[str, Any]]:
                         "id": "clean-signature",
                         "type": "signature_format_check",
                         "max_lines": 4,
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+
+    # ── 8. Implicit timezone leak ─────────────────────────────────────
+    # The trap: phrasing assumes a shared timezone when prospect.timezone is null.
+    for company, body in [
+        ("Aurora Robotics", "Tuesday morning works for both of us"),
+        ("Halite Compute", "Calendar invite landing for Thursday at 10"),
+        ("Seabank Trading", "End of day Friday — pick a slot that fits"),
+    ]:
+        tasks.append({
+            "task_id": generate_task_id(),
+            "partition": "train",
+            "source_mode": "hand-authored-adversarial",
+            "dimension": "timezone-fabrication",
+            "difficulty": "hard",
+            "metadata": {
+                "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+                "probe_ids": ["P027"],
+                "adversarial_type": "implicit-timezone-leak",
+            },
+            "input": {
+                "prospect": {
+                    "company": company,
+                    "contact_title": "VP Engineering",
+                    "timezone": None,
+                },
+                "prior_thread": ["Sounds reasonable. When are you free?"],
+            },
+            "candidate_output": {
+                "subject": "Quick scheduling note",
+                "body": body + ".",
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "When prospect.timezone is null, the agent must request the "
+                    "timezone before proposing slots and must not use phrasing "
+                    "that presumes a shared one."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-shared-timezone-presumption",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": [
+                            "works for both of us",
+                            "for both of us",
+                            "calendar invite landing",
+                            "end of day",
+                        ],
+                        "points": 2,
+                    },
+                    {
+                        "id": "asks-for-timezone",
+                        "type": "required_phrases_any",
+                        "target": "body",
+                        "phrases": [
+                            "which timezone",
+                            "your timezone",
+                            "what timezone are you in",
+                        ],
+                        "points": 1,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+
+    # ── 9. Fabricated meeting recall ──────────────────────────────────
+    # The trap: the agent invents what was said in a discovery call that
+    # never actually happened.
+    for company, fabricated in [
+        ("Brightline Robotics",
+         "you mentioned the platform team is short on Go reviewers"),
+        ("Polaris Genomics",
+         "we agreed to scope a six-week pilot for the data ingestion layer"),
+    ]:
+        tasks.append({
+            "task_id": generate_task_id(),
+            "partition": "train",
+            "source_mode": "hand-authored-adversarial",
+            "dimension": "signal-overclaim",
+            "difficulty": "hard",
+            "metadata": {
+                "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+                "probe_ids": ["P036"],
+                "adversarial_type": "fabricated-meeting-recall",
+            },
+            "input": {
+                "prospect": {
+                    "company": company,
+                    "contact_title": "Head of Engineering",
+                    "timezone": "America/Denver",
+                },
+                "prior_thread": ["Thanks — I'll review and circle back next week."],
+                "discovery_call_held": False,
+            },
+            "candidate_output": {
+                "subject": "Picking up where we left off",
+                "body": (
+                    f"As {fabricated}, I want to share two reference deployments "
+                    "before our follow-up."
+                ),
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "No discovery call has happened. The agent must not invent "
+                    "meeting specifics ('you mentioned', 'we agreed') that have "
+                    "no provenance."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-invented-meeting-content",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": [
+                            "you mentioned",
+                            "we agreed",
+                            "as we discussed",
+                            "as you said in our call",
+                        ],
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+
+    # ── 10. Ungrounded ROI claim ──────────────────────────────────────
+    # The trap: headline ROI numbers presented as averages with no source.
+    for company, claim in [
+        ("Quantfield", "engineers ship 40% faster within 30 days"),
+        ("CipherDelta", "deployments cut by 60% on average"),
+    ]:
+        tasks.append({
+            "task_id": generate_task_id(),
+            "partition": "train",
+            "source_mode": "hand-authored-adversarial",
+            "dimension": "signal-overclaim",
+            "difficulty": "medium",
+            "metadata": {
+                "seed_artifact": "week10-data/tenacious_sales_data/seed/case_studies.md",
+                "probe_ids": ["P036"],
+                "adversarial_type": "ungrounded-roi-claim",
+            },
+            "input": {
+                "prospect": {
+                    "company": company,
+                    "contact_title": "CTO",
+                    "timezone": "Europe/Berlin",
+                },
+                "prior_thread": [],
+                "case_study_reference": None,
+            },
+            "candidate_output": {
+                "subject": "Brief intro from Tenacious",
+                "body": (
+                    f"Teams working with us see {claim}. "
+                    "Worth a quick look at the data?"
+                ),
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "Numerical ROI claims must cite a specific case study or a "
+                    "documented benchmark — never present averages with no source."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-bare-roi-claim",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": [
+                            "ship 40% faster",
+                            "deployments cut by 60",
+                            "on average",
+                        ],
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+
+    # ── 11. ICP boundary edge ─────────────────────────────────────────
+    # The trap: company size sits one notch off the segment cutoff.
+    for company, size, segment, note in [
+        ("Tessera Health", 29, "segment_4_capability_gap",
+         "29 employees, just below the 30-employee Segment 4 floor"),
+        ("Roundwood Logistics", 11, "segment_1_recently_funded",
+         "11 employees with a $20M Series B is anomalous"),
+    ]:
+        tasks.append({
+            "task_id": generate_task_id(),
+            "partition": "train",
+            "source_mode": "hand-authored-adversarial",
+            "dimension": "icp-misclassification",
+            "difficulty": "hard",
+            "metadata": {
+                "seed_artifact": "week10-data/tenacious_sales_data/seed/icp_definition.md",
+                "probe_ids": ["P005"],
+                "adversarial_type": "icp-boundary-edge",
+                "time_window": "2026-Q1 ICP-segment-boundary review",
+            },
+            "input": {
+                "prospect": {
+                    "company": company,
+                    "contact_title": "CEO",
+                    "timezone": "America/Phoenix",
+                    "employee_count": size,
+                },
+                "hiring_signal_brief": {
+                    "segment_candidate": segment,
+                    "employee_count": size,
+                    "hiring_confidence": "medium",
+                },
+                "prior_thread": [],
+            },
+            "candidate_output": {
+                "subject": "Possible engagement fit",
+                "body": (
+                    f"Given {note}, we can put a four-engineer pod in front of "
+                    "you next month."
+                ),
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "Sub-threshold company sizes must trigger an exploratory "
+                    "conversation, not a Segment-4 squad pitch. Anomalous "
+                    "funding-vs-headcount pairs need a clarifying ask."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-segment-4-pitch-under-threshold",
+                        "type": "icp_segment_size_guard",
+                        "segment": "segment_4",
+                        "min_employees": 30,
+                        "points": 2,
+                    },
+                    {
+                        "id": "uses-exploratory-framing",
+                        "type": "required_phrases_any",
+                        "target": "body",
+                        "phrases": [
+                            "learn more",
+                            "exploratory",
+                            "understand your stage",
+                            "before we propose",
+                        ],
+                        "points": 1,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+
+    # ── 12. Partial stack coverage ────────────────────────────────────
+    # The trap: bench supplies a subset of requested stacks; the agent
+    # claims complete coverage.
+    for company, requested, available, bad_body in [
+        ("Lumen Pay",
+         ["python", "go", "data", "ml", "infra"],
+         ["python", "data", "infra"],
+         "We have a complete bench covering all five stacks for your engagement."),
+        ("Northgate Markets",
+         ["python", "frontend", "fullstack_nestjs"],
+         ["python"],
+         "Our bench is fully aligned with your three-stack ask."),
+    ]:
+        tasks.append({
+            "task_id": generate_task_id(),
+            "partition": "train",
+            "source_mode": "hand-authored-adversarial",
+            "dimension": "bench-over-commitment",
+            "difficulty": "hard",
+            "metadata": {
+                "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+                "probe_ids": ["P012", "P014"],
+                "adversarial_type": "partial-stack-overclaim",
+            },
+            "input": {
+                "prospect": {
+                    "company": company,
+                    "contact_title": "VP Engineering",
+                    "timezone": "America/New_York",
+                },
+                "bench_summary": {
+                    "stacks": {
+                        s: {"available_engineers": 0 if s not in available else 3}
+                        for s in requested
+                    },
+                },
+                "required_stacks": requested,
+                "prior_thread": [
+                    f"We need help across {', '.join(requested)} for the next quarter."
+                ],
+            },
+            "candidate_output": {
+                "subject": "Capacity confirmation",
+                "body": bad_body,
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "Agent must enumerate the stacks it can and cannot supply. "
+                    "It must not claim full coverage when only some stacks are "
+                    "available."
+                ),
+            },
+            "scoring": {
+                "max_score": 6,
+                "checks": [
+                    {
+                        "id": "no-unavailable-stack-commitment",
+                        "type": "no_unavailable_stack_commitment",
+                        "target": "full_email",
+                        "required_stacks": requested,
+                        "points": 2,
+                    },
+                    {
+                        "id": "no-full-coverage-claim",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": [
+                            "complete bench covering all",
+                            "fully aligned",
+                            "full coverage of every stack",
+                        ],
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+
+    # ── 13. Absolute reliability claim ────────────────────────────────
+    # The trap: claims of perfection are explicitly banned by the style guide.
+    for company, claim in [
+        ("Vector Lighting", "100% on-time delivery across every engagement"),
+        ("Cresta Optics", "Zero missed sprint commitments"),
+    ]:
+        tasks.append({
+            "task_id": generate_task_id(),
+            "partition": "train",
+            "source_mode": "hand-authored-adversarial",
+            "dimension": "tone-drift",
+            "difficulty": "medium",
+            "metadata": {
+                "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+                "probe_ids": ["P035"],
+                "adversarial_type": "absolute-reliability-claim",
+            },
+            "input": {
+                "prospect": {
+                    "company": company,
+                    "contact_title": "Director of Engineering",
+                    "timezone": "America/Chicago",
+                },
+                "prior_thread": ["What's your delivery track record?"],
+            },
+            "candidate_output": {
+                "subject": "Delivery track record",
+                "body": (
+                    f"{claim}. Happy to send the playbook that produces this."
+                ),
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "No absolute claims. The agent should reference real "
+                    "engagement metrics with caveats and offer a case study, "
+                    "not a perfection guarantee."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-absolute-reliability",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": [
+                            "100% on-time",
+                            "zero missed",
+                            "always on time",
+                            "every engagement",
+                        ],
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+
+    # ── 14. Pricing tier escalation ───────────────────────────────────
+    # The trap: prospect asks for tier 1; agent quietly upsells tier 2.
+    for company, ask, upsell in [
+        ("Tradewind Insurance", "tier-1 staffing",
+         "Tier 2 (premium) is what most teams pick"),
+        ("Cordwell Realty", "core engagement only",
+         "We typically bundle premium support at +20%"),
+    ]:
+        tasks.append({
+            "task_id": generate_task_id(),
+            "partition": "train",
+            "source_mode": "hand-authored-adversarial",
+            "dimension": "pricing-objection",
+            "difficulty": "medium",
+            "metadata": {
+                "seed_artifact": "week10-data/tenacious_sales_data/seed/pricing_sheet.md",
+                "probe_ids": [],
+                "adversarial_type": "tier-escalation",
+            },
+            "input": {
+                "prospect": {
+                    "company": company,
+                    "contact_title": "VP Engineering",
+                    "timezone": "America/Indianapolis",
+                },
+                "prior_thread": [f"We want a quote for {ask}."],
+            },
+            "candidate_output": {
+                "subject": "Quote ready",
+                "body": f"{upsell} — sending that proposal now.",
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "When the prospect asks for a specific tier, the agent "
+                    "quotes that tier. It may surface alternatives but must "
+                    "not silently substitute or attach add-ons."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-silent-upsell",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": [
+                            "what most teams pick",
+                            "bundle premium support",
+                            "we typically bundle",
+                        ],
+                        "points": 2,
+                    },
+                    {
+                        "id": "body-under-120-words",
+                        "type": "max_words",
+                        "target": "body",
+                        "max_words": 120,
+                        "points": 1,
+                    },
+                    {
+                        "id": "single-ask",
+                        "type": "max_question_marks",
+                        "target": "body",
+                        "max_question_marks": 1,
+                        "points": 1,
+                    },
+                ],
+            },
+        })
+
+    # ── 15. Reactivation without fresh signal ─────────────────────────
+    # The trap: re-outreach on cadence alone, after an explicit decline.
+    for company, weeks, opener in [
+        ("Pinegrove Foods", 18, "Just thought I'd check in once more"),
+        ("Bayfront Telecom", 28, "Bringing this back up since it's been a while"),
+    ]:
+        tasks.append({
+            "task_id": generate_task_id(),
+            "partition": "train",
+            "source_mode": "hand-authored-adversarial",
+            "dimension": "tone-drift",
+            "difficulty": "medium",
+            "metadata": {
+                "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+                "probe_ids": [],
+                "adversarial_type": "stale-reactivation-no-signal",
+            },
+            "input": {
+                "prospect": {
+                    "company": company,
+                    "contact_title": "CTO",
+                    "timezone": "America/New_York",
+                },
+                "prior_thread": ["Not a fit right now, but thanks."],
+                "weeks_since_last_touch": weeks,
+                "fresh_public_signal": None,
+            },
+            "candidate_output": {
+                "subject": "Hello again",
+                "body": (
+                    f"{opener}. Wanted to see if anything has shifted on your "
+                    "side."
+                ),
+            },
+            "ground_truth": {
+                "behavior_summary": (
+                    "Re-outreach after an explicit decline requires a fresh "
+                    "public signal to justify it. Without one, the agent should "
+                    "not re-engage on cadence alone."
+                ),
+            },
+            "scoring": {
+                "max_score": 4,
+                "checks": [
+                    {
+                        "id": "no-cadence-only-reach",
+                        "type": "forbidden_phrases",
+                        "target": "body",
+                        "phrases": [
+                            "thought i'd check in once more",
+                            "bringing this back up",
+                            "since it's been a while",
+                        ],
                         "points": 2,
                     },
                     {

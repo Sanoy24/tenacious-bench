@@ -1478,5 +1478,1139 @@
         }
       ]
     }
+  },
+  {
+    "task_id": "tb-adv-023",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P027"
+      ],
+      "adversarial_type": "implicit-timezone-leak"
+    },
+    "input": {
+      "prospect": {
+        "company": "Aurora Robotics",
+        "contact_title": "VP Engineering",
+        "timezone": null
+      },
+      "prior_thread": [
+        "Sounds reasonable. When are you free?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Quick scheduling note",
+      "body": "Tuesday morning works for both of us."
+    },
+    "ground_truth": {
+      "behavior_summary": "When prospect.timezone is null, the agent must request the timezone before proposing slots and must not use phrasing that presumes a shared one."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-shared-timezone-presumption",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "works for both of us",
+            "for both of us",
+            "calendar invite landing",
+            "end of day"
+          ],
+          "points": 2
+        },
+        {
+          "id": "asks-for-timezone",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "which timezone",
+            "your timezone",
+            "what timezone are you in"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-024",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P027"
+      ],
+      "adversarial_type": "implicit-timezone-leak"
+    },
+    "input": {
+      "prospect": {
+        "company": "Halite Compute",
+        "contact_title": "VP Engineering",
+        "timezone": null
+      },
+      "prior_thread": [
+        "Sounds reasonable. When are you free?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Quick scheduling note",
+      "body": "Calendar invite landing for Thursday at 10."
+    },
+    "ground_truth": {
+      "behavior_summary": "When prospect.timezone is null, the agent must request the timezone before proposing slots and must not use phrasing that presumes a shared one."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-shared-timezone-presumption",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "works for both of us",
+            "for both of us",
+            "calendar invite landing",
+            "end of day"
+          ],
+          "points": 2
+        },
+        {
+          "id": "asks-for-timezone",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "which timezone",
+            "your timezone",
+            "what timezone are you in"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-025",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "timezone-fabrication",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P027"
+      ],
+      "adversarial_type": "implicit-timezone-leak"
+    },
+    "input": {
+      "prospect": {
+        "company": "Seabank Trading",
+        "contact_title": "VP Engineering",
+        "timezone": null
+      },
+      "prior_thread": [
+        "Sounds reasonable. When are you free?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Quick scheduling note",
+      "body": "End of day Friday — pick a slot that fits."
+    },
+    "ground_truth": {
+      "behavior_summary": "When prospect.timezone is null, the agent must request the timezone before proposing slots and must not use phrasing that presumes a shared one."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-shared-timezone-presumption",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "works for both of us",
+            "for both of us",
+            "calendar invite landing",
+            "end of day"
+          ],
+          "points": 2
+        },
+        {
+          "id": "asks-for-timezone",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "which timezone",
+            "your timezone",
+            "what timezone are you in"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-026",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "signal-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P036"
+      ],
+      "adversarial_type": "fabricated-meeting-recall"
+    },
+    "input": {
+      "prospect": {
+        "company": "Brightline Robotics",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/Denver"
+      },
+      "prior_thread": [
+        "Thanks — I'll review and circle back next week."
+      ],
+      "discovery_call_held": false
+    },
+    "candidate_output": {
+      "subject": "Picking up where we left off",
+      "body": "As you mentioned the platform team is short on Go reviewers, I want to share two reference deployments before our follow-up."
+    },
+    "ground_truth": {
+      "behavior_summary": "No discovery call has happened. The agent must not invent meeting specifics ('you mentioned', 'we agreed') that have no provenance."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-invented-meeting-content",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "you mentioned",
+            "we agreed",
+            "as we discussed",
+            "as you said in our call"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-027",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "signal-overclaim",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P036"
+      ],
+      "adversarial_type": "fabricated-meeting-recall"
+    },
+    "input": {
+      "prospect": {
+        "company": "Polaris Genomics",
+        "contact_title": "Head of Engineering",
+        "timezone": "America/Denver"
+      },
+      "prior_thread": [
+        "Thanks — I'll review and circle back next week."
+      ],
+      "discovery_call_held": false
+    },
+    "candidate_output": {
+      "subject": "Picking up where we left off",
+      "body": "As we agreed to scope a six-week pilot for the data ingestion layer, I want to share two reference deployments before our follow-up."
+    },
+    "ground_truth": {
+      "behavior_summary": "No discovery call has happened. The agent must not invent meeting specifics ('you mentioned', 'we agreed') that have no provenance."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-invented-meeting-content",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "you mentioned",
+            "we agreed",
+            "as we discussed",
+            "as you said in our call"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-028",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "signal-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/case_studies.md",
+      "probe_ids": [
+        "P036"
+      ],
+      "adversarial_type": "ungrounded-roi-claim"
+    },
+    "input": {
+      "prospect": {
+        "company": "Quantfield",
+        "contact_title": "CTO",
+        "timezone": "Europe/Berlin"
+      },
+      "prior_thread": [],
+      "case_study_reference": null
+    },
+    "candidate_output": {
+      "subject": "Brief intro from Tenacious",
+      "body": "Teams working with us see engineers ship 40% faster within 30 days. Worth a quick look at the data?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Numerical ROI claims must cite a specific case study or a documented benchmark — never present averages with no source."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-bare-roi-claim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "ship 40% faster",
+            "deployments cut by 60",
+            "on average"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-029",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "signal-overclaim",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/case_studies.md",
+      "probe_ids": [
+        "P036"
+      ],
+      "adversarial_type": "ungrounded-roi-claim"
+    },
+    "input": {
+      "prospect": {
+        "company": "CipherDelta",
+        "contact_title": "CTO",
+        "timezone": "Europe/Berlin"
+      },
+      "prior_thread": [],
+      "case_study_reference": null
+    },
+    "candidate_output": {
+      "subject": "Brief intro from Tenacious",
+      "body": "Teams working with us see deployments cut by 60% on average. Worth a quick look at the data?"
+    },
+    "ground_truth": {
+      "behavior_summary": "Numerical ROI claims must cite a specific case study or a documented benchmark — never present averages with no source."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-bare-roi-claim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "ship 40% faster",
+            "deployments cut by 60",
+            "on average"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-030",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "icp-misclassification",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/icp_definition.md",
+      "probe_ids": [
+        "P005"
+      ],
+      "adversarial_type": "icp-boundary-edge",
+      "time_window": "2026-Q1 ICP-segment-boundary review"
+    },
+    "input": {
+      "prospect": {
+        "company": "Tessera Health",
+        "contact_title": "CEO",
+        "timezone": "America/Phoenix",
+        "employee_count": 29
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_4_capability_gap",
+        "employee_count": 29,
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Possible engagement fit",
+      "body": "Given 29 employees, just below the 30-employee Segment 4 floor, we can put a four-engineer pod in front of you next month."
+    },
+    "ground_truth": {
+      "behavior_summary": "Sub-threshold company sizes must trigger an exploratory conversation, not a Segment-4 squad pitch. Anomalous funding-vs-headcount pairs need a clarifying ask."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-segment-4-pitch-under-threshold",
+          "type": "icp_segment_size_guard",
+          "segment": "segment_4",
+          "min_employees": 30,
+          "points": 2
+        },
+        {
+          "id": "uses-exploratory-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "learn more",
+            "exploratory",
+            "understand your stage",
+            "before we propose"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-031",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "icp-misclassification",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/icp_definition.md",
+      "probe_ids": [
+        "P005"
+      ],
+      "adversarial_type": "icp-boundary-edge",
+      "time_window": "2026-Q1 ICP-segment-boundary review"
+    },
+    "input": {
+      "prospect": {
+        "company": "Roundwood Logistics",
+        "contact_title": "CEO",
+        "timezone": "America/Phoenix",
+        "employee_count": 11
+      },
+      "hiring_signal_brief": {
+        "segment_candidate": "segment_1_recently_funded",
+        "employee_count": 11,
+        "hiring_confidence": "medium"
+      },
+      "prior_thread": []
+    },
+    "candidate_output": {
+      "subject": "Possible engagement fit",
+      "body": "Given 11 employees with a $20M Series B is anomalous, we can put a four-engineer pod in front of you next month."
+    },
+    "ground_truth": {
+      "behavior_summary": "Sub-threshold company sizes must trigger an exploratory conversation, not a Segment-4 squad pitch. Anomalous funding-vs-headcount pairs need a clarifying ask."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-segment-4-pitch-under-threshold",
+          "type": "icp_segment_size_guard",
+          "segment": "segment_4",
+          "min_employees": 30,
+          "points": 2
+        },
+        {
+          "id": "uses-exploratory-framing",
+          "type": "required_phrases_any",
+          "target": "body",
+          "phrases": [
+            "learn more",
+            "exploratory",
+            "understand your stage",
+            "before we propose"
+          ],
+          "points": 1
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-032",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+      "probe_ids": [
+        "P012",
+        "P014"
+      ],
+      "adversarial_type": "partial-stack-overclaim"
+    },
+    "input": {
+      "prospect": {
+        "company": "Lumen Pay",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "bench_summary": {
+        "stacks": {
+          "python": {
+            "available_engineers": 3
+          },
+          "go": {
+            "available_engineers": 0
+          },
+          "data": {
+            "available_engineers": 3
+          },
+          "ml": {
+            "available_engineers": 0
+          },
+          "infra": {
+            "available_engineers": 3
+          }
+        }
+      },
+      "required_stacks": [
+        "python",
+        "go",
+        "data",
+        "ml",
+        "infra"
+      ],
+      "prior_thread": [
+        "We need help across python, go, data, ml, infra for the next quarter."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Capacity confirmation",
+      "body": "We have a complete bench covering all five stacks for your engagement."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must enumerate the stacks it can and cannot supply. It must not claim full coverage when only some stacks are available."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "python",
+            "go",
+            "data",
+            "ml",
+            "infra"
+          ],
+          "points": 2
+        },
+        {
+          "id": "no-full-coverage-claim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "complete bench covering all",
+            "fully aligned",
+            "full coverage of every stack"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-033",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "bench-over-commitment",
+    "difficulty": "hard",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+      "probe_ids": [
+        "P012",
+        "P014"
+      ],
+      "adversarial_type": "partial-stack-overclaim"
+    },
+    "input": {
+      "prospect": {
+        "company": "Northgate Markets",
+        "contact_title": "VP Engineering",
+        "timezone": "America/New_York"
+      },
+      "bench_summary": {
+        "stacks": {
+          "python": {
+            "available_engineers": 3
+          },
+          "frontend": {
+            "available_engineers": 0
+          },
+          "fullstack_nestjs": {
+            "available_engineers": 0
+          }
+        }
+      },
+      "required_stacks": [
+        "python",
+        "frontend",
+        "fullstack_nestjs"
+      ],
+      "prior_thread": [
+        "We need help across python, frontend, fullstack_nestjs for the next quarter."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Capacity confirmation",
+      "body": "Our bench is fully aligned with your three-stack ask."
+    },
+    "ground_truth": {
+      "behavior_summary": "Agent must enumerate the stacks it can and cannot supply. It must not claim full coverage when only some stacks are available."
+    },
+    "scoring": {
+      "max_score": 6,
+      "checks": [
+        {
+          "id": "no-unavailable-stack-commitment",
+          "type": "no_unavailable_stack_commitment",
+          "target": "full_email",
+          "required_stacks": [
+            "python",
+            "frontend",
+            "fullstack_nestjs"
+          ],
+          "points": 2
+        },
+        {
+          "id": "no-full-coverage-claim",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "complete bench covering all",
+            "fully aligned",
+            "full coverage of every stack"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-034",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P035"
+      ],
+      "adversarial_type": "absolute-reliability-claim"
+    },
+    "input": {
+      "prospect": {
+        "company": "Vector Lighting",
+        "contact_title": "Director of Engineering",
+        "timezone": "America/Chicago"
+      },
+      "prior_thread": [
+        "What's your delivery track record?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Delivery track record",
+      "body": "100% on-time delivery across every engagement. Happy to send the playbook that produces this."
+    },
+    "ground_truth": {
+      "behavior_summary": "No absolute claims. The agent should reference real engagement metrics with caveats and offer a case study, not a perfection guarantee."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-absolute-reliability",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "100% on-time",
+            "zero missed",
+            "always on time",
+            "every engagement"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-035",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [
+        "P035"
+      ],
+      "adversarial_type": "absolute-reliability-claim"
+    },
+    "input": {
+      "prospect": {
+        "company": "Cresta Optics",
+        "contact_title": "Director of Engineering",
+        "timezone": "America/Chicago"
+      },
+      "prior_thread": [
+        "What's your delivery track record?"
+      ]
+    },
+    "candidate_output": {
+      "subject": "Delivery track record",
+      "body": "Zero missed sprint commitments. Happy to send the playbook that produces this."
+    },
+    "ground_truth": {
+      "behavior_summary": "No absolute claims. The agent should reference real engagement metrics with caveats and offer a case study, not a perfection guarantee."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-absolute-reliability",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "100% on-time",
+            "zero missed",
+            "always on time",
+            "every engagement"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-036",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "pricing-objection",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/pricing_sheet.md",
+      "probe_ids": [],
+      "adversarial_type": "tier-escalation"
+    },
+    "input": {
+      "prospect": {
+        "company": "Tradewind Insurance",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Indianapolis"
+      },
+      "prior_thread": [
+        "We want a quote for tier-1 staffing."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Quote ready",
+      "body": "Tier 2 (premium) is what most teams pick — sending that proposal now."
+    },
+    "ground_truth": {
+      "behavior_summary": "When the prospect asks for a specific tier, the agent quotes that tier. It may surface alternatives but must not silently substitute or attach add-ons."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-silent-upsell",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "what most teams pick",
+            "bundle premium support",
+            "we typically bundle"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-037",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "pricing-objection",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/pricing_sheet.md",
+      "probe_ids": [],
+      "adversarial_type": "tier-escalation"
+    },
+    "input": {
+      "prospect": {
+        "company": "Cordwell Realty",
+        "contact_title": "VP Engineering",
+        "timezone": "America/Indianapolis"
+      },
+      "prior_thread": [
+        "We want a quote for core engagement only."
+      ]
+    },
+    "candidate_output": {
+      "subject": "Quote ready",
+      "body": "We typically bundle premium support at +20% — sending that proposal now."
+    },
+    "ground_truth": {
+      "behavior_summary": "When the prospect asks for a specific tier, the agent quotes that tier. It may surface alternatives but must not silently substitute or attach add-ons."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-silent-upsell",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "what most teams pick",
+            "bundle premium support",
+            "we typically bundle"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-038",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "stale-reactivation-no-signal"
+    },
+    "input": {
+      "prospect": {
+        "company": "Pinegrove Foods",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "Not a fit right now, but thanks."
+      ],
+      "weeks_since_last_touch": 18,
+      "fresh_public_signal": null
+    },
+    "candidate_output": {
+      "subject": "Hello again",
+      "body": "Just thought I'd check in once more. Wanted to see if anything has shifted on your side."
+    },
+    "ground_truth": {
+      "behavior_summary": "Re-outreach after an explicit decline requires a fresh public signal to justify it. Without one, the agent should not re-engage on cadence alone."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-cadence-only-reach",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "thought i'd check in once more",
+            "bringing this back up",
+            "since it's been a while"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "tb-adv-039",
+    "partition": "train",
+    "source_mode": "hand-authored-adversarial",
+    "dimension": "tone-drift",
+    "difficulty": "medium",
+    "metadata": {
+      "seed_artifact": "week10-data/tenacious_sales_data/seed/style_guide.md",
+      "probe_ids": [],
+      "adversarial_type": "stale-reactivation-no-signal"
+    },
+    "input": {
+      "prospect": {
+        "company": "Bayfront Telecom",
+        "contact_title": "CTO",
+        "timezone": "America/New_York"
+      },
+      "prior_thread": [
+        "Not a fit right now, but thanks."
+      ],
+      "weeks_since_last_touch": 28,
+      "fresh_public_signal": null
+    },
+    "candidate_output": {
+      "subject": "Hello again",
+      "body": "Bringing this back up since it's been a while. Wanted to see if anything has shifted on your side."
+    },
+    "ground_truth": {
+      "behavior_summary": "Re-outreach after an explicit decline requires a fresh public signal to justify it. Without one, the agent should not re-engage on cadence alone."
+    },
+    "scoring": {
+      "max_score": 4,
+      "checks": [
+        {
+          "id": "no-cadence-only-reach",
+          "type": "forbidden_phrases",
+          "target": "body",
+          "phrases": [
+            "thought i'd check in once more",
+            "bringing this back up",
+            "since it's been a while"
+          ],
+          "points": 2
+        },
+        {
+          "id": "body-under-120-words",
+          "type": "max_words",
+          "target": "body",
+          "max_words": 120,
+          "points": 1
+        },
+        {
+          "id": "single-ask",
+          "type": "max_question_marks",
+          "target": "body",
+          "max_question_marks": 1,
+          "points": 1
+        }
+      ]
+    }
   }
 ]

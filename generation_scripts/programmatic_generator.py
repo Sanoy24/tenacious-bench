@@ -236,10 +236,13 @@ def gen_competitor_gap_assertion() -> list[dict[str, Any]]:
         "Dedicated MLOps / ML-platform engineering function",
         "Automated CI/CD pipeline with canary deployments",
         "Data mesh architecture with domain-owned datasets",
+        "Real-time feature store for predictive models",
+        "Centralized AI governance committee",
     ]
     confidences = ["low", "medium"]
+    COMPANIES_EXT = COMPANIES + ["DataFlow Analytics", "CloudNative Solutions", "EdgeCompute Inc", "QuantumScale"]
     for practice, conf in itertools.product(practices, confidences):
-        company = random.choice(COMPANIES)
+        company = random.choice(COMPANIES_EXT)
         bad_body = f"Three peers have {practice.lower()} and you do not. You should close this gap."
         tasks.append({
             "task_id": generate_task_id("cga"),
