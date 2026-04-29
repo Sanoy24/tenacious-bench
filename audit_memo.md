@@ -1,0 +1,19 @@
+Tenacious-specific sales risk is not well measured by a generic benchmark like retail `tau2-bench`. The public benchmark is good at catching confirmation and authentication failures, but Week 10 evidence shows the Tenacious pipeline fails most expensively in places that never require a tool call: public-signal over-claiming, bench over-commitment, timezone fabrication in prospect-visible scheduling language, and gap-brief condescension.
+
+The clearest gap is evidence calibration. In the probe set, P007, P008, P009, P011, and P032 all show the drafter turning weak or medium-confidence research into prospect-facing assertions. The failure is not generic "bad writing." It is Tenacious-specific because the style guide explicitly requires grounded, honest, confidence-aware phrasing, and because the business harm is brand damage to founders, CTOs, and VPs of Engineering rather than a failed checkout flow. P027 widens the same gap: when `prospect.timezone` is missing, the agent fabricates a local-time label anyway. That is a measurable factual failure in an outreach email even though no downstream tool is touched.
+
+The second gap is bench truthfulness. P012, P013, and P014 show that stack-aware bench constraints exist in the code path, but the production behavior can still present capacity too confidently or without the right structured guard reaching the drafter. Generic benchmarks do not grade whether a staffing agent implies Rust availability when the current bench summary shows none. Tenacious must.
+
+The third gap is research framing. P015 and P032 are not about syntax quality; they are about whether competitor-gap language sounds like a research finding or a smug diagnosis. P034 is especially important because it shows a schema-level weakness: the system can encode `prospect_has_it` as a bare boolean without a matching confidence field. That means a superficially polished message can still be epistemically reckless.
+
+Week 10 traces support the same underlying diagnosis. Five concrete zero-reward traces in `trace_log.jsonl` show long speculative behavior after the point where the agent should have slowed down and asked: `879ee1fc-7a7f-438e-bb19-054fb43c8637` (task 105, reward 0.0, 1192s), `88bb3cea-1599-471c-9609-27736556d1e0` (task 76, reward 0.0, 891s), `09f0188f-8567-4e62-b62c-08cc164774e5` (task 92, reward 0.0, 687s), `ac397276-2c37-4026-94cc-39dc39ac52fa` (task 22, reward 0.0, 392s), and `7463faab-f29c-4617-8229-802300c83c30` (task 104, reward 0.0, 390s). Those are retail-domain traces, but they prove a reusable pattern: the agent becomes too bold when evidence is incomplete. In Tenacious, that same pattern appears as "assert rather than ask."
+
+So Tenacious-Bench v0.1 should grade machine-verifiable properties that public benchmarks mostly miss:
+
+- no unsupported hiring, funding, AI, or competitor-gap claims when confidence is weak
+- no commitment to unavailable bench capacity
+- no invented local-time or timezone claims when timezone data is missing
+- no banned tone markers or offshore-vendor phrasing
+- one grounded ask, with at least one claim anchored to supplied input artifacts
+
+This is why the benchmark should overweight trace-derived and adversarial sales tasks over a generic tool-use replay. What harms Tenacious most is not that the agent fails to call a tool. It is that the agent can sound certain, specific, and wrong in a message a prospect can screenshot.
