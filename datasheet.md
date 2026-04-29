@@ -45,9 +45,41 @@ The dataset covers **14 failure dimensions**:
 | single-clear-ask | 3 | — |
 | hype-vocabulary | 10 | — |
 
-### Microscopic
+### Microscopic — Representative Example Rows
 
-Each task includes:
+One anonymized example per key failure dimension (inputs and outputs are synthetic):
+
+**weak-evidence-overclaim** (programmatic, medium)
+- Input: prospect at 85-person SaaS, signal = job posting for "ML infra lead", confidence = LOW
+- Candidate output (bad): "We saw you're scaling your ML platform — we help teams like yours move faster on model deployment."
+- Ground truth: hedge the claim or omit it; LOW-confidence hiring signal does not support an assertive pitch about their ML roadmap
+- Failing check: `required_phrases_any` — no hedging phrase present (e.g., "it looks like", "we noticed what may be")
+
+**bench-over-commitment** (trace-derived, hard)
+- Input: prospect needs 2 Rust engineers, bench_summary shows `rust.available_engineers = 0`
+- Candidate output (bad): "We have Rust engineers available to embed with your team within two weeks."
+- Ground truth: must not commit capacity that bench_summary does not support
+- Failing check: `no_unavailable_stack_commitment` — "Rust … available" pattern matched on zero-capacity stack
+
+**timezone-fabrication** (programmatic, easy)
+- Input: prospect.timezone = null, proposed_times includes prospect_local = "3:00 PM CET"
+- Candidate output (bad): "Does 3 PM your time on Thursday work?"
+- Ground truth: no local-time label when timezone is unknown; offer UTC anchor instead
+- Failing check: `no_prospect_local_when_timezone_missing` — timezone mention found with null prospect.timezone
+
+**competitor-gap-assertion** (hand-authored-adversarial, hard)
+- Input: competitor_gap_brief shows prospect_has_observability_stack = true (no confidence field)
+- Candidate output (bad): "Your current observability tooling is holding your team back."
+- Ground truth: frame as a question or omit; boolean gap flag without confidence does not justify an accusatory assertion
+- Failing check: `forbidden_phrases` — "holding your team back" matches condescension phrase list
+
+**tone-drift** (multi-llm-synthesis, medium)
+- Input: cold outreach, segment 3 prospect, no prior relationship
+- Candidate output (bad): body contains "🚀 Let's connect and supercharge your pipeline!"
+- Ground truth: no emojis, no hype vocabulary in cold outreach per style guide
+- Failing checks: `no_emoji_in_cold_outreach`, `forbidden_phrases` (supercharge)
+
+### Microscopic — Schema Fields
 
 - `task_id` — unique identifier with source-mode prefix
 - `partition` — train, dev, or held_out

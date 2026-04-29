@@ -85,6 +85,17 @@ Four-stage pipeline documented in `generation_scripts/multi_llm_synthesis.py`:
 
 Generator and judge are always from different model families. The eval-tier model is never used as a bulk generator.
 
+**Model role → risk profile mapping:**
+
+| Role | Model | Cost tier | Primary bias risk | Primary failure mode |
+|---|---|---|---|---|
+| Hard-seed generator | claude-sonnet-4-6 | High | Self-preference on Anthropic outputs | Narrow stylistic range |
+| Bulk generator | deepseek-chat-v3-0324 | Low | Instruction-following over originality | Template repetition |
+| Judge (filter) | gemini-2.0-flash-001 | Low | Verbosity/length bias | Passing over-specific tasks that sound plausible |
+| Spot-check judge | claude-sonnet-4-6 | High | Familiarity with own seed style | Over-accepting hard seeds |
+
+The rotation policy directly counters the top risk in each column: using a different family for generation and judging prevents the judge from rewarding outputs that match its own generation style.
+
 All costs logged to `generation_scripts/synthesis_cost_log.json`. Calibration results in `generation_scripts/synthesis_calibration_log.json`.
 
 ### Hand-Authored Adversarial
@@ -158,6 +169,21 @@ A stratified 30-task sample covering all 14 failure dimensions was hand-labeled 
 Overall agreement: **95.5%** (84/88 check decisions agreed). Cohen's κ: **0.91**. **All 14 dimensions clear the brief's 80% threshold**, so v0.1 ships as-is for the interim submission.
 
 The four remaining disagreements all sit on rules where the literal banned/required-phrase list is narrower than the rule name suggests — small phrase-list refinements queued for v0.2. Full per-dimension matrix, disagreement records, and revision plan in [inter_rater_agreement.md](inter_rater_agreement.md).
+
+## Ablation Baseline
+
+The probe trigger rates from Week 10 establish the pre-intervention baseline that Path B is measured against:
+
+| Probe | Failure | Trigger Rate (baseline) |
+|---|---|---|
+| P007 | Signal over-claiming | 3/3 (100%) |
+| P011 | Signal over-claiming | 3/3 (100%) |
+| P027 | Timezone fabrication | 3/3 (100%) |
+| P032 | Gap over-claiming | 3/3 (100%) |
+| P023 | Dual-control failure | 41/150 (27%) |
+| P024 | Dual-control failure | 26/150 (17%) |
+
+Delta A/B/C ablation results (base → judge-augmented → LoRA-tuned) will be added after Days 4–7 training runs complete. The target improvement per dimension is ≥20pp trigger-rate reduction on P007, P011, P027, and P032 — the four P0 probes that drove the Path B selection.
 
 ## Next Steps (Days 4–7)
 

@@ -101,6 +101,33 @@ uv run python generation_scripts/contamination_check.py
 uv run python scoring_evaluator.py --path tenacious_bench_v0.1/dev/tasks.json --pretty
 ```
 
+### End-to-end example
+
+Score the full dev partition and inspect results for a single task:
+
+```bash
+# Score all dev tasks and write to a file
+uv run python scoring_evaluator.py \
+  --path tenacious_bench_v0.1/dev/tasks.json \
+  --pretty > dev_results.json
+
+# Check how many tasks passed all checks
+python -c "
+import json
+data = json.load(open('dev_results.json'))
+print(f\"{data['passed_all']}/{data['task_count']} tasks passed all checks\")
+"
+
+# Inspect check-level detail for the first failing task
+python -c "
+import json
+data = json.load(open('dev_results.json'))
+failing = [r for r in data['results'] if not r['passed_all_checks']]
+if failing:
+    print(json.dumps(failing[0], indent=2))
+"
+```
+
 ## Task Authoring Modes
 
 | Mode | Share | Tasks | Description |

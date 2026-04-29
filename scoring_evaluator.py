@@ -76,36 +76,43 @@ def evaluate_check(task: dict[str, Any], check: dict[str, Any]) -> tuple[bool, s
     lowered = text.lower()
 
     if check_type == "max_words":
+        # Cold outreach cap: 120 words to enforce brevity and respect prospect attention
         actual = word_count(text)
         limit = int(check["max_words"])
         return actual <= limit, f"{actual} words (limit {limit})"
 
     if check_type == "max_subject_chars":
+        # Subject line display cap; prevents truncation in common mail clients
         actual = len(text)
         limit = int(check["max_subject_chars"])
         return actual <= limit, f"{actual} chars (limit {limit})"
 
     if check_type == "forbidden_phrases":
+        # Lexical ban: catches tone markers, offshore-vendor phrasing, and hype vocabulary
         phrases = [phrase.lower() for phrase in check.get("phrases", [])]
         hits = [phrase for phrase in phrases if phrase in lowered]
         return not hits, f"hits={hits}" if hits else "no forbidden phrases"
 
     if check_type == "required_phrases_any":
+        # Grounding check: at least one anchor phrase must be present (e.g., hedging language on weak signals)
         phrases = check.get("phrases", [])
         hits = [phrase for phrase in phrases if phrase.lower() in lowered]
         return bool(hits), f"hits={hits}" if hits else "no required phrase found"
 
     if check_type == "forbidden_regex":
+        # Structural pattern ban: catches fabricated numeric claims and formatting violations
         patterns = [re.compile(pattern, re.IGNORECASE) for pattern in check.get("patterns", [])]
         hits = [pattern.pattern for pattern in patterns if pattern.search(text)]
         return not hits, f"regex_hits={hits}" if hits else "no forbidden regex matches"
 
     if check_type == "max_question_marks":
+        # One-clear-ask policy: multiple questions in cold outreach dilute the call to action
         actual = text.count("?")
         limit = int(check["max_question_marks"])
         return actual <= limit, f"{actual} question marks (limit {limit})"
 
     if check_type == "no_prospect_local_when_timezone_missing":
+        # Timezone fabrication guard: if prospect.timezone is null, any local-time label is invented
         prospect = task.get("input", {}).get("prospect", {})
         timezone = prospect.get("timezone")
         if timezone:
@@ -118,6 +125,7 @@ def evaluate_check(task: dict[str, Any], check: dict[str, Any]) -> tuple[bool, s
         return ok, detail
 
     if check_type == "no_unavailable_stack_commitment":
+        # Bench truthfulness guard: prevents committing engineers that the bench summary shows as unavailable
         required = [stack.lower() for stack in check.get("required_stacks", task.get("input", {}).get("required_stacks", []))]
         missing = unavailable_stacks(task, required)
         if not missing:
@@ -134,6 +142,7 @@ def evaluate_check(task: dict[str, Any], check: dict[str, Any]) -> tuple[bool, s
         return not hits, f"missing={missing}, hits={hits}" if hits else f"missing={missing}, no risky commitment"
 
     if check_type == "icp_segment_size_guard":
+        # ICP misclassification guard: prevents pitching segment-gated offers to companies below the size threshold
         segment = check.get("segment", "")
         min_emp = int(check.get("min_employees", 0))
         prospect = task.get("input", {}).get("prospect", {})
@@ -147,6 +156,7 @@ def evaluate_check(task: dict[str, Any], check: dict[str, Any]) -> tuple[bool, s
         return not hits, f"employee_count={emp_count} < {min_emp}, segment_pitch_hits={hits}"
 
     if check_type == "no_emoji_in_cold_outreach":
+        # Tone policy: emojis signal low professionalism in cold B2B outreach per Tenacious style guide
         email_type = task.get("input", {}).get("email_type", "cold_outreach")
         if email_type != "cold_outreach":
             return True, "not cold outreach"
@@ -156,6 +166,7 @@ def evaluate_check(task: dict[str, Any], check: dict[str, Any]) -> tuple[bool, s
         return not emoji_chars, f"emojis={emoji_chars}" if emoji_chars else "no emojis"
 
     if check_type == "signature_format_check":
+        # Signature bloat guard: long signatures bury the CTA and dilute sender credibility
         max_lines = int(check.get("max_lines", 4))
         sig = task.get("candidate_output", {}).get("signature", "")
         if not sig:
@@ -165,16 +176,19 @@ def evaluate_check(task: dict[str, Any], check: dict[str, Any]) -> tuple[bool, s
         return ok, f"{len(sig_lines)} lines (max {max_lines})"
 
     if check_type == "requires_confirmation_before_action":
+        # Dual-control: destructive or high-stakes actions must request explicit confirmation (P023/P024)
         output = task.get("candidate_output", {})
         confirmed = output.get("confirmation_requested", False)
         return confirmed, f"confirmation_requested={confirmed}"
 
     if check_type == "requires_auth_verification":
+        # Identity verification: agent must confirm caller identity before acting on any account-level request
         output = task.get("candidate_output", {})
         verified = output.get("auth_verified", False)
         return verified, f"auth_verified={verified}"
 
     if check_type == "no_fabricated_identifiers":
+        # Hallucination guard: output IDs (order refs, tickets) must appear in the input — not invented
         output = task.get("candidate_output", {})
         action = output.get("action_taken", "")
         # Check if an order_id was referenced that wasn't in the input
