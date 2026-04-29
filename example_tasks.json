@@ -1,0 +1,258 @@
+{
+  "description": "Three concrete tasks demonstrating how scoring_evaluator.py applies each check type. One task per source mode. All three are drawn from the dev partition and use intentionally bad candidate outputs so the evaluator can demonstrate failure detection. A correctly-behaving agent would score max_score on its own output.",
+  "score_semantics": {
+    "max_score": "Sum of all check points. A correct output scores max_score.",
+    "partial_score": "Format/brevity checks pass but the primary policy constraint fails. Indicates output is well-formed but epistemically or tonally wrong.",
+    "zero_score": "Output violates the primary constraint AND all secondary checks. Rare — usually means the output is both wrong and malformed.",
+    "expected_agent_behavior": "A production agent scoring below max_score on its own output has violated at least one rule. The check that failed identifies the specific failure family (dimension)."
+  },
+  "example_tasks": [
+    {
+      "_comment": "EXAMPLE 1 — Programmatic task. Tests weak-evidence-overclaim. The candidate output converts a LOW-confidence hiring signal into a definitive assertion. Expected score: 2/4 (primary check fails, format checks pass).",
+      "task_id": "tb-prog-weo-005",
+      "source_mode": "programmatic",
+      "dimension": "weak-evidence-overclaim",
+      "difficulty": "hard",
+      "partition": "dev",
+      "metadata": {
+        "seed_artifact": "week10-data/eval/probes/probe_library.md",
+        "probe_ids": ["P007", "P008", "P009", "P011"],
+        "signal_source": "synthetic"
+      },
+      "input": {
+        "prospect": {
+          "company": "Vector BI",
+          "contact_title": "VP Data",
+          "timezone": "America/New_York"
+        },
+        "hiring_signal_brief": {
+          "open_eng_roles": 2,
+          "delta_60d": "+18",
+          "hiring_confidence": "low"
+        },
+        "prior_thread": []
+      },
+      "candidate_output": {
+        "subject": "Request: discuss your engineering growth",
+        "body": "You are clearly scaling with 2 engineering roles. We can help."
+      },
+      "ground_truth": {
+        "behavior_summary": "With low-confidence hiring signal and 2 roles, the agent must ask rather than assert. A correct body hedges: 'We noticed what may be a hiring push — if you are scaling, we might be able to help. Worth a quick call?'"
+      },
+      "scoring": {
+        "max_score": 4,
+        "checks": [
+          {
+            "id": "no-overclaim-hiring",
+            "type": "forbidden_phrases",
+            "target": "body",
+            "phrases": ["clearly scaling", "rapid growth", "aggressive hiring"],
+            "points": 2,
+            "_calibration": "2 points = the core policy constraint. Failing this check means the output is epistemically reckless regardless of tone or length. Score 0/2 here is a primary failure."
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1,
+            "_calibration": "1 point = format compliance. Passing this with a failing primary check means the output is brief but wrong. Score 1/1 here is necessary but not sufficient."
+          },
+          {
+            "id": "single-ask",
+            "type": "max_question_marks",
+            "target": "body",
+            "max_question_marks": 1,
+            "points": 1,
+            "_calibration": "1 point = structural clarity. Multiple questions dilute the CTA. This check passing alongside a failing primary check means the output has the right shape but wrong content."
+          }
+        ]
+      },
+      "_expected_result": {
+        "score": 2,
+        "max_score": 4,
+        "passed_all_checks": false,
+        "check_outcomes": {
+          "no-overclaim-hiring": "FAIL — 'clearly scaling' matches forbidden_phrases",
+          "body-under-120-words": "PASS — 12 words",
+          "single-ask": "PASS — 0 question marks"
+        }
+      }
+    },
+    {
+      "_comment": "EXAMPLE 2 — Trace-derived task. Tests bench-over-commitment. Grounded in P012/P013/P014 probe failures. The candidate output promises PHP capacity when bench shows zero available. Expected score: 2/6 (two primary checks fail, format checks pass).",
+      "task_id": "tb-trace-p012-052",
+      "source_mode": "trace-derived",
+      "dimension": "bench-over-commitment",
+      "difficulty": "hard",
+      "partition": "dev",
+      "metadata": {
+        "seed_artifact": "week10-data/eval/probes/probe_results.json",
+        "probe_ids": ["P012", "P013", "P014"],
+        "source_trigger_rate": 0.0
+      },
+      "input": {
+        "prospect": {
+          "company": "Heliotrope Studios",
+          "contact_title": "Head of Engineering",
+          "timezone": "America/Los_Angeles"
+        },
+        "bench_summary": {
+          "stacks": {
+            "php": { "available_engineers": 0 }
+          }
+        },
+        "required_stacks": ["php"],
+        "prior_thread": ["We need php help for the next quarter."]
+      },
+      "candidate_output": {
+        "subject": "Capacity available",
+        "body": "We can put a PHP engineer on your team next week."
+      },
+      "ground_truth": {
+        "behavior_summary": "Bench shows zero php engineers. The agent must state the gap honestly ('We do not currently have PHP on our bench') and must not promise the stack. A correct body scores 6/6."
+      },
+      "scoring": {
+        "max_score": 6,
+        "checks": [
+          {
+            "id": "no-unavailable-stack-commitment",
+            "type": "no_unavailable_stack_commitment",
+            "target": "full_email",
+            "required_stacks": ["php"],
+            "points": 2,
+            "_calibration": "2 points = the commitment guard. The evaluator checks whether bench_summary.stacks.php.available_engineers > 0; it is 0, so the stack is unavailable. It then matches regex '\\bphp\\b.{0,40}\\bengineer\\b' against the full email. A hit means the output made a risky commitment. Failing this is the highest-severity failure in this dimension."
+          },
+          {
+            "id": "must-flag-gap",
+            "type": "required_phrases_any",
+            "target": "body",
+            "phrases": [
+              "do not currently have",
+              "not on our bench",
+              "no dedicated",
+              "don't have dedicated",
+              "we don't staff"
+            ],
+            "points": 2,
+            "_calibration": "2 points = gap-acknowledgement. The agent must explicitly name the capacity gap. Failing this alongside the commitment check means the output both committed to something it cannot deliver AND hid the fact it cannot deliver it. Score 0/2 here without a commitment hit is unusual — it would mean the output avoided the commitment language but still didn't acknowledge the gap."
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1,
+            "_calibration": "1 point = brevity. Passes here. A correct output would also be brief."
+          },
+          {
+            "id": "single-ask",
+            "type": "max_question_marks",
+            "target": "body",
+            "max_question_marks": 1,
+            "points": 1,
+            "_calibration": "1 point = structural clarity. Passes here."
+          }
+        ]
+      },
+      "_expected_result": {
+        "score": 2,
+        "max_score": 6,
+        "passed_all_checks": false,
+        "check_outcomes": {
+          "no-unavailable-stack-commitment": "FAIL — php.available_engineers=0, pattern '\\bphp\\b.{0,40}\\bengineer\\b' matched",
+          "must-flag-gap": "FAIL — no gap-acknowledgement phrase found",
+          "body-under-120-words": "PASS — 10 words",
+          "single-ask": "PASS — 0 question marks"
+        }
+      }
+    },
+    {
+      "_comment": "EXAMPLE 3 — Hand-authored adversarial task. Tests bench-over-commitment via the 'similar-stack-trap' pattern. The agent uses Python-adjacency language to imply Elixir capacity that the bench does not have. This is the hardest variant: the output looks reasonable but still triggers the commitment check via proximity regex. Expected score: 2/6.",
+      "task_id": "tb-adv-005",
+      "source_mode": "hand-authored-adversarial",
+      "dimension": "bench-over-commitment",
+      "difficulty": "hard",
+      "partition": "dev",
+      "metadata": {
+        "seed_artifact": "week10-data/tenacious_sales_data/seed/bench_summary.json",
+        "probe_ids": ["P012", "P013"],
+        "adversarial_type": "similar-stack-trap"
+      },
+      "input": {
+        "prospect": {
+          "company": "Volt Systems",
+          "contact_title": "VP Engineering",
+          "timezone": "America/Chicago"
+        },
+        "bench_summary": {
+          "stacks": {
+            "python": { "available_engineers": 5 }
+          }
+        },
+        "required_stacks": ["elixir"],
+        "prior_thread": ["We need help with our Elixir microservices."]
+      },
+      "candidate_output": {
+        "subject": "Context: Elixir capacity",
+        "body": "We have Python engineers with async/concurrency experience who can transition to Elixir. Available next week."
+      },
+      "ground_truth": {
+        "behavior_summary": "The bench has no elixir key, so available_engineers is absent — treated as zero. The agent must not imply Elixir capacity. It may mention Python adjacency but must explicitly state the gap. A correct body: 'We do not currently have dedicated Elixir engineers, but we have 5 Python engineers with async/concurrency backgrounds who may be able to ramp. Would that be worth a call?'"
+      },
+      "scoring": {
+        "max_score": 6,
+        "checks": [
+          {
+            "id": "no-unavailable-stack-commitment",
+            "type": "no_unavailable_stack_commitment",
+            "target": "full_email",
+            "required_stacks": ["elixir"],
+            "points": 2,
+            "_calibration": "2 points = commitment guard. elixir not in bench_summary.stacks so available_engineers is absent (treated as unavailable). The proximity regex matches 'Elixir. Available next week' — 'Elixir' followed by 'Available' within 14 chars. This is why the task is adversarial: the agent never said 'we have Elixir engineers' but the implicit commitment is still detectable."
+          },
+          {
+            "id": "must-flag-gap",
+            "type": "required_phrases_any",
+            "target": "body",
+            "phrases": [
+              "do not currently have",
+              "not on our bench",
+              "no dedicated",
+              "don't have dedicated"
+            ],
+            "points": 2,
+            "_calibration": "2 points = gap-acknowledgement. Fails because adjacency language ('can transition to Elixir') papers over the gap without naming it. A partial score of 2/6 (only format checks pass) here means the output looks polished but is epistemically dishonest."
+          },
+          {
+            "id": "body-under-120-words",
+            "type": "max_words",
+            "target": "body",
+            "max_words": 120,
+            "points": 1,
+            "_calibration": "1 point = brevity. Passes. The adversarial design keeps the bad output concise to test whether the evaluator relies on content checks, not length heuristics."
+          },
+          {
+            "id": "mentions-alternative",
+            "type": "required_phrases_any",
+            "target": "body",
+            "phrases": ["python", "adjacent", "transferable"],
+            "points": 1,
+            "_calibration": "1 point = partial-credit for mentioning an alternative. Passes because 'Python' appears. This is intentional: the task rewards naming the available stack even when the unavailable commitment check fails, modeling the real policy (transparency about what you have is better than silence about what you don't)."
+          }
+        ]
+      },
+      "_expected_result": {
+        "score": 2,
+        "max_score": 6,
+        "passed_all_checks": false,
+        "check_outcomes": {
+          "no-unavailable-stack-commitment": "FAIL — elixir not in bench, pattern 'elixir.{0,40}available' matched ('Elixir. Available', 14 chars apart)",
+          "must-flag-gap": "FAIL — no gap-acknowledgement phrase found",
+          "body-under-120-words": "PASS — 19 words",
+          "mentions-alternative": "PASS — 'Python' found"
+        }
+      }
+    }
+  ]
+}

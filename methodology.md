@@ -49,6 +49,24 @@ All five are zero-reward traces supporting the "assert before evidence is suffic
 
 Justification: the Week 10 evidence points to an **inconsistency problem**, not a pure generation-quality problem. Probes P007, P011, P027, and P032 show that the system sometimes follows policy and sometimes does not on very similar inputs. The zero-reward traces suggest the agent fails to recognize when available evidence does not justify a strong action or claim. A judge/critic layer is the most defensible intervention for Week 11.
 
+### Paper-grounded rationale for Path B
+
+Two required-reading papers directly inform this choice:
+
+**1. Gu et al., "A Survey on LLM-as-a-Judge" (arXiv:2411.15594)**
+
+Section 4 of the survey catalogues the systematic biases that afflict untuned LLM judges: concreteness bias (favoring specific, confident-sounding answers), authority bias (favoring outputs with numeric claims), and position bias (favoring whichever option is presented first). These are precisely the biases that explain the Week 10 failure pattern. When the sales agent over-claims — asserting hiring velocity on a LOW-confidence signal, fabricating a prospect's local time, or framing a competitor gap as a diagnosis — the outputs *sound more confident and specific*. An untuned judge would reward exactly these properties.
+
+Path B is the direct response to this finding: instead of adding an off-the-shelf judge call, we train a judge/critic on preference pairs derived from the Week 10 probe failures. The training signal is grounded in the failure taxonomy, not in generic "quality" labels. This directly counters the concreteness and authority biases that would otherwise cause a generic judge to grade Tenacious failures as successes.
+
+Section 5 of the survey further shows that multiple evaluation rounds (more robust than single judge calls) and structured rubric scoring (more reliable than freeform narrative) are the improvements with the most consistent empirical support. The scoring evaluator's deterministic check structure embodies exactly this: structured, repeatable, multi-check rubrics rather than single LLM opinion calls.
+
+**2. Liu et al., "Best Practices and Lessons Learned on Synthetic Data for Language Models" (arXiv:2404.07503, COLM 2024)**
+
+Section 4 of this paper explicitly warns that *synthetic alignment data can misrepresent human values* and that this risk is especially high when the labeled pairs are not grounded in real behavioral evidence. The Week 10 evidence provides that grounding: the zero-reward traces and 100% probe trigger rates on P007/P011/P027/P032 give us real failure examples that anchor the preference pairs for Path B training. Without that grounding, preference labels constructed from synthetic variation would risk training a critic that rewards surface-level policy compliance (e.g., avoiding the literal word "aggressively") rather than genuine evidence-calibrated reasoning.
+
+Liu et al. also distinguish between *coverage* and *fidelity* in synthetic data (Section 3). Coverage without fidelity produces noisy training signal; fidelity without coverage produces a brittle model. This distinction directly informed the four-mode generation strategy: programmatic sweeps provide coverage (controlled combinatorial variation), trace-derived tasks provide fidelity (grounded in real failure evidence), and adversarial tasks stress-test the decision boundary. Path B preference pairs are generated in the same priority order: trace-derived pairs first, programmatic second, adversarial third — fidelity before coverage.
+
 ## Task Authoring Modes
 
 | Mode | Actual (Interim) | Script | API Cost |

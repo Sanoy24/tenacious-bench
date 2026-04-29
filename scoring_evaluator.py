@@ -1,3 +1,50 @@
+"""
+scoring_evaluator.py — Deterministic grading engine for Tenacious-Bench v0.1.
+
+SCORE SEMANTICS
+---------------
+Each task defines a set of checks with individual point values. The evaluator
+runs every check and sums the awarded points.
+
+  score == max_score        All checks passed. A production agent's output
+                            should always reach this level.
+
+  score < max_score,        Format/brevity checks passed but at least one
+  format checks pass        content-policy check failed. The output is
+                            well-formed but epistemically or tonally wrong
+                            (e.g., an overclaim on a LOW-confidence signal,
+                            or a bench commitment for an unavailable stack).
+                            This is the most common failure pattern.
+
+  score == 0                All checks failed, including format checks.
+                            The output violated the primary policy constraint
+                            AND was also too long, used multiple questions,
+                            or had another structural problem.
+
+  passed_all_checks: true   Equivalent to score == max_score. Safe to use
+                            as a binary pass/fail signal when comparing
+                            agent versions in A/B ablations.
+
+INTERPRETING PARTIAL SCORES
+----------------------------
+Because each check carries a point weight reflecting its severity, partial
+scores are meaningful:
+
+  - A task with max_score=6 and score=2 (only format checks passing) signals
+    a primary content violation — the agent produced a confident wrong claim.
+  - A task with max_score=6 and score=4 (one policy check failing) signals a
+    secondary violation — the output avoided the worst pattern but still
+    missed a required grounding phrase.
+  - Averaging score/max_score across a dimension slice gives a dimension
+    pass-rate, directly comparable across model versions in ablations.
+
+RUNNING ON EXAMPLE TASKS
+-------------------------
+  uv run python scoring_evaluator.py --path example_tasks.json --pretty
+
+This loads the three concrete example tasks (one per source mode) with
+pre-computed expected outcomes documented in example_tasks.json.
+"""
 from __future__ import annotations
 
 import argparse
@@ -133,9 +180,11 @@ def evaluate_check(task: dict[str, Any], check: dict[str, Any]) -> tuple[bool, s
         risky_patterns: list[str] = []
         for stack in missing:
             stack_re = re.escape(stack)
+            # Double-brace {{0,40}} so the f-string emits the literal regex quantifier {0,40}
+            # rather than evaluating (0, 40) as a Python tuple expression.
             patterns = [
-                rf"\b{stack_re}\b.{0,40}\b(?:engineer|engineers|capacity|available|ready)\b",
-                rf"\b(?:engineer|engineers|capacity|available|ready)\b.{0,40}\b{stack_re}\b",
+                rf"\b{stack_re}\b.{{0,40}}\b(?:engineer|engineers|capacity|available|ready)\b",
+                rf"\b(?:engineer|engineers|capacity|available|ready)\b.{{0,40}}\b{stack_re}\b",
             ]
             risky_patterns.extend(patterns)
         hits = [pattern for pattern in risky_patterns if re.search(pattern, text, re.IGNORECASE | re.DOTALL)]
@@ -204,7 +253,18 @@ def evaluate_check(task: dict[str, Any], check: dict[str, Any]) -> tuple[bool, s
 
 
 def evaluate_task(task: dict[str, Any]) -> dict[str, Any]:
-    """Score all checks for a single task and return a result dictionary."""
+    """Score all checks for a single task and return a result dictionary.
+
+    The returned dict includes per-check detail strings suitable for
+    human review. Use passed_all_checks for binary comparisons; use
+    score/max_score for continuous ablation deltas.
+
+    Calibration note: checks within a task are weighted by severity.
+    High-point checks (typically 2 pts) guard the primary policy
+    constraint for that dimension. Low-point checks (typically 1 pt)
+    guard format compliance. An output can score partial points by
+    passing format checks while failing the policy constraint.
+    """
     checks = task.get("scoring", {}).get("checks", [])
     max_score = int(task.get("scoring", {}).get("max_score", 0))
     awarded = 0
