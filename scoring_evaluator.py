@@ -337,6 +337,11 @@ def evaluate_task(task: dict[str, Any]) -> dict[str, Any]:
     human review. Use passed_all_checks for binary comparisons; use
     score/max_score for continuous ablation deltas.
 
+    See example_tasks.json for three annotated tasks (one per source mode)
+    with _calibration notes on every check and _expected_result blocks that
+    show intended scores. Run: uv run python scoring_evaluator.py --path
+    example_tasks.json --pretty
+
     Calibration note: checks within a task are weighted by severity.
     High-point checks (typically 2 pts) guard the primary policy
     constraint for that dimension. Low-point checks (typically 1 pt)

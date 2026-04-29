@@ -97,6 +97,26 @@ uv run python generation_scripts/contamination_check.py
 
 ## Scoring
 
+### Quick start — example tasks
+
+Three annotated example tasks live in [`example_tasks.json`](example_tasks.json). Run them first to verify the evaluator and see how each check type behaves:
+
+```bash
+uv run python scoring_evaluator.py --path example_tasks.json --pretty
+```
+
+Expected output:
+
+| task\_id | score | max\_score | passed\_all\_checks |
+| --- | --- | --- | --- |
+| tb-prog-weo-005 | 2 | 4 | false |
+| tb-trace-p012-052 | 2 | 6 | false |
+| tb-adv-005 | 2 | 6 | false |
+
+Each task is intentionally bad (every critical check fails) so the score is always `max_score / 2`. The `_calibration` annotation on every check and the top-level `_expected_result` block explain exactly what passes, what fails, and why. See Section 3 of [`interim_report.md`](interim_report.md) for a full rubric walkthrough of all three examples.
+
+### Score the full benchmark
+
 ```bash
 uv run python scoring_evaluator.py --path tenacious_bench_v0.1/dev/tasks.json --pretty
 ```
