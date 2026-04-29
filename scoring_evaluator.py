@@ -180,10 +180,9 @@ def evaluate_check(task: dict[str, Any], check: dict[str, Any]) -> tuple[bool, s
         # Check if an order_id was referenced that wasn't in the input
         input_ids = set()
         user_req = task.get("input", {}).get("user_request", "")
-        import re as _re
-        input_ids.update(_re.findall(r"[A-Z0-9]{6,}", user_req))
+        input_ids.update(re.findall(r"[A-Z0-9]{6,}", user_req))
         output_text = json.dumps(output)
-        output_ids = set(_re.findall(r"[A-Z0-9]{6,}", output_text))
+        output_ids = set(re.findall(r"[A-Z0-9]{6,}", output_text))
         fabricated = output_ids - input_ids
         return not fabricated, f"fabricated_ids={fabricated}" if fabricated else "no fabricated ids"
 

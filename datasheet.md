@@ -12,17 +12,17 @@ Week 10 evidence showed a strong cluster of failures around over-claiming weak s
 
 ### Microscopic
 
-This release is the interim submission benchmark, containing 230 tasks across 14 failure dimensions, in the brief's 200–300 range. It covers the core failure families identified in the Week 10 audit and validates schema, evaluator behavior, partition integrity, and contamination resistance.
+This release is the interim submission benchmark, containing 242 tasks across 14 failure dimensions, in the brief's 200–300 range. It covers the core failure families identified in the Week 10 audit and validates schema, evaluator behavior, partition integrity, and contamination resistance.
 
 ## 2. Composition
 
 ### Telescopic
 
-Current composition: **230 tasks** total.
+Current composition: **242 tasks** total.
 
-- **train**: 116 tasks (50%)
-- **dev**: 71 tasks (31%)
-- **held_out**: 43 tasks (19%)
+- **train**: 121 tasks (50%)
+- **dev**: 73 tasks (30%)
+- **held_out**: 48 tasks (20%)
 
 ### Periscopic
 
@@ -32,7 +32,7 @@ The dataset covers **14 failure dimensions**:
 |---|---|---|
 | weak-evidence-overclaim | 39 | P007, P008, P009, P011 |
 | bench-over-commitment | 26 | P012, P013, P014 |
-| tone-drift | 26 | P015, P016, P017, P035 |
+| tone-drift | 30 | P015, P016, P017, P035 |
 | competitor-gap-assertion | 26 | P032, P034 |
 | timezone-fabrication | 25 | P026, P027 |
 | icp-misclassification | 19 | P001, P005, P006 |
@@ -43,7 +43,7 @@ The dataset covers **14 failure dimensions**:
 | directness-subject-line | 8 | — |
 | bench-jargon | 6 | P015 |
 | single-clear-ask | 3 | — |
-| hype-vocabulary | 2 | — |
+| hype-vocabulary | 10 | — |
 
 ### Microscopic
 
@@ -83,11 +83,11 @@ Task provenance by source mode:
 
 | Source Mode | Tasks | Share | API Cost |
 |---|---|---|---|
-| Programmatic sweeps | 71 | 31% | $0.00 |
-| Trace-derived | 68 | 30% | $0.00 |
-| Multi-LLM synthesis | 56 | 24% | $0.10 |
-| Hand-authored adversarial | 35 | 15% | $0.00 |
-| **Total** | **230** | **100%** | **$0.10** |
+| Programmatic sweeps | 79 | 33% | $0.00 |
+| Trace-derived | 68 | 28% | $0.00 |
+| Multi-LLM synthesis | 56 | 23% | $0.10 |
+| Hand-authored adversarial | 39 | 16% | $0.00 |
+| **Total** | **242** | **100%** | **$0.10** |
 
 ## 4. Preprocessing / Labeling / Scoring
 

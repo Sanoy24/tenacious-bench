@@ -53,12 +53,12 @@ Justification: the Week 10 evidence points to an **inconsistency problem**, not 
 
 | Mode | Actual (Interim) | Script | API Cost |
 |---|---|---|---|
-| Programmatic sweeps | 71 tasks (31%) | `programmatic_generator.py` | $0.00 |
-| Trace-derived | 68 tasks (30%) | `trace_derived_generator.py` | $0.00 |
-| Multi-LLM synthesis | 56 tasks (24%) | `multi_llm_synthesis.py` | logged in `generation_scripts/synthesis_cost_log.json` |
-| Hand-authored adversarial | 35 tasks (15%) | `hand_authored_adversarial.py` | $0.00 |
+| Programmatic sweeps | 79 tasks (33%) | `programmatic_generator.py` | $0.00 |
+| Trace-derived | 68 tasks (28%) | `trace_derived_generator.py` | $0.00 |
+| Multi-LLM synthesis | 56 tasks (23%) | `multi_llm_synthesis.py` | logged in `generation_scripts/synthesis_cost_log.json` |
+| Hand-authored adversarial | 39 tasks (16%) | `hand_authored_adversarial.py` | $0.00 |
 
-**Total: 230 tasks.** Mix tracks the brief's targets (≈30/30/25/15) within ±1pp on every mode.
+**Total: 242 tasks.** Mix tracks the brief's targets (≈30/30/25/15) within ±3pp on every mode.
 
 ### Programmatic Sweeps
 Combinatorial expansion across 9 failure dimensions using seed data. Varies: signal type, confidence level, company size, stack, thread context. Deterministic — zero randomness in check application.
@@ -67,7 +67,25 @@ Combinatorial expansion across 9 failure dimensions using seed data. Varies: sig
 Extracts failure patterns from actual Week 10 probe results (P007, P011, P027, P032, P023/P024, P005). Each task links back to the source trigger rate and probe ID.
 
 ### Multi-LLM Synthesis
-Uses DeepSeek V3 (dev-tier) for generation and Gemini Flash for judge-filtering. Different model families to avoid systematic bias. All costs logged to `generation_scripts/synthesis_cost_log.json`.
+
+Four-stage pipeline documented in `generation_scripts/multi_llm_synthesis.py`:
+
+1. **Hard seeds** — eval-tier model (`anthropic/claude-sonnet-4-6`) authors 40 high-difficulty edge-case tasks spread across all 9 dimensions. These are the hardest seeds anchored to the Week 10 failure taxonomy.
+2. **Bulk generation** — dev-tier generator (`deepseek/deepseek-chat-v3-0324`) fills remaining quota per dimension via combinatorial variation.
+3. **Judge filter** — cheap dev-tier judge (`google/gemini-2.0-flash-001`) scores every task on three dimensions (1–5 each): `input_coherence`, `ground_truth_verifiability`, `rubric_clarity`. Thresholds: all ≥ 3. Tasks below any threshold are dropped.
+4. **Pairwise dedup** — within each dimension, pairs of tasks with `SequenceMatcher` ratio > 0.75 on `candidate_output.body` are sent to the cheap judge for pairwise comparison; the less diagnostic task is dropped.
+5. **Spot-check calibration** — 50 accepted tasks are re-scored with the eval-tier model. Results written to `synthesis_calibration_log.json` for methodology documentation (calibration only — does not gate tasks).
+
+**Model-family rotation policy (preference-leakage prevention — Li et al. 2025):**
+
+- Hard-seed generator : eval-tier family (Anthropic)
+- Bulk generator      : dev-tier A (DeepSeek)
+- Judge (filtering)   : dev-tier B (Google)
+- Spot-check judge    : eval-tier family (Anthropic)
+
+Generator and judge are always from different model families. The eval-tier model is never used as a bulk generator.
+
+All costs logged to `generation_scripts/synthesis_cost_log.json`. Calibration results in `generation_scripts/synthesis_calibration_log.json`.
 
 ### Hand-Authored Adversarial
 Manually crafted edge cases: multi-signal conflict, similar-stack trap, case study inflation, guilt-trip re-engagement, dual objection, emoji in cold outreach, signature bloat. Highest originality.
@@ -78,7 +96,7 @@ Manually crafted edge cases: multi-signal conflict, similar-stack trap, case stu
 |---|---|---|
 | weak-evidence-overclaim | 39 | P007, P008, P009, P011 |
 | bench-over-commitment | 26 | P012, P013, P014 |
-| tone-drift | 26 | P015, P016, P017, P035 |
+| tone-drift | 30 | P015, P016, P017, P035 |
 | competitor-gap-assertion | 26 | P032, P034 |
 | timezone-fabrication | 25 | P026, P027 |
 | icp-misclassification | 19 | P001, P005, P006 |
@@ -89,11 +107,11 @@ Manually crafted edge cases: multi-signal conflict, similar-stack trap, case stu
 | directness-subject-line | 8 | — |
 | bench-jargon | 6 | P015 |
 | single-clear-ask | 3 | — |
-| hype-vocabulary | 2 | — |
+| hype-vocabulary | 10 | — |
 
 ## Partition Protocol
 
-Final split: **train 50% (116) / dev 31% (71) / held_out 19% (43)** — tracks the 50/30/20 target within ±1pp on every partition.
+Final split: **train 50% (121) / dev 30% (73) / held_out 20% (48)** — tracks the 50/30/20 target within ±1pp on every partition.
 
 Pipeline:
 
