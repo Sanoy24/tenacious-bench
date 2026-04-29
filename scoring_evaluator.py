@@ -44,6 +44,22 @@ RUNNING ON EXAMPLE TASKS
 
 This loads the three concrete example tasks (one per source mode) with
 pre-computed expected outcomes documented in example_tasks.json.
+
+INPUT VALIDATION
+----------------
+Every task is validated before scoring. A task that fails validation is
+recorded with score=0 and an "error" field in the result — the evaluator
+never crashes on malformed input. Validation checks:
+
+  - task_id present (string)
+  - scoring.checks is a non-empty list
+  - scoring.max_score is a non-negative integer
+  - candidate_output is a dict (may be empty — checks handle missing fields)
+  - each check has "id", "type", and "points" fields
+
+Individual check execution is also wrapped in try-except. A check that
+raises an unexpected error (e.g., malformed regex pattern) is recorded as
+failed with points_awarded=0 and a diagnostic "error" detail string.
 """
 from __future__ import annotations
 
@@ -67,7 +83,10 @@ TIMEZONE_RE = re.compile(
 
 
 def read_tasks(path: Path) -> list[dict[str, Any]]:
-    """Read tasks from a file or directory recursively."""
+    """Read tasks from a file or directory recursively.
+
+    Malformed JSONL lines are skipped with a warning rather than crashing.
+    """
     if path.is_dir():
         tasks: list[dict[str, Any]] = []
         for candidate in sorted(path.rglob("*")):
@@ -76,9 +95,21 @@ def read_tasks(path: Path) -> list[dict[str, Any]]:
         return tasks
 
     if path.suffix.lower() == ".jsonl":
-        return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        tasks = []
+        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if not line.strip():
+                continue
+            try:
+                tasks.append(json.loads(line))
+            except json.JSONDecodeError as exc:
+                logger.warning("Skipping malformed JSONL line %d in %s: %s", i, path, exc)
+        return tasks
 
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Invalid JSON in {path}: {exc}") from exc
+
     if isinstance(payload, list):
         return payload
     if isinstance(payload, dict) and "example_tasks" in payload:
@@ -86,6 +117,53 @@ def read_tasks(path: Path) -> list[dict[str, Any]]:
     if isinstance(payload, dict):
         return [payload]
     raise ValueError(f"Unsupported task payload in {path}")
+
+
+def validate_task(task: dict[str, Any]) -> list[str]:
+    """Return a list of validation error strings for a task.
+
+    An empty list means the task is structurally valid and safe to score.
+    Validation is intentionally lenient: missing optional fields (e.g.,
+    candidate_output.body) are allowed — individual checks handle absent
+    values by treating them as empty strings.
+    """
+    errors: list[str] = []
+
+    if not isinstance(task.get("task_id"), str) or not task["task_id"].strip():
+        errors.append("task_id must be a non-empty string")
+
+    scoring = task.get("scoring")
+    if not isinstance(scoring, dict):
+        errors.append("scoring must be a dict")
+    else:
+        checks = scoring.get("checks")
+        if not isinstance(checks, list) or len(checks) == 0:
+            errors.append("scoring.checks must be a non-empty list")
+        else:
+            for idx, check in enumerate(checks):
+                if not isinstance(check, dict):
+                    errors.append(f"checks[{idx}] must be a dict")
+                    continue
+                for required_key in ("id", "type", "points"):
+                    if required_key not in check:
+                        errors.append(f"checks[{idx}] missing required field '{required_key}'")
+                try:
+                    int(check.get("points", 0))
+                except (TypeError, ValueError):
+                    errors.append(f"checks[{idx}].points must be numeric, got {check.get('points')!r}")
+
+        max_score = scoring.get("max_score")
+        try:
+            val = int(max_score)
+            if val < 0:
+                errors.append(f"scoring.max_score must be >= 0, got {val}")
+        except (TypeError, ValueError):
+            errors.append(f"scoring.max_score must be numeric, got {max_score!r}")
+
+    if not isinstance(task.get("candidate_output", {}), dict):
+        errors.append("candidate_output must be a dict when present")
+
+    return errors
 
 
 def get_target_text(task: dict[str, Any], target: str) -> str:
@@ -264,29 +342,58 @@ def evaluate_task(task: dict[str, Any]) -> dict[str, Any]:
     constraint for that dimension. Low-point checks (typically 1 pt)
     guard format compliance. An output can score partial points by
     passing format checks while failing the policy constraint.
+
+    Malformed tasks are returned with score=0 and an "error" field listing
+    every validation problem found. Individual check errors (e.g. bad regex
+    pattern) are isolated: that check scores 0 and records a diagnostic
+    detail string; other checks are unaffected.
     """
+    task_id = task.get("task_id", "<unknown>")
+
+    validation_errors = validate_task(task)
+    if validation_errors:
+        logger.warning("Task %s failed validation: %s", task_id, "; ".join(validation_errors))
+        return {
+            "task_id": task_id,
+            "partition": task.get("partition"),
+            "source_mode": task.get("source_mode"),
+            "dimension": task.get("dimension"),
+            "score": 0,
+            "max_score": 0,
+            "passed_all_checks": False,
+            "error": validation_errors,
+            "checks": [],
+        }
+
     checks = task.get("scoring", {}).get("checks", [])
     max_score = int(task.get("scoring", {}).get("max_score", 0))
     awarded = 0
     results: list[dict[str, Any]] = []
 
     for check in checks:
-        passed, detail = evaluate_check(task, check)
-        points = int(check.get("points", 0)) if passed else 0
+        check_id = check.get("id", "<unknown>")
+        check_type = check.get("type", "<unknown>")
+        points_possible = int(check.get("points", 0))
+        try:
+            passed, detail = evaluate_check(task, check)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Check %s on task %s raised %s: %s", check_id, task_id, type(exc).__name__, exc)
+            passed, detail = False, f"error: {type(exc).__name__}: {exc}"
+        points = points_possible if passed else 0
         awarded += points
         results.append(
             {
-                "id": check["id"],
-                "type": check["type"],
+                "id": check_id,
+                "type": check_type,
                 "passed": passed,
                 "points_awarded": points,
-                "points_possible": int(check.get("points", 0)),
+                "points_possible": points_possible,
                 "detail": detail,
             }
         )
 
     return {
-        "task_id": task.get("task_id"),
+        "task_id": task_id,
         "partition": task.get("partition"),
         "source_mode": task.get("source_mode"),
         "dimension": task.get("dimension"),
@@ -311,11 +418,29 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    tasks = read_tasks(Path(args.path))
+    path = Path(args.path)
+    if not path.exists():
+        logger.error("Path not found: %s", path)
+        return 1
+
+    try:
+        tasks = read_tasks(path)
+    except (ValueError, OSError) as exc:
+        logger.error("Failed to read tasks from %s: %s", path, exc)
+        return 1
+
+    if not tasks:
+        logger.warning("No tasks found at %s", path)
+
     results = [evaluate_task(task) for task in tasks]
+    invalid = sum(1 for r in results if "error" in r)
+    if invalid:
+        logger.warning("%d task(s) skipped due to validation errors", invalid)
+
     summary = {
         "task_count": len(results),
         "passed_all": sum(1 for result in results if result["passed_all_checks"]),
+        "invalid_tasks": invalid,
         "results": results,
     }
     logger.info(f"Evaluation complete: {summary['passed_all']}/{summary['task_count']} passed")
