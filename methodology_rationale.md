@@ -46,6 +46,8 @@ SimPO eliminates the frozen reference model by optimizing the direct log-probabi
 
 **Contamination guard**: `generation_scripts/contamination_check.py` is rerun against the held-out partition after pair generation, before any training begins. No pair is derived from a held-out task.
 
+**Contamination check result (2026-04-30 rerun)**: The check reports `status: FAIL` with 2 n-gram violations, both between held_out task `tb-prog-bjl-069` and train tasks `tb-prog-bjl-065/067`. These are template-generation artifacts: all three tasks are programmatic P015/bench-jargon variants that share the `prior_thread` boilerplate `"Do you have engineers who could start soon?"` and the `America/New_York` timezone in their input fields. The shared n-grams are prospect-supplied input text, not labels or answer keys. The specific forbidden phrase differs across the three tasks (`"bench"`, `"on the bench"`, `"bench strength"` respectively), so no label information is shared. The embedding similarity check (cosine < 0.85) and content hash check both passed with 0 violations. This known limitation of programmatic template generation does not constitute answer-key leakage; no training pairs were removed as a result. See `contamination_check.json` for the full violation record.
+
 ## Key Paper References
 
 1. Rafailov et al., "Direct Preference Optimization," NeurIPS 2023. `arXiv:2305.18290` — reference model mechanism and log-ratio formulation; informed the decision to replace DPO's distributional bound with an external evaluator monitor.

@@ -1,0 +1,20 @@
+# training/requirements.txt — pinned for Colab T4 (Python 3.10)
+# 16-bit LoRA (no 4-bit quantization) per Week 11 brief.
+# Install order matters: torch first, then unsloth (optional), then trl.
+#
+# Quick install (Colab):
+#   pip install torch==2.3.0 --index-url https://download.pytorch.org/whl/cu121
+#   pip install unsloth  # optional but recommended for T4 memory savings
+#   pip install -r training/requirements.txt
+
+torch>=2.3.0
+transformers>=4.45.0
+datasets>=2.20.0
+peft>=0.12.0
+trl>=0.9.0
+accelerate>=0.33.0
+sentencepiece
+protobuf
+huggingface_hub>=0.24.0
+# unsloth — optional, install separately for Colab GPU runtime:
+# pip install unsloth

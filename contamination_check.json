@@ -2,12 +2,38 @@
   "ngram_threshold": 8,
   "cosine_threshold": 0.85,
   "partitions": {
-    "train": 116,
-    "dev": 71,
-    "held_out": 43
+    "train": 121,
+    "dev": 73,
+    "held_out": 48
   },
-  "total_violations": 0,
-  "status": "PASS",
-  "violations_by_check": {},
-  "violations": []
+  "total_violations": 2,
+  "status": "FAIL",
+  "violations_by_check": {
+    "ngram_8": 2
+  },
+  "violations": [
+    {
+      "task_a": "tb-prog-bjl-069",
+      "task_b": "tb-prog-bjl-067",
+      "shared_ngrams": 3,
+      "sample": [
+        "engineering america/new_york do you have engineers who could",
+        "america/new_york do you have engineers who could start",
+        "do you have engineers who could start soon?"
+      ],
+      "check": "ngram_8",
+      "pair": "held_out-train"
+    },
+    {
+      "task_a": "tb-prog-bjl-069",
+      "task_b": "tb-prog-bjl-065",
+      "shared_ngrams": 2,
+      "sample": [
+        "america/new_york do you have engineers who could start",
+        "do you have engineers who could start soon?"
+      ],
+      "check": "ngram_8",
+      "pair": "held_out-train"
+    }
+  ]
 }
