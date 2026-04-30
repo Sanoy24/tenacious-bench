@@ -3,10 +3,9 @@ training/train_judge.py
 
 SimPO preference fine-tuning for the Tenacious-Bench judge.
 
-Backbone: unsloth/Qwen3.5-1.7B-Instruct  (Qwen 3.5 ~2B per challenge brief)
-  — verify exact model ID from https://unsloth.ai/docs/models/qwen3.5/fine-tune
-  — override via --model if the HF repo name differs
-Algorithm: SimPO (Meng et al., NeurIPS 2024) via TRL SimPOTrainer
+Backbone: unsloth/Qwen3.5-4B  (fits the brief's 4B tier; ~8 GB fp16 weights, T4-safe with LoRA)
+  — override via --model to use a smaller size (e.g. unsloth/Qwen3.5-1.7B)
+Algorithm: SimPO (Meng et al., NeurIPS 2024) via TRL CPOTrainer (loss_type="simpo")
 LoRA: rank=16, alpha=32, 16-bit (NO 4-bit quantization — per Week 11 brief)
 Precision: fp16 on T4, bf16 on Ampere+ (auto-detected)
 
@@ -49,12 +48,12 @@ LOG_PATH = ROOT / "training" / "training_run.log"
 
 # ── Hyperparameters ──────────────────────────────────────────────────────────
 
-# Verify the exact model ID from https://unsloth.ai/docs/models/qwen3.5/fine-tune
-# before running on Colab. Override with --model if needed.
-MODEL_ID = "unsloth/Qwen3.5-1.7B-Instruct"
+# Override with --model to switch sizes (e.g. unsloth/Qwen3.5-1.7B for tighter VRAM).
+MODEL_ID = "unsloth/Qwen3.5-4B"
 BETA = 2.0  # SimPO β (reward scaling)
-# γ is passed via CLI --gamma; default 2.5 per methodology_rationale.md.
-# γ=1.5 is the ablation variant.  TRL uses gamma_beta_ratio = γ / β.
+# γ is passed via CLI --gamma; default 1.0 → γ/β = 0.5, the SimPO paper's
+# Mistral/Llama best-region (Meng et al. 2024, Table 3). γ=1.5 → γ/β=0.75 is the
+# upper-edge ablation variant. TRL's CPOConfig.simpo_gamma takes γ/β directly.
 
 LORA_RANK = 16
 LORA_ALPHA = 32
@@ -138,7 +137,7 @@ def load_model_and_tokenizer(model_id: str, lora_rank: int, lora_alpha: int):
     Prefers Unsloth (~2x faster, less VRAM via fused kernels); falls back to
     standard transformers + PEFT. Precision is fp16 on T4, bf16 on Ampere+.
     """
-    dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() and torch.cuda.get_device_capability()[0] >= 8 else torch.float16
     dtype_name = "bf16" if dtype == torch.bfloat16 else "fp16"
 
     try:
@@ -283,8 +282,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument(
         "--gamma",
         type=float,
-        default=2.5,
-        help="SimPO target reward margin γ (default 2.5; ablation 1.5)",
+        default=1.0,
+        help="SimPO target reward margin γ (default 1.0 → γ/β=0.5; ablation 1.5 → γ/β=0.75)",
     )
     p.add_argument(
         "--model", default=MODEL_ID, help="HuggingFace model ID for the backbone"
@@ -361,55 +360,6 @@ def append_cost_record(
         cost_usd,
     )
 
-
-def setup_hf_auth(hf_repo: str) -> None:
-    """Authenticate with HuggingFace before model load so a bad token fails fast.
-
-    Priority: HF_TOKEN env var → Colab Secrets → interactive login.
-    Only runs when --hf-repo is set.
-    """
-    if not hf_repo:
-        return
-
-    from huggingface_hub import HfApi, login
-
-    token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
-    if token:
-        login(token=token, add_to_git_credential=False)
-        log.info("HF auth: token loaded from environment")
-    else:
-        try:
-            from google.colab import userdata  # type: ignore
-
-            token = userdata.get("HF_TOKEN")
-            if token:
-                login(token=token, add_to_git_credential=False)
-                log.info("HF auth: token loaded from Colab Secrets")
-                return
-        except (ImportError, Exception):
-            pass
-        log.info("HF auth: no token found — launching interactive login")
-        log.info(
-            "  To avoid this: add HF_TOKEN to Colab Secrets (lock icon in sidebar)"
-        )
-        try:
-            from huggingface_hub import notebook_login  # type: ignore
-
-            notebook_login()
-        except Exception:
-            login()
-
-    try:
-        whoami = HfApi().whoami()
-        log.info("HF auth verified — logged in as: %s", whoami["name"])
-    except Exception as exc:
-        log.error("HF auth check failed: %s", exc)
-        log.error(
-            "Check token has 'write' scope at https://huggingface.co/settings/tokens"
-        )
-        sys.exit(1)
-
-
 def main() -> None:
     args = parse_args()
     gamma = args.gamma
@@ -420,8 +370,6 @@ def main() -> None:
         else _PLATFORM_RATES[args.platform]
     )
 
-    # Authenticate before the 30-90 min model load so a bad token fails fast
-    setup_hf_auth(args.hf_repo)
 
     log.info("=" * 60)
     log.info("Tenacious-Bench SimPO Judge Training")
@@ -452,20 +400,22 @@ def main() -> None:
 
     # ── SimPO config ─────────────────────────────────────────────────────────
     try:
-        from trl import SimPOConfig, SimPOTrainer
+        from trl import CPOConfig, CPOTrainer
     except ImportError as e:
-        log.error("TRL SimPOTrainer not available: %s", e)
+        log.error("TRL CPOTrainer not available: %s", e)
         log.error("Install with: pip install trl>=0.9.0")
         sys.exit(1)
 
-    use_bf16 = torch.cuda.is_bf16_supported()
+    use_bf16 = torch.cuda.is_bf16_supported() and torch.cuda.get_device_capability()[0] >= 8
     use_fp16 = not use_bf16
 
-    simpo_config = SimPOConfig(
+    simpo_config = CPOConfig(
         output_dir=str(CKPT_DIR),
         # SimPO-specific
+        loss_type="simpo",
+        cpo_alpha=0.0,
         beta=BETA,
-        gamma_beta_ratio=gamma_beta_ratio,
+        simpo_gamma=gamma_beta_ratio,
         # Training
         num_train_epochs=NUM_EPOCHS,
         per_device_train_batch_size=BATCH_SIZE,
@@ -500,12 +450,12 @@ def main() -> None:
         dataloader_num_workers=0,
     )
 
-    trainer = SimPOTrainer(
+    trainer = CPOTrainer(
         model=model,
         args=simpo_config,
         train_dataset=train_ds,
         eval_dataset=eval_ds,
-        processing_class=tokenizer,
+        processing_class=getattr(tokenizer, "tokenizer", tokenizer),
     )
 
     # ── Baseline pairwise accuracy before training ────────────────────────────
