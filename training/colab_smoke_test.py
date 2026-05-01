@@ -83,32 +83,35 @@ def load_model_and_tokenizer(model_id: str):
 
     print(f"[smoke] Loading {model_id} in {dtype_name}")
 
-    try:
-        from unsloth import FastLanguageModel
+    if torch.cuda.get_device_capability()[0] >= 8:
+        try:
+            from unsloth import FastLanguageModel
 
-        model, tokenizer = FastLanguageModel.from_pretrained(
-            model_name=model_id,
-            max_seq_length=MAX_LEN,
-            load_in_4bit=False,
-            dtype=dtype,
-        )
+            model, tokenizer = FastLanguageModel.from_pretrained(
+                model_name=model_id,
+                max_seq_length=MAX_LEN,
+                load_in_4bit=False,
+                dtype=dtype,
+            )
 
-        model = FastLanguageModel.get_peft_model(
-            model,
-            r=LORA_RANK,
-            lora_alpha=LORA_ALPHA,
-            lora_dropout=0.0,
-            target_modules=LORA_TARGETS,
-            bias="none",
-            use_gradient_checkpointing="unsloth",
-            random_state=SEED,
-        )
+            model = FastLanguageModel.get_peft_model(
+                model,
+                r=LORA_RANK,
+                lora_alpha=LORA_ALPHA,
+                lora_dropout=0.0,
+                target_modules=LORA_TARGETS,
+                bias="none",
+                use_gradient_checkpointing="unsloth",
+                random_state=SEED,
+            )
 
-        print("[smoke] Unsloth LoRA attached")
-        return model, tokenizer, dtype
+            print("[smoke] Unsloth LoRA attached")
+            return model, tokenizer, dtype
 
-    except ImportError:
-        print("[smoke] Unsloth not found → fallback to transformers")
+        except ImportError:
+            print("[smoke] Unsloth not found → fallback to transformers")
+    else:
+        print("[smoke] Unsloth bypassed on T4 to prevent compiler crashes. Using standard transformers.")
 
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from peft import LoraConfig, get_peft_model, TaskType

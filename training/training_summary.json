@@ -1,0 +1,22 @@
+{
+  "model_id": "unsloth/Qwen2.5-3B-Instruct",
+  "beta": 2.0,
+  "gamma": 1.5,
+  "gamma_beta_ratio": 0.75,
+  "lora_rank": 16,
+  "lora_alpha": 32,
+  "seed": 42,
+  "train_pairs": 618,
+  "dev_pairs": 347,
+  "num_epochs": 2,
+  "effective_batch_size": 8,
+  "learning_rate": 5e-05,
+  "training_loss": 0.01618441540211699,
+  "baseline_pairwise_acc": 0.98,
+  "final_pairwise_acc": 1.0,
+  "pairwise_acc_delta": 0.020000000000000018,
+  "wall_time_min": 16.14,
+  "platform": "colab",
+  "hourly_rate_usd": 0.0,
+  "cost_usd": 0.0
+}

@@ -3,8 +3,9 @@ training/train_judge.py
 
 SimPO preference fine-tuning for the Tenacious-Bench judge.
 
-Backbone: unsloth/Qwen3.5-4B  (fits the brief's 4B tier; ~8 GB fp16 weights, T4-safe with LoRA)
-  — override via --model to use a smaller size (e.g. unsloth/Qwen3.5-1.7B)
+Backbone: unsloth/Qwen2.5-3B-Instruct  (standard transformer, fp16-safe on T4; Qwen3.5-4B
+  requires bf16 via GatedDeltaNet hybrid layers and is Ampere+-only)
+  — override via --model (e.g. unsloth/Qwen2.5-7B-Instruct on A100)
 Algorithm: SimPO (Meng et al., NeurIPS 2024) via TRL CPOTrainer (loss_type="simpo")
 LoRA: rank=16, alpha=32, 16-bit (NO 4-bit quantization — per Week 11 brief)
 Precision: fp16 on T4, bf16 on Ampere+ (auto-detected)
@@ -52,8 +53,9 @@ LOG_PATH = ROOT / "training" / "training_run.log"
 
 # ── Hyperparameters ──────────────────────────────────────────────────────────
 
-# Override with --model to switch sizes (e.g. unsloth/Qwen3.5-1.7B for tighter VRAM).
-MODEL_ID = "unsloth/Qwen3.5-4B"
+# Qwen3.5-4B has GatedDeltaNet layers that require bf16 (Ampere+) — incompatible with T4.
+# Qwen2.5-3B-Instruct is a standard transformer that runs in fp16 on T4 with Unsloth.
+MODEL_ID = "unsloth/Qwen2.5-3B-Instruct"
 BETA = 2.0  # SimPO β (reward scaling)
 # γ is passed via CLI --gamma; default 1.0 → γ/β = 0.5, the SimPO paper's
 # Mistral/Llama best-region (Meng et al. 2024, Table 3). γ=1.5 → γ/β=0.75 is the

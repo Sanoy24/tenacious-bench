@@ -1,0 +1,26 @@
+[
+  {
+    "timestamp": "2026-05-01T02:27:04.302102Z",
+    "bucket": "training_compute",
+    "platform": "colab",
+    "hourly_rate_usd": 0.0,
+    "wall_time_min": 16.25,
+    "cost_usd": 0.0,
+    "model_id": "unsloth/Qwen2.5-3B-Instruct",
+    "train_pairs": 618,
+    "gamma": 1.0,
+    "note": "SimPO LoRA fine-tune \u2014 618 pairs, \u03b3=1.0"
+  },
+  {
+    "timestamp": "2026-05-01T02:50:05.878903Z",
+    "bucket": "training_compute",
+    "platform": "colab",
+    "hourly_rate_usd": 0.0,
+    "wall_time_min": 16.14,
+    "cost_usd": 0.0,
+    "model_id": "unsloth/Qwen2.5-3B-Instruct",
+    "train_pairs": 618,
+    "gamma": 1.5,
+    "note": "SimPO LoRA fine-tune \u2014 618 pairs, \u03b3=1.5"
+  }
+]
