@@ -1,0 +1,22 @@
+{
+  "delta_a_bootstrap": {
+    "observed_delta": 0.0227,
+    "ci_95_lo": 0.0,
+    "ci_95_hi": 0.0682,
+    "p_value": 0.372,
+    "significant": false,
+    "n_pairs": 44,
+    "bootstrap_iters": 1000
+  },
+  "delta_b_bootstrap": {
+    "observed_delta": 0.0,
+    "ci_95_lo": 0.0,
+    "ci_95_hi": 0.0,
+    "p_value": 1.0,
+    "significant": false,
+    "n_pairs": 44,
+    "bootstrap_iters": 1000
+  },
+  "seed": 42,
+  "bootstrap_iters": 1000
+}

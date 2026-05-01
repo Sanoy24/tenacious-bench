@@ -1,0 +1,82 @@
+{
+  "claims": [
+    {
+      "claim": "100.00% pairwise accuracy (Delta A)",
+      "document": "delivery_memo.md, blog_post.md",
+      "source": "ablations/ablation_results.json",
+      "resolution": "Key 'delta_a.trained_pairwise_acc', value 1.0"
+    },
+    {
+      "claim": "+2.27pp improvement over baseline",
+      "document": "delivery_memo.md, blog_post.md",
+      "source": "ablations/ablation_results.json",
+      "resolution": "Key 'delta_a.delta', value 0.0227"
+    },
+    {
+      "claim": "p=0.372",
+      "document": "delivery_memo.md, blog_post.md",
+      "source": "ablations/statistical_tests.json",
+      "resolution": "Key 'delta_a_bootstrap.p_value', value 0.372"
+    },
+    {
+      "claim": "CI=[0.0%, 6.8%]",
+      "document": "delivery_memo.md, blog_post.md",
+      "source": "ablations/statistical_tests.json",
+      "resolution": "Keys 'delta_a_bootstrap.ci_95_lo'=0.0 and 'ci_95_hi'=0.0682"
+    },
+    {
+      "claim": "Delta B (+0.00%)",
+      "document": "delivery_memo.md, blog_post.md",
+      "source": "ablations/ablation_results.json",
+      "resolution": "Key 'delta_b.delta', value 0.0"
+    },
+    {
+      "claim": "97.73% baseline pairwise accuracy",
+      "document": "delivery_memo.md, blog_post.md, model_card.md",
+      "source": "ablations/ablation_results.json",
+      "resolution": "Key 'delta_a.base_pairwise_acc', value 0.9773"
+    },
+    {
+      "claim": "44 eval pairs from 48 held-out tasks",
+      "document": "delivery_memo.md, blog_post.md, model_card.md",
+      "source": "ablations/ablation_results.json",
+      "resolution": "Keys 'held_out_tasks'=48, 'eval_pairs'=44"
+    },
+    {
+      "claim": "Training time 16.14 minutes",
+      "document": "blog_post.md",
+      "source": "training/training_summary.json",
+      "resolution": "Key 'wall_time_min', value 16.14"
+    },
+    {
+      "claim": "Training cost $0.00",
+      "document": "delivery_memo.md, blog_post.md",
+      "source": "training/training_summary.json",
+      "resolution": "Key 'cost_usd', value 0.0"
+    },
+    {
+      "claim": "618 training pairs, 347 dev pairs",
+      "document": "model_card.md",
+      "source": "training/training_summary.json",
+      "resolution": "Keys 'train_pairs'=618, 'dev_pairs'=347"
+    },
+    {
+      "claim": "SimPO beta=2.0, gamma=1.5, margin=0.75",
+      "document": "model_card.md, blog_post.md",
+      "source": "training/training_summary.json",
+      "resolution": "Keys 'beta'=2.0, 'gamma'=1.5, 'gamma_beta_ratio'=0.75"
+    },
+    {
+      "claim": "242 tasks across 14 dimensions",
+      "document": "datasheet.md",
+      "source": "tenacious_bench_v0.1/composition_summary.json",
+      "resolution": "Top-level count fields in composition summary"
+    },
+    {
+      "claim": "42ms latency overhead (trained vs base)",
+      "document": "model_card.md",
+      "source": "ablations/ablation_results.json",
+      "resolution": "Key 'cost_pareto.latency_overhead_trained_vs_base_ms', value 42.1"
+    }
+  ]
+}

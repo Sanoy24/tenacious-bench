@@ -1,0 +1,56 @@
+{
+  "model_id": "unsloth/Qwen2.5-3B-Instruct",
+  "adapter_path": "/content/tenacious-bench/training/checkpoints/final_adapter",
+  "gamma": 1.0,
+  "held_out_tasks": 48,
+  "eval_pairs": 44,
+  "deterministic_baseline": {
+    "metric": "pass_rate (scoring_evaluator on candidate_output)",
+    "pass_rate": 0.0,
+    "passed": 0,
+    "total": 48
+  },
+  "delta_a": {
+    "description": "Trained judge (LoRA) vs base model \u2014 pairwise accuracy on held-out",
+    "base_pairwise_acc": 0.9773,
+    "trained_pairwise_acc": 1.0,
+    "delta": 0.0227,
+    "bootstrap_test": {
+      "observed_delta": 0.0227,
+      "ci_95_lo": 0.0,
+      "ci_95_hi": 0.0682,
+      "p_value": 0.372,
+      "significant": false,
+      "n_pairs": 44,
+      "bootstrap_iters": 1000
+    }
+  },
+  "delta_b": {
+    "description": "Prompt-engineered judge (base + rubric system prompt) vs base \u2014 pairwise accuracy",
+    "note": "Tests whether a careful system prompt matches training; report honestly even if negative.",
+    "base_pairwise_acc": 0.9773,
+    "prompt_engineered_acc": 0.9773,
+    "delta": 0.0,
+    "bootstrap_test": {
+      "observed_delta": 0.0,
+      "ci_95_lo": 0.0,
+      "ci_95_hi": 0.0,
+      "p_value": 1.0,
+      "significant": false,
+      "n_pairs": 44,
+      "bootstrap_iters": 1000
+    }
+  },
+  "delta_c": {
+    "description": "Informational only \u2014 reuse Week 10 tau2-bench score if available.",
+    "note": "tau2-bench retail NOT re-run (cost-discipline rule). Use Week 10 score as reference.",
+    "week10_tau2_score": null
+  },
+  "cost_pareto": {
+    "base_avg_latency_ms": 255.8,
+    "trained_avg_latency_ms": 297.8,
+    "prompt_engineered_avg_latency_ms": 290.6,
+    "latency_overhead_trained_vs_base_ms": 42.1,
+    "note": "Inference cost is $0 (Colab T4). Latency overhead is the only production cost signal."
+  }
+}
