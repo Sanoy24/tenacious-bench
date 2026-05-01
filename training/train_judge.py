@@ -393,6 +393,7 @@ def main() -> None:
 
     # ── Load model ───────────────────────────────────────────────────────────
     model, tokenizer = load_model_and_tokenizer(args.model, LORA_RANK, LORA_ALPHA)
+    tokenizer = getattr(tokenizer, "tokenizer", tokenizer)  # Bypass vision processor
 
     if args.dry_run:
         log.info("Dry-run complete — model and data loaded, exiting without training")
