@@ -424,19 +424,67 @@ def load_base_model(model_id: str):
     return model, tokenizer
 
 
+def resolve_adapter_path(adapter_path: str) -> str:
+    """Find the directory that contains adapter_config.json.
+
+    Training sometimes saves to a numbered checkpoint subdirectory
+    (e.g. checkpoints/checkpoint-156/) rather than the final_adapter path.
+    Walk the given path and its immediate children to find adapter_config.json.
+    """
+    p = Path(adapter_path)
+    # Direct hit
+    if (p / "adapter_config.json").exists():
+        return str(p)
+    # Search one level down (checkpoint-N subdirs)
+    candidates = sorted(
+        [d for d in p.iterdir() if d.is_dir() and (d / "adapter_config.json").exists()],
+        key=lambda d: d.stat().st_mtime,
+        reverse=True,
+    ) if p.exists() else []
+    if candidates:
+        log.info(
+            "adapter_config.json not in %s — using %s instead",
+            adapter_path, candidates[0],
+        )
+        return str(candidates[0])
+    # Try parent directory (in case final_adapter itself is one level too deep)
+    parent = p.parent
+    if (parent / "adapter_config.json").exists():
+        log.info("adapter_config.json found in parent %s", parent)
+        return str(parent)
+    # Search parent's children
+    parent_candidates = sorted(
+        [d for d in parent.iterdir() if d.is_dir() and (d / "adapter_config.json").exists()],
+        key=lambda d: d.stat().st_mtime,
+        reverse=True,
+    ) if parent.exists() else []
+    if parent_candidates:
+        log.info(
+            "adapter_config.json not in %s — using latest sibling %s",
+            adapter_path, parent_candidates[0],
+        )
+        return str(parent_candidates[0])
+    raise FileNotFoundError(
+        f"Cannot find adapter_config.json under {adapter_path} or its siblings. "
+        f"Run: find {p.parent} -name adapter_config.json"
+    )
+
+
 def load_trained_model(adapter_path: str, model_id: str):
     from peft import PeftModel  # type: ignore
+
+    resolved = resolve_adapter_path(adapter_path)
+    log.info("Resolved adapter path: %s", resolved)
 
     dtype = (
         torch.bfloat16
         if torch.cuda.is_bf16_supported() and torch.cuda.get_device_capability()[0] >= 8
         else torch.float16
     )
-    log.info("Loading trained model %s + LoRA from %s", model_id, adapter_path)
+    log.info("Loading trained model %s + LoRA from %s", model_id, resolved)
 
     try:
         from unsloth import FastLanguageModel  # type: ignore
-        from transformers import AutoTokenizer
 
         base_model, tokenizer = FastLanguageModel.from_pretrained(
             model_name=model_id,
@@ -445,7 +493,7 @@ def load_trained_model(adapter_path: str, model_id: str):
             dtype=dtype,
         )
         tokenizer = getattr(tokenizer, "tokenizer", tokenizer)
-        model = PeftModel.from_pretrained(base_model, adapter_path)
+        model = PeftModel.from_pretrained(base_model, resolved)
         log.info("Loaded via Unsloth + PeftModel")
         return model, tokenizer
 
@@ -460,7 +508,7 @@ def load_trained_model(adapter_path: str, model_id: str):
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-    model = PeftModel.from_pretrained(base_model, adapter_path)
+    model = PeftModel.from_pretrained(base_model, resolved)
     log.info("Loaded via transformers + PeftModel")
     return model, tokenizer
 
