@@ -120,24 +120,57 @@ def save_chosen_cache(task_id: str, chosen_text: str) -> None:
         f.write(json.dumps({"task_id": task_id, "chosen_text": chosen_text}) + "\n")
 
 
+def _retry_hint(task: dict[str, Any], base_msg: str) -> str:
+    """Append a stricter reminder about required phrases on retry attempts."""
+    checks = task.get("scoring", {}).get("checks", [])
+    required_phrases: list[str] = []
+    for c in checks:
+        if c.get("type") == "required_phrases_any":
+            required_phrases.extend(c.get("phrases", []))
+    if not required_phrases:
+        return base_msg
+    phrase_list = ", ".join(f'"{p}"' for p in required_phrases)
+    hint = (
+        f"\n\nCRITICAL: your body MUST contain one of these EXACT phrases "
+        f"(copy-paste one verbatim): {phrase_list}"
+    )
+    return base_msg + hint
+
+
 def generate_chosen_outputs(
     tasks: list[dict[str, Any]],
     cache: dict[str, str],
 ) -> dict[str, str]:
-    """Generate corrected chosen outputs for held-out tasks via OpenRouter."""
+    """Generate corrected chosen outputs for held-out tasks via OpenRouter.
+
+    Accepts the best attempt if it scores strictly higher than the rejected
+    (candidate_output) baseline — even when it doesn't pass all checks —
+    because the key property for pairwise evaluation is chosen > rejected,
+    not chosen == perfect.
+    """
     updated_cache = dict(cache)
     to_generate = [t for t in tasks if t["task_id"] not in updated_cache]
     log.info("Generating chosen outputs for %d tasks", len(to_generate))
 
     for i, task in enumerate(to_generate):
         tid = task["task_id"]
-        user_msg = build_user_message(task)
-        messages = [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_msg},
-        ]
+        # Score the rejected side once so we know the floor
+        rejected_result = evaluate_task(task)
+        rejected_score = rejected_result.get("score", 0)
+        max_score = rejected_result.get("max_score", 1)
+
+        base_user_msg = build_user_message(task)
+        best_score = -1
+        best_text: str | None = None
         chosen_text: str | None = None
-        for attempt in range(1, 4):
+
+        for attempt in range(1, 5):  # up to 4 tries
+            # From attempt 2 onward, add explicit phrase reminder
+            user_msg = base_user_msg if attempt == 1 else _retry_hint(task, base_user_msg)
+            messages = [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": user_msg},
+            ]
             raw = call_openrouter(messages)
             if raw is None:
                 break
@@ -145,27 +178,45 @@ def generate_chosen_outputs(
             if parsed is None:
                 log.warning("%s attempt %d: unparseable response", tid, attempt)
                 continue
-            # Validate with scoring_evaluator
+
             test_task = dict(task)
             test_task["candidate_output"] = parsed
             result = evaluate_task(test_task)
+            score = result.get("score", 0)
+            candidate_text = f"Subject: {parsed['subject']}\n\n{parsed['body']}"
+
+            if score > best_score:
+                best_score = score
+                best_text = candidate_text
+
             if result.get("passed_all_checks"):
-                chosen_text = f"Subject: {parsed['subject']}\n\n{parsed['body']}"
+                chosen_text = candidate_text
+                log.info(
+                    "[%d/%d] %s — perfect score %d/%d on attempt %d",
+                    i + 1, len(to_generate), tid, score, max_score, attempt,
+                )
                 break
             log.warning(
-                "%s attempt %d: evaluator failed (score %d/%d)",
-                tid,
-                attempt,
-                result.get("score", 0),
-                result.get("max_score", 0),
+                "%s attempt %d: score %d/%d (rejected baseline=%d)",
+                tid, attempt, score, max_score, rejected_score,
+            )
+
+        # Accept best attempt if it strictly beats the rejected output
+        if chosen_text is None and best_text is not None and best_score > rejected_score:
+            chosen_text = best_text
+            log.info(
+                "[%d/%d] %s — accepted best score %d/%d (rejected=%d)",
+                i + 1, len(to_generate), tid, best_score, max_score, rejected_score,
             )
 
         if chosen_text:
             updated_cache[tid] = chosen_text
             save_chosen_cache(tid, chosen_text)
-            log.info("[%d/%d] %s — chosen generated", i + 1, len(to_generate), tid)
         else:
-            log.warning("[%d/%d] %s — skipped (no valid rewrite)", i + 1, len(to_generate), tid)
+            log.warning(
+                "[%d/%d] %s — skipped (best=%d rejected=%d, not better)",
+                i + 1, len(to_generate), tid, best_score, rejected_score,
+            )
 
     return updated_cache
 
@@ -184,6 +235,9 @@ def build_eval_pairs(
             continue
         # Score the rejected (candidate_output) with the evaluator
         eval_result = evaluate_task(task)
+        if eval_result.get("error"):
+            log.warning("Skipping %s — validation error: %s", tid, eval_result["error"])
+            continue
         pairs.append(
             {
                 "task_id": tid,
