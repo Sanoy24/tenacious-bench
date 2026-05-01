@@ -13,6 +13,9 @@ Precision: fp16 on T4, bf16 on Ampere+ (auto-detected)
 Designed to run on Colab T4. Unsloth is used when available for faster LoRA
 kernels; falls back to standard transformers + PEFT otherwise.
 
+Expected Wall-clock Time: ~16 minutes
+Hardware Requirements: 1x NVIDIA T4 GPU (16GB VRAM) or better
+
 Usage (Colab):
   # install first — see requirements.txt
   python training/train_judge.py [--gamma 2.5] [--hf-repo your-hf-user/tenacious-judge-qwen3.5-1.7b]
@@ -56,6 +59,7 @@ LOG_PATH = ROOT / "training" / "training_run.log"
 # Qwen3.5-4B has GatedDeltaNet layers that require bf16 (Ampere+) — incompatible with T4.
 # Qwen2.5-3B-Instruct is a standard transformer that runs in fp16 on T4 with Unsloth.
 MODEL_ID = "unsloth/Qwen2.5-3B-Instruct"
+MODEL_REVISION = "main"  # Pin to specific commit hash (e.g., "1234abcd") for absolute reproducibility
 BETA = 2.0  # SimPO β (reward scaling)
 # γ is passed via CLI --gamma; default 1.0 → γ/β = 0.5, the SimPO paper's
 # Mistral/Llama best-region (Meng et al. 2024, Table 3). γ=1.5 → γ/β=0.75 is the
@@ -155,6 +159,7 @@ def load_model_and_tokenizer(model_id: str, lora_rank: int, lora_alpha: int):
             max_seq_length=MAX_LEN,
             load_in_4bit=False,  # 16-bit LoRA per Week 11 brief
             dtype=dtype,
+            revision=MODEL_REVISION,
         )
         model = FastLanguageModel.get_peft_model(
             model,
@@ -182,8 +187,9 @@ def load_model_and_tokenizer(model_id: str, lora_rank: int, lora_alpha: int):
         model_id,
         device_map="auto",
         torch_dtype=dtype,
+        revision=MODEL_REVISION,
     )
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    tokenizer = AutoTokenizer.from_pretrained(model_id, revision=MODEL_REVISION)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
