@@ -4,15 +4,22 @@
 
 Built for the TRP1 Week 11 challenge: auditing what public benchmarks miss for Tenacious-style technical staffing outreach, constructing a 242-task machine-verifiable dataset, and training a SimPO LoRA judge that lifts pairwise accuracy on sealed held-out tasks from **97.73% → 100.00%** (+2.27pp, p=0.372).
 
+## Public Links
+
+- **Hugging Face Dataset:** https://huggingface.co/datasets/sanoy24/tenacious_bench_v0.1
+- **Hugging Face Model Adapter:** https://huggingface.co/sanoy24/tenacious-judge-qwen25-3b-gamma15
+- **Technical Blog Post:** https://yonasmekonnen.substack.com/p/building-a-0-100-accurate-ai-sales?r=8bkitf
+- **Community Engagement Post:** https://github.com/sierra-research/tau2-bench/issues/278
+
 ---
 
 ## Key Results
 
-| Condition | Pairwise Accuracy | Delta | Significance |
-|---|---|---|---|
-| Base Qwen2.5-3B (zero-shot) | 97.73% | — | — |
-| Prompt-engineered base (Delta B) | 97.73% | +0.00pp | p=1.0 |
-| SimPO LoRA adapter (Delta A) | **100.00%** | **+2.27pp** | p=0.372, CI=[0.0%, 6.8%] |
+| Condition                        | Pairwise Accuracy | Delta       | Significance             |
+| -------------------------------- | ----------------- | ----------- | ------------------------ |
+| Base Qwen2.5-3B (zero-shot)      | 97.73%            | —           | —                        |
+| Prompt-engineered base (Delta B) | 97.73%            | +0.00pp     | p=1.0                    |
+| SimPO LoRA adapter (Delta A)     | **100.00%**       | **+2.27pp** | p=0.372, CI=[0.0%, 6.8%] |
 
 **Honest interpretation:** The ceiling effect dominates at n=44 eval pairs. The base model is already strong; the adapter patches the remaining adversarial edge cases. Delta B=0 confirms that prompting alone cannot close the gap — training is required. Statistical significance cannot be established at this sample size; a larger adversarial held-out slice is the v0.2 priority.
 
@@ -22,12 +29,12 @@ Built for the TRP1 Week 11 challenge: auditing what public benchmarks miss for T
 
 ## Public Artifacts
 
-| Artifact | URL |
-|---|---|
-| HuggingFace Dataset | `[TBD — add after HF push]` |
-| HuggingFace Model (LoRA adapter) | `[TBD — add after HF push]` |
-| Technical Blog Post | `[TBD — add after publish]` |
-| Community Engagement | `[TBD — add GitHub issue link]` |
+| Artifact                         | URL                             |
+| -------------------------------- | ------------------------------- |
+| HuggingFace Dataset              | `[TBD — add after HF push]`     |
+| HuggingFace Model (LoRA adapter) | `[TBD — add after HF push]`     |
+| Technical Blog Post              | `[TBD — add after publish]`     |
+| Community Engagement             | `[TBD — add GitHub issue link]` |
 
 ---
 
@@ -146,31 +153,31 @@ Results are written to `ablations/ablation_results.json` and `ablations/statisti
 
 ### Source Modes
 
-| Mode | Tasks | Share | How |
-|---|---|---|---|
-| Programmatic sweeps | 79 | 33% | Combinatorial expansion across company size, stack, bench state, signal confidence |
-| Trace-derived | 68 | 28% | Real Week 10 agent outputs restructured into (input, candidate, rubric) triples |
-| Multi-LLM synthesis | 56 | 23% | Claude Sonnet seeds → DeepSeek bulk → GPT-4o-mini judge filter |
-| Hand-authored adversarial | 39 | 16% | Highest originality; edge cases specifically designed to defeat baseline models |
+| Mode                      | Tasks | Share | How                                                                                |
+| ------------------------- | ----- | ----- | ---------------------------------------------------------------------------------- |
+| Programmatic sweeps       | 79    | 33%   | Combinatorial expansion across company size, stack, bench state, signal confidence |
+| Trace-derived             | 68    | 28%   | Real Week 10 agent outputs restructured into (input, candidate, rubric) triples    |
+| Multi-LLM synthesis       | 56    | 23%   | Claude Sonnet seeds → DeepSeek bulk → GPT-4o-mini judge filter                     |
+| Hand-authored adversarial | 39    | 16%   | Highest originality; edge cases specifically designed to defeat baseline models    |
 
 ### Failure Dimensions
 
-| Dimension | Tasks | Probes | Description |
-|---|---|---|---|
-| weak-evidence-overclaim | 39 | P007–P011 | Asserting on LOW/MEDIUM confidence signals |
-| tone-drift | 30 | P015–P017, P035 | Jargon, hype, guilt-trips, emojis |
-| bench-over-commitment | 26 | P012–P014 | Promising capacity the bench does not have |
-| competitor-gap-assertion | 26 | P032–P034 | Accusing rather than asking about competitor gaps |
-| timezone-fabrication | 25 | P027 | Fabricating local time when timezone is null |
-| icp-misclassification | 19 | P001–P006 | Wrong segment assignment |
-| dual-control-coordination | 16 | P023–P025 | Acting without auth/confirmation |
-| pricing-objection | 12 | — | Discounting or matching offshore rates |
-| segment-2-first-touch | 12 | P010 | Referencing layoffs in cold outreach |
-| signal-overclaim | 10 | P020, P036 | Over-interpreting weak public signals |
-| hype-vocabulary | 10 | — | Banned high-energy vocabulary in cold outreach |
-| directness-subject-line | 8 | — | Vague or clickbait subject lines |
-| bench-jargon | 6 | P015 | Internal terminology exposed to prospects |
-| single-clear-ask | 3 | — | Multiple asks in one email |
+| Dimension                 | Tasks | Probes          | Description                                       |
+| ------------------------- | ----- | --------------- | ------------------------------------------------- |
+| weak-evidence-overclaim   | 39    | P007–P011       | Asserting on LOW/MEDIUM confidence signals        |
+| tone-drift                | 30    | P015–P017, P035 | Jargon, hype, guilt-trips, emojis                 |
+| bench-over-commitment     | 26    | P012–P014       | Promising capacity the bench does not have        |
+| competitor-gap-assertion  | 26    | P032–P034       | Accusing rather than asking about competitor gaps |
+| timezone-fabrication      | 25    | P027            | Fabricating local time when timezone is null      |
+| icp-misclassification     | 19    | P001–P006       | Wrong segment assignment                          |
+| dual-control-coordination | 16    | P023–P025       | Acting without auth/confirmation                  |
+| pricing-objection         | 12    | —               | Discounting or matching offshore rates            |
+| segment-2-first-touch     | 12    | P010            | Referencing layoffs in cold outreach              |
+| signal-overclaim          | 10    | P020, P036      | Over-interpreting weak public signals             |
+| hype-vocabulary           | 10    | —               | Banned high-energy vocabulary in cold outreach    |
+| directness-subject-line   | 8     | —               | Vague or clickbait subject lines                  |
+| bench-jargon              | 6     | P015            | Internal terminology exposed to prospects         |
+| single-clear-ask          | 3     | —               | Multiple asks in one email                        |
 
 ### Quality Controls
 
@@ -185,23 +192,23 @@ Results are written to `ablations/ablation_results.json` and `ablations/statisti
 
 **Why Path B:** Week 10 traces showed inconsistency failures — the agent gets bench-over-commitment and weak-evidence claims right most of the time but cannot detect when it is wrong. A preference-tuned judge deployed as a rejection-sampling layer directly targets this failure mode.
 
-| Hyperparameter | Value |
-|---|---|
-| Backbone | `unsloth/Qwen2.5-3B-Instruct` |
-| Algorithm | SimPO via TRL `CPOTrainer` |
-| LoRA rank | 16 |
-| LoRA alpha | 32 |
-| β (beta) | 2.0 |
-| γ (gamma) | 1.5 |
-| Margin (γ/β) | 0.75 |
-| Epochs | 2 |
-| Effective batch size | 8 |
-| Learning rate | 5e-5 |
-| Training pairs | 618 (train) + 347 (dev) |
-| Seed | 42 |
-| Platform | Google Colab T4 (free) |
-| Wall time | 16.14 min |
-| Cost | $0.00 |
+| Hyperparameter       | Value                         |
+| -------------------- | ----------------------------- |
+| Backbone             | `unsloth/Qwen2.5-3B-Instruct` |
+| Algorithm            | SimPO via TRL `CPOTrainer`    |
+| LoRA rank            | 16                            |
+| LoRA alpha           | 32                            |
+| β (beta)             | 2.0                           |
+| γ (gamma)            | 1.5                           |
+| Margin (γ/β)         | 0.75                          |
+| Epochs               | 2                             |
+| Effective batch size | 8                             |
+| Learning rate        | 5e-5                          |
+| Training pairs       | 618 (train) + 347 (dev)       |
+| Seed                 | 42                            |
+| Platform             | Google Colab T4 (free)        |
+| Wall time            | 16.14 min                     |
+| Cost                 | $0.00                         |
 
 Training script: [training/train_judge.py](training/train_judge.py). Full loss curves: [training/training_run.log](training/training_run.log).
 
@@ -221,33 +228,33 @@ uv run python scoring_evaluator.py --path example_tasks.json --pretty
 
 Implemented check types (13):
 
-| Check Type | Description |
-|---|---|
-| `forbidden_phrases` | Banned words/phrases that must not appear |
-| `required_phrases_any` | At least one required phrase must be present |
-| `forbidden_regex` | Regex-based policy enforcement |
-| `max_words` | Word count ceiling (120 for cold outreach) |
-| `max_question_marks` | Single-clear-ask enforcement |
-| `no_prospect_local_when_timezone_missing` | Timezone fabrication guard |
-| `no_unavailable_stack_commitment` | Bench capacity guard |
-| `icp_segment_size_guard` | Company size threshold check |
-| `no_emoji_in_cold_outreach` | Emoji ban in cold outreach |
-| `signature_format_check` | Signature line count limit |
-| `requires_confirmation_before_action` | Dual-control confirmation guard |
-| `requires_auth_verification` | Identity verification guard |
-| `no_fabricated_identifiers` | No fabricated order/reference IDs |
+| Check Type                                | Description                                  |
+| ----------------------------------------- | -------------------------------------------- |
+| `forbidden_phrases`                       | Banned words/phrases that must not appear    |
+| `required_phrases_any`                    | At least one required phrase must be present |
+| `forbidden_regex`                         | Regex-based policy enforcement               |
+| `max_words`                               | Word count ceiling (120 for cold outreach)   |
+| `max_question_marks`                      | Single-clear-ask enforcement                 |
+| `no_prospect_local_when_timezone_missing` | Timezone fabrication guard                   |
+| `no_unavailable_stack_commitment`         | Bench capacity guard                         |
+| `icp_segment_size_guard`                  | Company size threshold check                 |
+| `no_emoji_in_cold_outreach`               | Emoji ban in cold outreach                   |
+| `signature_format_check`                  | Signature line count limit                   |
+| `requires_confirmation_before_action`     | Dual-control confirmation guard              |
+| `requires_auth_verification`              | Identity verification guard                  |
+| `no_fabricated_identifiers`               | No fabricated order/reference IDs            |
 
 ---
 
 ## Cost Summary
 
-| Bucket | Spent | Budget |
-|---|---|---|
-| Dataset authoring (multi-LLM synthesis) | $0.10 | $3–5 |
-| Path B chosen-rewrite generation | $0.28 | (in above) |
-| Training compute | $0.00 | $0–5 |
-| Held-out evaluation | $0.00 | $2–3 |
-| **Total** | **$0.38** | **$10.00** |
+| Bucket                                  | Spent     | Budget     |
+| --------------------------------------- | --------- | ---------- |
+| Dataset authoring (multi-LLM synthesis) | $0.10     | $3–5       |
+| Path B chosen-rewrite generation        | $0.28     | (in above) |
+| Training compute                        | $0.00     | $0–5       |
+| Held-out evaluation                     | $0.00     | $2–3       |
+| **Total**                               | **$0.38** | **$10.00** |
 
 Full itemized log: [cost_log.md](cost_log.md).
 

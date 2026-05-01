@@ -69,6 +69,13 @@ The dataset uses a four-mode authoring blend:
 **What mechanisms were used to prevent contamination?**
 The 64-record `held_out` partition is strictly sealed. We manually injected adversarial edge cases only into the `held_out` partition to ensure zero data leakage between the evaluation slice and the training slice.
 
+## Preprocessing/cleaning/labeling
+**Was any preprocessing/cleaning/labeling of the data performed?**
+Yes. For the multi-LLM synthesis partition, a lightweight dev-tier model (Gemini 2.0 Flash) was used as a pointwise judge. It scored all generated tasks on a 1-5 scale for `input_coherence`, `ground_truth_verifiability`, and `rubric_clarity`. Any task scoring below a 3 on any dimension was dropped. Near-duplicate tasks were also resolved via pairwise deduplication.
+
+**Is the software used to preprocess/clean/label the instances available?**
+Yes. The complete source code is available in `generation_scripts/multi_llm_synthesis.py`.
+
 ## Uses
 **What tasks could the dataset be used for?**
 * **Preference Tuning (DPO/SimPO/ORPO):** Teaching small models to penalize confident hallucinations in a sales context.
@@ -77,9 +84,25 @@ The 64-record `held_out` partition is strictly sealed. We manually injected adve
 **Is there anything about the composition of the dataset or the way it was collected and preprocessed/cleaned/labeled that might impact future uses?**
 The baseline models score highly on this dataset. A baseline 3B-parameter model achieves 98.4% zero-shot accuracy. Future expansions should drastically scale the volume of "hand-authored adversarial" cases to lower the baseline ceiling.
 
+## Limitations and Bias
+**What are the known limitations and biases of the dataset?**
+* **Size Constraint:** The `held_out` partition contains only 64 tasks. This small `N` restricts the statistical power (p-value) when measuring performance deltas between highly capable models.
+* **Domain Narrowness:** The dataset is hyper-specific to the Tenacious B2B technical staffing domain. It is not designed to evaluate general-purpose sales capability.
+* **LLM Assessor Bias:** The synthesized portion of the dataset was filtered using a Gemini model, which may induce verbosity or structural biases aligned with that model's training data.
+
 ## Distribution
 **Will the dataset be distributed to third parties outside of the entity on behalf of which the dataset was created?**
 Yes, it is designed to be hosted publicly on Hugging Face to contribute to the open evaluation community.
 
 **What license applies?**
 CC-BY-4.0.
+
+## Maintenance
+**Who is maintaining the dataset?**
+The author of the Tenacious-Bench challenge submission.
+
+**Is there an erratum?**
+No erratum exists for v0.1.
+
+**Will the dataset be updated?**
+This is a static v0.1 release for the Week 11 challenge. Future versions (v0.2) will focus on tightening phrase-list regexes per the inter-rater agreement findings.
