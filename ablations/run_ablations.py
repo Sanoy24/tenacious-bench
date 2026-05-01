@@ -36,6 +36,8 @@ from pathlib import Path
 from typing import Any
 
 import torch
+import torch._dynamo
+torch._dynamo.config.disable = True
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -440,13 +442,6 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    torch._dynamo_disable = True  # type: ignore[attr-defined]
-    try:
-        import torch._dynamo
-        torch._dynamo.config.disable = True
-    except Exception:
-        pass
-
     ABLATIONS_DIR.mkdir(parents=True, exist_ok=True)
 
     # ── 1. Load held-out tasks ────────────────────────────────────────────────
