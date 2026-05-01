@@ -36,6 +36,10 @@ from pathlib import Path
 from typing import Any
 
 import torch
+import torch._dynamo
+# T4 (sm75) cannot JIT-compile Triton kernels — disable dynamo to avoid the
+# "no kernel image" crash while preserving Unsloth's pre-compiled CUDA kernels.
+torch._dynamo.config.disable = True
 from datasets import Dataset
 
 # ── Paths ────────────────────────────────────────────────────────────────────
