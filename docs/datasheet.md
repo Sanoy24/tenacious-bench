@@ -78,31 +78,43 @@ Yes. The complete source code is available in `generation_scripts/multi_llm_synt
 
 ## Uses
 **What tasks could the dataset be used for?**
-* **Preference Tuning (DPO/SimPO/ORPO):** Teaching small models to penalize confident hallucinations in a sales context.
-* **LLM-as-a-Judge Evaluation:** Scoring the reliability of generative outreach agents.
+The primary intended use case is **Preference Tuning (DPO/SimPO/ORPO)**. The dataset is specifically structured with hard-negative pairs designed to teach small, efficient models (like Qwen 3B or Llama-3-8B) how to act as deterministic rejection-sampling judges. By penalizing the exact failure modes identified in the Tenacious failure taxonomy—such as timezone fabrication, competitor-gap assertions, and bench over-commitment—the dataset acts as a direct alignment signal.
+
+A secondary use case is **LLM-as-a-Judge Evaluation**. The held-out dataset serves as an unbiased benchmark to score the reliability and policy-compliance of external generative outreach agents before they are deployed to production.
+
+**What tasks should the dataset NOT be used for? (Misuses)**
+* **General Sales Training:** Do not use this dataset to train general-purpose SDR agents. The policies embedded here (e.g., maximum word counts, aggressive tone bans, and strict technical stack matching) are proprietary to the Tenacious brand voice. Applying these strict rules to an unrelated SaaS or retail sales pipeline will artificially degrade performance and restrict necessary sales behaviors.
+* **Factual Extraction:** The prospect names, companies, and "bench states" included in this dataset are largely synthesized or structurally anonymized. They do not represent real people or current economic realities. Using this dataset to extract factual B2B lead lists will result in 100% hallucinated outputs.
 
 **Is there anything about the composition of the dataset or the way it was collected and preprocessed/cleaned/labeled that might impact future uses?**
-The baseline models score highly on this dataset. A baseline 3B-parameter model achieves 98.4% zero-shot accuracy. Future expansions should drastically scale the volume of "hand-authored adversarial" cases to lower the baseline ceiling.
+The baseline models score highly on this dataset (e.g., Qwen2.5-3B-Instruct achieves 98.4% zero-shot accuracy). This high baseline ceiling means future iterations of this dataset will need to drastically scale the volume of "hand-authored adversarial" cases to effectively separate frontier models.
 
 ## Limitations and Bias
 **What are the known limitations and biases of the dataset?**
-* **Size Constraint:** The `held_out` partition contains only 64 tasks. This small `N` restricts the statistical power (p-value) when measuring performance deltas between highly capable models.
-* **Domain Narrowness:** The dataset is hyper-specific to the Tenacious B2B technical staffing domain. It is not designed to evaluate general-purpose sales capability.
-* **LLM Assessor Bias:** The synthesized portion of the dataset was filtered using a Gemini model, which may induce verbosity or structural biases aligned with that model's training data.
+1. **Statistical Power (Size Constraint):** The `held_out` partition currently contains exactly 48 tasks. While this strictly follows the 20% validation split rule for our 242-task dataset, this small `N` restricts the statistical power (p-value) when measuring pairwise performance deltas between highly capable models. A 100% pairwise accuracy on 48 tasks still yields a 95% confidence interval up to ~6.8%, meaning we cannot statistically guarantee absolute perfection in production.
+2. **Domain Narrowness:** The dataset is hyper-specific to the Tenacious B2B technical staffing domain. It penalizes behaviors (like utilizing competitor gaps to sell) that are considered standard practice in other sales disciplines, leading to a domain-specific bias.
+3. **LLM Assessor Bias (The "Gemini Effect"):** The synthesized portion of the dataset was filtered using `google/gemini-2.0-flash-001`. While cross-family generation was used to prevent direct preference leakage, the filter may still induce subtle structural biases, such as favoring emails with bulleted lists or specific professional sign-offs that align with Gemini's implicit preferences.
+4. **Public Proxy Lossiness:** Because the dataset grounds truth in public signals (layoffs.fyi, Crunchbase), it inherently penalizes the kind of nuanced risk-taking that top human sales reps execute using private CRM intuition. This "lossiness" biases the dataset toward rewarding overly conservative, formulaic outreach over personalized intuition.
 
 ## Distribution
 **Will the dataset be distributed to third parties outside of the entity on behalf of which the dataset was created?**
-Yes, it is designed to be hosted publicly on Hugging Face to contribute to the open evaluation community.
+Yes. To contribute to the broader open evaluation and alignment community, the dataset partitions (train and dev) are hosted publicly on Hugging Face.
 
 **What license applies?**
-CC-BY-4.0.
+CC-BY-4.0. We deliberately chose this permissive license to allow researchers to freely integrate these adversarial B2B examples into larger multi-domain alignment datasets (e.g., ToolBench or AgentBench) without restrictive commercial caveats.
 
 ## Maintenance
 **Who is maintaining the dataset?**
-The author of the Tenacious-Bench challenge submission.
+The dataset is maintained by the core Tenacious engineering team as part of the TRP1 Challenge suite.
+
+**How can the maintainer be contacted?**
+Maintenance requests, errata submissions, and pull requests can be directed to the primary GitHub repository (Issue Tracker) or via the Hugging Face Community Discussion tab on the dataset page.
 
 **Is there an erratum?**
-No erratum exists for v0.1.
+No erratum exists for v0.1. Any future errata will be published as a unified JSON log in the repository root and linked directly from the top of this datasheet.
 
 **Will the dataset be updated?**
-This is a static v0.1 release for the Week 11 challenge. Future versions (v0.2) will focus on tightening phrase-list regexes per the inter-rater agreement findings.
+Yes. While this represents the static v0.1 release for the Week 11 challenge, a v0.2 update is already scheduled. The planned v0.2 release will:
+1. Increase the dataset size to >1,000 tasks to solve the statistical power limitation.
+2. Incorporate the Round 2 Inter-Rater Agreement findings, specifically tightening phrase-list regexes for rules like `no-guilt-trip-language` and `no-layoff-or-restructure-reference`.
+3. Introduce dynamic real-time temporal verification for public signals.

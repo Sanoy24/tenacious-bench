@@ -156,7 +156,9 @@ Four checks run after partitioning, all on the **values of input fields only** (
 1. **N-gram overlap** — no shared 8-grams on input values across any partition pair.
 2. **Embedding similarity** — cosine < 0.85 between any cross-partition pair (all-MiniLM-L6-v2).
 3. **Content hash** — no duplicate input payloads across partitions.
-4. **Temporal integrity** — only tasks that explicitly declare a public-data source (via `metadata.signal_source` ∈ {`layoffs.fyi`, `crunchbase`, `sec_edgar`, …}) must carry a `metadata.time_window` documenting the snapshot window. Synthetic-signal tasks (the default in v0.1) are stamped `signal_source: "synthetic"` and exempted, since pretending synthetic data has a real time window is exactly the fabrication the rule is designed to prevent.
+4. **Temporal integrity (Time-Shift Verification)** — only tasks that explicitly declare a public-data source (via `metadata.signal_source` ∈ {`layoffs.fyi`, `crunchbase`, `sec_edgar`, …}) must carry a valid `metadata.time_window`. 
+   * **Explicit Signal Window Assumption:** For v0.1, we assume the valid signal window for time-sensitive public data is strictly between the years **2024 and 2026**. 
+   * **Inclusion Gating:** Any task referencing a public data source without a time window, or with a time window that falls outside this explicitly allowed 2024-2026 boundary (e.g., historical 2022 data), is strictly gated and excluded from the final partitions to prevent temporal leakage. Synthetic-signal tasks are exempted.
 
 **Current status: PASS, 0 violations** across all four checks. Report committed to `contamination_check.json`. Re-running `repartition.py` is the canonical way to regenerate partitions if new tasks are added.
 

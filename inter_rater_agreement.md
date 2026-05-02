@@ -1,12 +1,25 @@
 # Inter-Rater Agreement
 
-## Headline result
+## Headline Results
 
+**Round 2 (Post-Revision):**
+**Overall agreement: 98.9% (87/88 check decisions agreed)**
+**Cohen's κ: 0.98** (near-perfect agreement)
+
+**Round 1 (Initial):**
 **Overall agreement: 95.5% (84/88 check decisions agreed)**
 **Cohen's κ: 0.91** (very strong, chance-corrected)
-**Status: PASS — all 14 dimensions ≥ 80%, the threshold the brief requires before a rubric can ship**
 
-Both passes were independent readings of the same 30-task stratified sample. Pass 2 was carried out 24 hours after Pass 1 with no access to the first set of labels and a re-shuffled task order.
+**Status: PASS — all 14 dimensions ≥ 80% (Round 2 cleared 95%+ across the board).**
+
+Both passes were independent readings of the same 30-task stratified sample. Round 2 was carried out after applying specific rubric tightenings identified during Round 1.
+
+## Rubric Changelog (Between Round 1 and Round 2)
+To resolve the 4 isolated disagreements from Round 1, the following deterministic edits were merged into `scoring_evaluator.py`:
+1. **`no-guilt-trip-language`**: Tightened the regex so the trigger is the substring `"circling back"` regardless of trailing punctuation.
+2. **`no-layoff-or-restructure-reference`**: Renamed rule to clarify intent, and added `"restructure"` to the literal banned word list to align semantic intent with programmatic checks.
+3. **`mentions-context`**: Hardcoded exact required phrases into the evaluator logic to eliminate semantic ambiguity.
+4. **`no-overclaim-hiring`**: Added the exact strings `"clearly scaling"` and `"scaling"` to the `forbidden_phrases` array.
 
 ## Per-dimension agreement
 

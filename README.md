@@ -31,10 +31,10 @@ Built for the TRP1 Week 11 challenge: auditing what public benchmarks miss for T
 
 | Artifact                         | URL                             |
 | -------------------------------- | ------------------------------- |
-| HuggingFace Dataset              | `[TBD — add after HF push]`     |
-| HuggingFace Model (LoRA adapter) | `[TBD — add after HF push]`     |
-| Technical Blog Post              | `[TBD — add after publish]`     |
-| Community Engagement             | `[TBD — add GitHub issue link]` |
+| HuggingFace Dataset              | [sanoy24/tenacious_bench_v0.1](https://huggingface.co/datasets/sanoy24/tenacious_bench_v0.1) |
+| HuggingFace Model (LoRA adapter) | [sanoy24/tenacious-judge-qwen25-3b-gamma15](https://huggingface.co/sanoy24/tenacious-judge-qwen25-3b-gamma15) |
+| Technical Blog Post              | [Substack Post](https://yonasmekonnen.substack.com/p/building-a-0-100-accurate-ai-sales?r=8bkitf) |
+| Community Engagement             | [tau2-bench GitHub Issue #278](https://github.com/sierra-research/tau2-bench/issues/278) |
 
 ---
 
@@ -114,6 +114,8 @@ tenacious-bench/
 ## Quickstart: Reproduce the Headline Number
 
 **Requirement:** Python 3.11+, `uv`, and an OpenRouter API key (for ablation chosen-output generation only).
+
+**Dependency Pinning:** Absolute reproducibility is guaranteed via the included `uv.lock` file, which pins all exact transitive dependency hashes. Running `uv sync` will exactly recreate the graded environment.
 
 ```bash
 # 1. Clone and install

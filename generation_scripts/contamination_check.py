@@ -207,17 +207,26 @@ def check_temporal_integrity(tasks: list[dict[str, Any]], partition_name: str) -
     `metadata.signal_source` that names the public source AND a
     `metadata.time_window` documenting the snapshot window. Synthetic-signal
     tasks (the default in v0.1) carry `signal_source: "synthetic"` and are
-    exempt — pretending synthetic data has a real time window is exactly
-    the fabrication the rule is designed to prevent.
+    exempt.
+    
+    Explicit Signal Window Assumption:
+    For v0.1, all valid time-sensitive public data must fall within the allowed
+    temporal window of "2024" to "2026". Any data from 2023 or earlier, or
+    missing bounds, is gated and excluded to prevent temporal leakage.
     """
     violations: list[dict[str, Any]] = []
     invalid_windows = {"", "placeholder", "tbd", "unknown", "n/a"}
+    valid_years = {"2024", "2025", "2026"}
+    
     for t in tasks:
         meta = t.get("metadata", {})
         signal_source = str(meta.get("signal_source", "")).strip().lower()
-        # Only tasks that *claim* a public source are subject to the check.
+        
+        # Only tasks that *claim* a public source are subject to the explicit check.
         if signal_source in PUBLIC_DATA_SOURCES:
             tw = str(meta.get("time_window", "")).strip().lower()
+            
+            # 1. Must exist
             if not tw or tw in invalid_windows:
                 violations.append({
                     "task": t.get("task_id"),
@@ -225,6 +234,18 @@ def check_temporal_integrity(tasks: list[dict[str, Any]], partition_name: str) -
                     "signal_source": signal_source,
                     "time_window_value": tw,
                     "check": "temporal_integrity_missing",
+                })
+                continue
+                
+            # 2. Must be within the explicitly allowed temporal window (2024-2026)
+            has_valid_year = any(year in tw for year in valid_years)
+            if not has_valid_year:
+                violations.append({
+                    "task": t.get("task_id"),
+                    "partition": partition_name,
+                    "signal_source": signal_source,
+                    "time_window_value": tw,
+                    "check": "temporal_integrity_out_of_bounds",
                 })
     return violations
 

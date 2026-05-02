@@ -59,7 +59,7 @@ LOG_PATH = ROOT / "training" / "training_run.log"
 # Qwen3.5-4B has GatedDeltaNet layers that require bf16 (Ampere+) — incompatible with T4.
 # Qwen2.5-3B-Instruct is a standard transformer that runs in fp16 on T4 with Unsloth.
 MODEL_ID = "unsloth/Qwen2.5-3B-Instruct"
-MODEL_REVISION = "main"  # Pin to specific commit hash (e.g., "1234abcd") for absolute reproducibility
+MODEL_REVISION = "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b"  # Pin to specific commit hash for absolute reproducibility
 BETA = 2.0  # SimPO β (reward scaling)
 # γ is passed via CLI --gamma; default 1.0 → γ/β = 0.5, the SimPO paper's
 # Mistral/Llama best-region (Meng et al. 2024, Table 3). γ=1.5 → γ/β=0.75 is the
@@ -149,6 +149,8 @@ def load_model_and_tokenizer(model_id: str, lora_rank: int, lora_alpha: int):
     """
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() and torch.cuda.get_device_capability()[0] >= 8 else torch.float16
     dtype_name = "bf16" if dtype == torch.bfloat16 else "fp16"
+    
+    log.info(f"Pinning model ({model_id}) to specific commit hash: {MODEL_REVISION}")
 
     try:
         from unsloth import FastLanguageModel  # type: ignore
