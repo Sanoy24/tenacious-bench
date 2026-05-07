@@ -66,6 +66,17 @@ Evaluated on a sealed held-out partition of 48 tasks (44 eval pairs; 4 tasks ski
 
 Paired bootstrap test (1000 iterations, seed=42): p=0.372, 95% CI=[0.0%, 6.8%] — not statistically significant due to high baseline and n=44. The ceiling effect is the primary constraint; see blog post for full interpretation.
 
+## What training did (Day-3 diagnostic, post paired research with Amir Ahmedin)
+
+Per-pair diagnostic on the 100-pair dev evaluation window (`ablations/per_pair_diagnostic_dev100.jsonl`), comparing base Qwen2.5-3B against the trained adapter:
+
+- **2 pairs flipped from wrong to right; 0 pairs regressed.** The flipped pairs are `tb-syn-047` (synthetic, base_margin=−0.262 → +2.285) and `tb-prog-dsl-054` (programmatic-DSL, base_margin=−0.074 → +8.922). Neither is in the adversarial probe set (P007/P011/P027).
+- **All 18 adversarial pairs in the eval window were already correctly ranked by the base model.** Training did not flip any adversarial pair; it pushed their margins wider but did not change outcomes. Lift on adversarial subset: +0.
+- **76 of 100 pairs sat in the `silent_passenger` regime (M ≥ 1.75) at start of training.** Per the per-pair gradient mechanics in `methodology_rationale.md`, those pairs contributed under 12% of max gradient at step zero, decaying to near-zero as training pushed margins wider.
+- **9 pairs sat in `below_gamma_real_signal` (M < 0.75) at start.** Of the 18 adversarial, exactly 1 sat in this bucket (correct-but-close, not wrong); 6 in `moderate_fading`; 11 in `silent_passenger`.
+
+The headline +2.27pp held-out result (delta_a) is real, but it came from non-adversarial easy edges, not from the adversarial cases the bench was built to stress. The bench's adversarial set is at ceiling for Qwen2.5-3B in pairwise log-prob mode. The bench may still discriminate in generation-mode evaluation; pairwise classification is not the regime where these probes do work.
+
 ## Limitations and Bias
 
 - Highly specialized to the Tenacious style guide and bench format; not intended for general-purpose preference judging.

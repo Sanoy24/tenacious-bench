@@ -23,7 +23,8 @@
       "significant": false,
       "n_pairs": 44,
       "bootstrap_iters": 1000
-    }
+    },
+    "interpretation": "Lift came from non-adversarial pairs; training did not move the cases the bench was built for. Per `ablations/per_pair_diagnostic_dev100.jsonl` (Day-3 paired research with Amir Ahmedin), the 2 dev-side flips landed on `tb-syn-047` and `tb-prog-dsl-054`, both non-adversarial. All 18 adversarial pairs (P007/P011/P027) in the dev eval window were already correctly ranked by the base model (18/18) and remained correctly ranked after training (18/18). Lift on adversarial subset: +0. The held-out partition was not separately diagnosed in Day 3; the 1 held-out flip is most likely non-adversarial by analogy with the dev pattern. Slack distribution on dev: 9 pairs in below_gamma_real_signal, 15 in moderate_fading, 76 in silent_passenger \u2014 76% of the eval window contributed near-zero gradient at start of training. Implication: the bench's adversarial set (P007/P011/P027) is at ceiling for Qwen2.5-3B in pairwise log-prob mode; pairwise classification is not the regime where these probes discriminate, even if they remain valid in generation mode."
   },
   "delta_b": {
     "description": "Prompt-engineered judge (base + rubric system prompt) vs base \u2014 pairwise accuracy",
