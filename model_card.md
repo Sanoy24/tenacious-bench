@@ -64,7 +64,7 @@ Evaluated on a sealed held-out partition of 48 tasks (44 eval pairs; 4 tasks ski
 | Prompt-engineered base (Delta B) | 97.73% (43/44)    | +0.00pp     |
 | SimPO LoRA adapter (Delta A)     | 100.00% (44/44)   | **+2.27pp** |
 
-Paired bootstrap test (1000 iterations, seed=42): p=0.372, 95% CI=[0.0%, 6.8%] — not statistically significant due to high baseline and n=44. The ceiling effect is the primary constraint; see blog post for full interpretation.
+Paired bootstrap test (1000 iterations, seed=42): p=0.372, 95% CI=[0.0%, 6.8%] (n=44). This result should not be read as "the improvement is likely somewhere between 0% and 6.8%." With a 97.73% baseline, only one pair discriminated between the adapter and the base model; the CI reflects the sampling variability of that single pair, not a range of plausible true effect sizes. The evaluation cannot confirm or rule out a real improvement — it is structurally underpowered for the regime the adapter was trained on.
 
 ## What training did (Day-3 diagnostic, post paired research with Amir Ahmedin)
 
@@ -81,7 +81,7 @@ The headline +2.27pp held-out result (delta_a) is real, but it came from non-adv
 
 - Highly specialized to the Tenacious style guide and bench format; not intended for general-purpose preference judging.
 - The base Qwen2.5-3B model already achieves 97.7% zero-shot on this domain; this adapter patches the remaining adversarial edge cases.
-- Statistical lift cannot be proven at n=44; a larger adversarial held-out slice is needed for conclusive measurement.
+- Statistical lift cannot be confirmed with this evaluation structure. Adding more non-adversarial pairs does not fix this, nor does switching to a permutation test or Fisher's exact test — a different test on the same one-discriminating-pair data returns the same answer. The three paths that would give a real answer: (1) a 10–15 pair adversarial slice where the base model scores 60–70%, (2) generation-mode scoring which is continuous rather than binary and harder to saturate, or (3) continuous reward margin (r_chosen − r_rejected) rather than binary win/lose.
 - May over-penalize polite ambiguity (e.g., "I'd love to see if we might have a fit") as a weak-evidence overclaim.
 
 ## Environmental Cost
